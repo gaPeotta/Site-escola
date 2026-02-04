@@ -2,27 +2,27 @@ package model;
 
 public class Notas {
     private Integer idNotas;
-    private Integer idAluno;
+    private Integer matriculaAluno;
     private Integer idProfessor;
-    private Integer idDiscplina;
+    private String discplina;
     private String observcao;
-    private boolean nota1;
-    private boolean nota2;
+    private double nota1;
+    private double nota2;
 
-    public Notas(Integer idAluno, Integer idProfessor, Integer idDiscplina, String observcao, boolean nota1, boolean nota2) {
-        this.idAluno = idAluno;
+    public Notas(Integer matriculaAluno, Integer idProfessor, String discplina, String observcao, double nota1, double nota2) {
+        this.matriculaAluno = matriculaAluno;
         this.idProfessor = idProfessor;
-        this.idDiscplina = idDiscplina;
+        this.discplina = discplina;
         this.observcao = observcao;
         this.nota1 = nota1;
         this.nota2 = nota2;
     }
 
-    public Notas(Integer idNotas, Integer idAluno, Integer idProfessor, Integer idDiscplina, String observcao, boolean nota1, boolean nota2) {
+    public Notas(Integer idNotas, Integer matriculaAluno, Integer idProfessor, String discplina, String observcao, double nota1, double nota2) {
         this.idNotas = idNotas;
-        this.idAluno = idAluno;
+        this.matriculaAluno = matriculaAluno;
         this.idProfessor = idProfessor;
-        this.idDiscplina = idDiscplina;
+        this.discplina = discplina;
         this.observcao = observcao;
         this.nota1 = nota1;
         this.nota2 = nota2;
@@ -32,27 +32,27 @@ public class Notas {
         return idNotas;
     }
 
-    public Integer getIdAluno() {
-        return idAluno;
+    public Integer getMatriculaAluno() {
+        return matriculaAluno;
     }
 
     public Integer getIdProfessor() {
         return idProfessor;
     }
 
-    public Integer getIdDiscplina() {
-        return idDiscplina;
+    public Integer getDisciplina() {
+        return discplina;
     }
 
     public String getObservcao() {
         return observcao;
     }
 
-    public boolean isNota1() {
+    public double getNota1() {
         return nota1;
     }
 
-    public boolean isNota2() {
+    public double getNota2() {
         return nota2;
     }
 }
