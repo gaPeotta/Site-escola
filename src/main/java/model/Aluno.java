@@ -1,4 +1,6 @@
 package model;
+import java.util.regex.Pattern;
+
 
 public class Aluno {
     private Integer matricula;
@@ -48,4 +50,6 @@ public class Aluno {
     public String getTurma() {
         return turma;
     }
+
+
 }
