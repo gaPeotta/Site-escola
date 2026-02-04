@@ -1,25 +1,24 @@
 package Dao;
 
 import conexao.Conexao;
-import model.Aluno;
+import model.Professor;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlunoDAO {
-    public boolean create(Aluno aluno) {
-        String sql = "INSERT INTO aluno (matricula, nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?, ?)";
+public class ProfessorDAO {
+    public boolean create(Professor professor) {
+        String sql = "INSERT INTO professor (id_professor, nome, discplina, senha, usuario) VALUES (?, ?, ?, ?, ?)";
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, aluno.getMatricula());
-            pstmt.setString(2, aluno.getNome());
-            pstmt.setString(3, aluno.getSenha());
-            pstmt.setString(4, aluno.getEmail());
-            pstmt.setString(5, aluno.getCpf());
-            pstmt.setString(6, aluno.getTurma());
+            pstmt.setInt(1, professor.getIdProfessor());
+            pstmt.setString(2, professor.getNome());
+            pstmt.setString(3, professor.getDisciplina());
+            pstmt.setString(4, professor.getSenha());
+            pstmt.setString(5, professor.getUsuario());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException sqle) {
@@ -28,45 +27,42 @@ public class AlunoDAO {
         } finally {
             conexao.desconectar(conn);
         }
-}
-    public List<Aluno> read() {
-        ArrayList<Aluno> alunoList = new ArrayList<>();
+    }
+    public List<Professor> read() {
+        ArrayList<Professor> professorList = new ArrayList<>();
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         ResultSet rs;
         try {
             Statement stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM aluno");
+            rs = stmt.executeQuery("SELECT * FROM professor");
 
             while (rs.next()) {
-                Aluno aluno = new Aluno(
-                        rs.getInt("matricula"),
+                Professor professor = new Professor(
+                        rs.getInt("id_professor"),
                         rs.getString("nome"),
+                        rs.getString("discplina"),
                         rs.getString("senha"),
-                        rs.getString("email"),
-                        rs.getString("cpf"),
-                        rs.getString("turma")
-
+                        rs.getString("usuario")
                 );
-                alunoList.add(aluno);
+                professorList.add(professor);
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
         conexao.desconectar(conn);
-        return alunoList;
+        return professorList;
     }
-    public boolean update(Aluno aluno) {
-        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
+    public boolean update(Professor professor) {
+        String sql = "UPDATE professor SET nome = ?, discplina = ?, senha = ?, cpf = ?, usuario = ? WHERE id_professor = ?";
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, aluno.getNome());
-            pstmt.setString(2, aluno.getSenha());
-            pstmt.setString(3, aluno.getEmail());
-            pstmt.setString(4, aluno.getCpf());
-            pstmt.setString(5, aluno.getTurma());
+            pstmt.setString(1, professor.getNome());
+            pstmt.setString(2, professor.getDisciplina());
+            pstmt.setString(3, professor.getSenha());
+            pstmt.setString(4, professor.getUsuario());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException sqle) {
@@ -76,14 +72,14 @@ public class AlunoDAO {
             conexao.desconectar(conn);
         }
     }
-    public int delete(int matricula) {
+    public int delete(int id_professor) {
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         try {
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM aluno WHERE matricula = ?");
-            pstmt.setInt(1, matricula);
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM professor WHERE id_professor = ?");
+            pstmt.setInt(1, id_professor);
             if (pstmt.executeUpdate() > 0) {
-                System.out.println("Aluno deletado com sucesso");
+                System.out.println("Professor deletado com sucesso");
                 return 1;
             }
             return 0;
@@ -94,7 +90,7 @@ public class AlunoDAO {
             }
             return -1;
         } finally {
-                conexao.desconectar(conn);
-            }
+            conexao.desconectar(conn);
         }
     }
+}

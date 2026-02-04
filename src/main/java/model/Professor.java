@@ -7,7 +7,7 @@ public class Professor {
     private String senha;
     private String usuario;
 
-    public void Professor(Integer idProfessor ,String nome,String disciplina,String senha,String usuario ){
+    public Professor(Integer idProfessor ,String nome,String disciplina,String senha,String usuario ){
     this.idProfessor = idProfessor;
     this.nome = nome;
     this.disciplina = disciplina;
