@@ -1,23 +1,25 @@
 package Dao;
 
 import conexao.Conexao;
-import model.Administrador;
+import model.Aluno;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdministradorDAO {
-    public boolean create(Administrador administrador) {
-        String sql = "INSERT INTO administrador (id_administrador, nome, senha, email) VALUES (?, ?, ?, ?)";
+public class AlunoDAO {
+    public boolean create(Aluno aluno) {
+        String sql = "INSERT INTO aluno (matricula, nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?, ?)";
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, administrador.getIdAdm());
-            pstmt.setString(2, administrador.getNome());
-            pstmt.setString(3, administrador.getSenha());
-            pstmt.setString(4, administrador.getEmail());
+            pstmt.setInt(1, aluno.getMatricula());
+            pstmt.setString(2, aluno.getNome());
+            pstmt.setString(3, aluno.getSenha());
+            pstmt.setString(4, aluno.getEmail());
+            pstmt.setString(5, aluno.getCpf());
+            pstmt.setString(6, aluno.getTurma());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException sqle) {
@@ -26,42 +28,45 @@ public class AdministradorDAO {
         } finally {
             conexao.desconectar(conn);
         }
-    }
-
-    public List<Administrador> read() {
-        ArrayList<Administrador> admList = new ArrayList<>();
+}
+    public List<Aluno> read() {
+        ArrayList<Aluno> alunoList = new ArrayList<>();
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         ResultSet rs;
         try {
             Statement stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM administrador");
+            rs = stmt.executeQuery("SELECT * FROM aluno");
 
             while (rs.next()) {
-                Administrador administrador = new Administrador(
-                        rs.getInt("id_administrador"),
+                Aluno aluno = new Aluno(
+                        rs.getInt("matricula"),
                         rs.getString("nome"),
                         rs.getString("senha"),
-                        rs.getString("email")
+                        rs.getString("email"),
+                        rs.getString("cpf"),
+                        rs.getString("turma")
+
                 );
-                admList.add(administrador);
+                alunoList.add(aluno);
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
         conexao.desconectar(conn);
-        return admList;
+        return alunoList;
     }
-
-    public boolean update(Administrador administrador) {
-        String sql = "UPDATE administrador SET nome = ?, senha = ?, email = ? WHERE id_administrador = ?";
+    public boolean update(Aluno aluno) {
+        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, administrador.getNome());
-            pstmt.setString(2, administrador.getSenha());
-            pstmt.setString(3, administrador.getEmail());
+            pstmt.setString(1, aluno.getNome());
+            pstmt.setString(2, aluno.getSenha());
+            pstmt.setString(3, aluno.getEmail());
+            pstmt.setString(4, aluno.getCpf());
+            pstmt.setString(4, aluno.getTurma());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException sqle) {
@@ -71,15 +76,14 @@ public class AdministradorDAO {
             conexao.desconectar(conn);
         }
     }
-
-    public int delete(int idAdm) {
+    public int delete(int matricula) {
         Conexao conexao = new Conexao();
         Connection conn = conexao.conectar();
         try {
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM administrador WHERE id_administrador = ?");
-            pstmt.setInt(1, idAdm);
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM aluno WHERE matricula = ?");
+            pstmt.setInt(1, matricula);
             if (pstmt.executeUpdate() > 0) {
-                System.out.println("Administrador deletado com sucesso");
+                System.out.println("Aluno deletado com sucesso");
                 return 1;
             }
             return 0;
@@ -90,7 +94,7 @@ public class AdministradorDAO {
             }
             return -1;
         } finally {
-            conexao.desconectar(conn);
+                conexao.desconectar(conn);
+            }
         }
     }
-}
