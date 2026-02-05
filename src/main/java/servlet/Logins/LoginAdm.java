@@ -40,9 +40,6 @@ public class LoginAdm extends HttpServlet {
             }else {
                 System.out.println("Email ou senha incorretos");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            erro = "Erro de banco de dados. Tente novamente mais tarde.";
         }catch (Exception e){
             e.printStackTrace();
             erro = "Erro inesperado ao processar o login: " + e.getMessage();

@@ -14,8 +14,8 @@ public class AdministradorDAO {
     /*
      * Cria um novo registro de administrador no banco de dados.
      */
-    public boolean create(Administrador administracao) throws SQLException{
-        String sql = "INSERT INTO administracao (nome, email, senha) VALUES (?,?,?)";
+    public boolean create(Administrador administracao){
+        String sql = "INSERT INTO administrador (nome, email, senha) VALUES (?,?,?)";
         Conexao conexao = new Conexao();
 
         // Usa try-with-resources para garantir fechamento de Connection e PreparedStatement
@@ -27,15 +27,19 @@ public class AdministradorDAO {
 
             // Retorna true se inseriu
             return pstmt.executeUpdate() > 0;
-        } // rset, pstmt e conn são fechados automaticamente
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return false;
+        }
+        // rset, pstmt e conn são fechados automaticamente
         // SQLException é propagada se ocorrer
     }
 
     /*
      * Busca todos os registros de administradores no banco de dados.
      */
-    public List<Administrador> read() throws SQLException {
-        String sql = "SELECT * FROM administracao ORDER BY id ASC";
+    public List<Administrador> read(){
+        String sql = "SELECT * FROM administrador ORDER BY id ASC";
         Conexao conexao = new Conexao();
         List<Administrador> listaAdministracao = new LinkedList<>();
 
@@ -54,6 +58,8 @@ public class AdministradorDAO {
                 );
                 listaAdministracao.add(admin);
             }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         } // rset, pstmt e conn são fechados automaticamente
         // SQLException é propagada se ocorrer
         return listaAdministracao;
@@ -62,7 +68,7 @@ public class AdministradorDAO {
     /*
      * Busca administradores filtrando por nome (case-insensitive) e ordenando.
      */
-    public List<Administrador> read(String nome, String orderBy, String direction) throws SQLException{
+    public List<Administrador> read(String nome, String orderBy, String direction){
         Conexao conexao = new Conexao();
         List<Administrador> listaAdministracao = new LinkedList<>();
 
@@ -119,7 +125,9 @@ public class AdministradorDAO {
                     listaAdministracao.add(admin);
                 }
             } // rset é fechado automaticamente
-        } // pstmt e conn são fechados automaticamente
+        }catch(SQLException sqle){
+            sqle.printStackTrace();
+        }// pstmt e conn são fechados automaticamente
         // SQLException é propagada
         return listaAdministracao;
     }
@@ -127,8 +135,8 @@ public class AdministradorDAO {
     /*
      * Busca um administrador pelo seu ID.
      */
-    public Administrador read(int id) throws SQLException {
-        String sql = "SELECT * FROM administracao WHERE id = ?";
+    public Administrador read(int id){
+        String sql = "SELECT * FROM administrador WHERE id = ?";
         Conexao conexao = new Conexao();
         Administrador admin = null;
 
@@ -149,14 +157,16 @@ public class AdministradorDAO {
                     );
                 }
             } // rset é fechado automaticamente
-        } // pstmt e conn são fechados automaticamente
+        }catch (SQLException slqe){
+            slqe.printStackTrace();
+        }// pstmt e conn são fechados automaticamente
         // SQLException é propagada
         return admin; // Retorna o objeto ou null se não encontrou
     }
 
 
-    public Administrador read(String email, String senha) throws SQLException {
-        String sql = "SELECT * FROM administracao WHERE email = ? and senha = ?";
+    public Administrador read(String email, String senha) {
+        String sql = "SELECT * FROM administrador WHERE email = ? and senha = ?";
         Conexao conexao = new Conexao();
         Administrador admin = null;
 
@@ -177,6 +187,8 @@ public class AdministradorDAO {
                     );
                 }
             }
+        }catch (SQLException slqe){
+            slqe.printStackTrace();
         }
         return admin;
     }
@@ -184,8 +196,8 @@ public class AdministradorDAO {
     /*
      * Atualiza os dados de um administrador existente no banco, baseado no objeto.
      */
-    public int update(Administrador administracao) throws SQLException {
-        String sql = "UPDATE administracao SET nome = ?, email = ?, senha = ? WHERE id = ?";
+    public int update(Administrador administracao)  {
+        String sql = "UPDATE administrador SET nome = ?, email = ?, senha = ? WHERE id = ?";
         Conexao conexao = new Conexao();
 
         // Usa try-with-resources
@@ -201,7 +213,10 @@ public class AdministradorDAO {
                 return 1;
             }
             return 0;
-        } // conn e pstmt são fechados automaticamente
+        }catch (SQLException sqle){
+            sqle.printStackTrace();
+            return 0;
+        }// conn e pstmt são fechados automaticamente
         // SQLException é propagada
     }
 
@@ -209,8 +224,8 @@ public class AdministradorDAO {
     /*
      * Atualiza os dados de um administrador existente no banco, baseado nos parâmetros.
      */
-    public int update(String nome, String email, String senha, int id) throws SQLException {
-        String sql = "UPDATE administracao SET nome = ?, email = ?, senha = ? WHERE id = ?";
+    public int update(String nome, String email, String senha, int id){
+        String sql = "UPDATE administrador SET nome = ?, email = ?, senha = ? WHERE id = ?";
         Conexao conexao = new Conexao();
 
         // Usa try-with-resources
@@ -226,15 +241,18 @@ public class AdministradorDAO {
                 return 1;
             }
             return 0;
-        } // conn e pstmt são fechados automaticamente
+        }catch (SQLException sqle){
+            sqle.printStackTrace();
+            return 0;
+        }// conn e pstmt são fechados automaticamente
         // SQLException é propagada
     }
 
     /*
      * Exclui um administrador do banco de dados pelo ID.
      */
-    public int delete(int id) throws SQLException {
-        String sql = "DELETE FROM administracao WHERE id = ?";
+    public int delete(int id){
+        String sql = "DELETE FROM administrador WHERE id = ?";
         Conexao conexao = new Conexao();
 
         // Usa try-with-resources
@@ -247,15 +265,19 @@ public class AdministradorDAO {
                 return 1;
             }
             return 0;
-        } // conn e pstmt são fechados automaticamente
+        }catch (SQLException sqle){
+            sqle.printStackTrace();
+            return 0;
+        }
+        // conn e pstmt são fechados automaticamente
         // SQLException é propagada
     }
 
     /*
      * Exclui um administrador do banco de dados pelo nome.
      */
-    public int delete(String nome) throws SQLException {
-        String sql = "DELETE FROM administracao WHERE nome = ?";
+    public int delete(String nome){
+        String sql = "DELETE FROM administrador WHERE nome = ?";
         Conexao conexao = new Conexao();
 
         // Usa try-with-resources
@@ -268,7 +290,11 @@ public class AdministradorDAO {
                 return 1;
             }
             return 0;
-        } // conn e pstmt são fechados automaticamente
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return 0;
+        }
+        // conn e pstmt são fechados automaticamente
         // SQLException é propagada
     }
 }
