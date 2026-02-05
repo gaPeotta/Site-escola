@@ -4,6 +4,7 @@ import model.Aluno;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 public class AlunoDAO { public boolean create(Aluno aluno) {
     String sql = "INSERT INTO aluno (matricula, nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?, ?)";
@@ -53,6 +54,73 @@ public class AlunoDAO { public boolean create(Aluno aluno) {
         conexao.desconectar(conn);
         return alunoList;
     }
+    public List<Aluno> read(String nome, String orderBy, String direction) throws SQLException {
+
+        Conexao conexao = new Conexao();
+        List<Aluno> alunos = new LinkedList<>();
+        List<Object> parametros = new LinkedList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM aluno WHERE 1=1 ");
+
+        if (nome != null && !nome.trim().isEmpty()) {
+            sql.append(" AND nome ILIKE ?");
+            parametros.add("%" + nome.trim() + "%");
+        }
+
+        // Whitelist ordenação
+        String coluna = "matricula";
+
+        if (orderBy != null) {
+            switch (orderBy.toLowerCase()) {
+                case "nome":
+                    coluna = "nome";
+                    break;
+                case "turma":
+                    coluna = "turma";
+                    break;
+                case "email":
+                    coluna = "email";
+                    break;
+            }
+        }
+
+        String dir = "ASC";
+        if (direction != null && direction.equalsIgnoreCase("DESC")) {
+            dir = "DESC";
+        }
+
+        sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
+
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql.toString())
+        ) {
+
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                while (rs.next()) {
+
+                    Aluno aluno = new Aluno(
+                            rs.getInt("matricula"),
+                            rs.getString("nome"),
+                            rs.getString("cpf"),
+                            rs.getString("email"),
+                            rs.getString("senha"),
+                            rs.getString("turma")
+                    );
+
+                    alunos.add(aluno);
+                }
+            }
+        }
+
+        return alunos;
+    }
+
     public boolean update(Aluno aluno) {
         String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
         Conexao conexao = new Conexao();
