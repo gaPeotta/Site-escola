@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Escolar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="left-side"></div>
+
+        <div class="right-side">
+            
+            <div class="form-wrapper">
+                
+                <div class="admin-btn-container">
+                    <button class="btn-admin">
+                        <i class="fa-regular fa-circle-user"></i> Sou admin
+                    </button>
+                </div>
+
+                <div class="login-card">
+                    
+                    <div class="tabs">
+                        <h2 class="active">Login</h2>
+                        <h2><a href="html/cadastro.html"style="text-decoration: none; color: inherit;">Cadastrar</a></h2>
+                    </div>
+
+                    <form>
+                        <div class="input-group">
+                            <label>E-mail</label>
+                            <input type="email" placeholder="Seunome@email.com">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Password</label>
+                            <input type="password" placeholder="@Password1234">
+                        </div>
+
+                        <div class="role-selector">
+                            <label class="radio-box">
+                                <input type="radio" name="role" checked>
+                                <span class="checkmark"></span>
+                                Sou professor
+                            </label>
+                            <label class="radio-box">
+                                <input type="radio" name="role">
+                                <span class="checkmark"></span>
+                                Sou aluno
+                            </label>
+                        </div>
+
+                        <button class="btn-login">Login</button>
+
+                        <a href="#" class="forgot-link">Esqueceu sua senha?</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
