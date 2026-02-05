@@ -43,8 +43,8 @@ public class NotaDAO {
 
             return 0;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
@@ -79,8 +79,8 @@ public class NotaDAO {
                 lista.add(notas);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return lista;
@@ -166,8 +166,8 @@ public class NotaDAO {
                 }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return lista;
@@ -203,8 +203,8 @@ public class NotaDAO {
                 }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return null;
@@ -233,8 +233,8 @@ public class NotaDAO {
 
             return pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
@@ -263,8 +263,8 @@ public class NotaDAO {
 
             return pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
@@ -285,8 +285,8 @@ public class NotaDAO {
             pstmt.setInt(1, idNotas);
             return pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
@@ -307,8 +307,8 @@ public class NotaDAO {
             pstmt.setInt(1, matriculaAluno);
             return pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }

@@ -36,8 +36,8 @@ public class AlunoDAO {
             }
 
             return aluno.getMatricula();
-        }catch (SQLException e) {
-            e.printStackTrace();
+        }catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
@@ -71,8 +71,8 @@ public class AlunoDAO {
 
                 alunos.add(aluno);
             }
-        }catch (SQLException e) {
-            e.printStackTrace();
+        }catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return alunos;
@@ -147,8 +147,8 @@ public class AlunoDAO {
                     alunos.add(aluno);
                 }
             }
-        }catch (SQLException e) {
-            e.printStackTrace();
+        }catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return alunos;
@@ -183,8 +183,8 @@ public class AlunoDAO {
                     );
                 }
             }
-        }catch (SQLException e) {
-            e.printStackTrace();
+        }catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return null;
@@ -212,8 +212,8 @@ public class AlunoDAO {
             pstmt.setInt(7, aluno.getMatricula());
 
             return pstmt.executeUpdate();
-        }catch (SQLException e) {
-            e.printStackTrace();
+        }catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }

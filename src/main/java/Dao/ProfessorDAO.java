@@ -24,8 +24,8 @@ public class ProfessorDAO {
 
             return pstmt.executeUpdate() > 0;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return false;
         }
     }
@@ -50,15 +50,15 @@ public class ProfessorDAO {
                 lista.add(professor);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return lista;
     }
 
 
-    public List<Professor> read(String nome, String orderBy, String direction) throws SQLException{
+    public List<Professor> read(String nome, String orderBy, String direction){
         Conexao conexao = new Conexao();
         List<Professor> listaProfessor = new LinkedList<>();
 
@@ -116,11 +116,13 @@ public class ProfessorDAO {
                     listaProfessor.add(prof);
                 }
             } // rset é fechado automaticamente
-        } // pstmt e conn são fechados automaticamente
+        }catch (SQLException sqle){
+            sqle.printStackTrace();
+        }// pstmt e conn são fechados automaticamente
         // SQLException é propagada
         return listaProfessor;
     }
-    public Professor read(String usuario, String senha) throws SQLException {
+    public Professor read(String usuario, String senha){
         String sql = "SELECT * FROM professor WHERE usuario = ? and senha = ?";
         Conexao conexao = new Conexao();
         Professor prof = null;
@@ -143,6 +145,8 @@ public class ProfessorDAO {
                     );
                 }
             }
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
         }
         return prof;
     }
@@ -163,8 +167,8 @@ public class ProfessorDAO {
 
             return pstmt.executeUpdate() > 0;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return false;
         }
     }
@@ -178,8 +182,8 @@ public class ProfessorDAO {
             pstmt.setInt(1, idProfessor);
             return pstmt.executeUpdate() > 0;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return false;
         }
     }

@@ -38,8 +38,8 @@ public class PreMatriculaDAO {
 
             return 0;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
@@ -69,8 +69,8 @@ public class PreMatriculaDAO {
                 lista.add(pre);
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return lista;
@@ -116,8 +116,8 @@ public class PreMatriculaDAO {
                 }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return lista;
@@ -148,8 +148,8 @@ public class PreMatriculaDAO {
                 }
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
 
         return null;
@@ -173,8 +173,8 @@ public class PreMatriculaDAO {
 
             return pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
@@ -195,8 +195,8 @@ public class PreMatriculaDAO {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
             return 0;
         }
     }
