@@ -9,7 +9,7 @@
 body, html {
     height: 100%;
     width: 100%;
-    background-image: url('efeito-verde.png');
+    background-image: url('../img/efeito-verde.png');
     background-size: cover;       
     background-position: center; 
     background-repeat: no-repeat; 
@@ -29,7 +29,7 @@ body, html {
     height: 100%;
     
     /* CONFIGURAÇÃO DA IMAGEM */
-    background-image: url('imagem-boas.png'); /* Nome do seu arquivo */
+    background-image: url('../img/imagem-boas.png'); /* Nome do seu arquivo */
     background-size: cover; /* Ajusta para cobrir todo o espaço */
     background-position: left center; /* Alinha a parte da onda para a direita */
     background-repeat: no-repeat;
