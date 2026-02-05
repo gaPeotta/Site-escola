@@ -1,80 +1,59 @@
 package Dao;
-
 import conexao.Conexao;
 import model.Aluno;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+public class AlunoDAO { public boolean create(Aluno aluno) {
+    String sql = "INSERT INTO aluno (matricula, nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?, ?)";
+    Conexao conexao = new Conexao();
+    Connection conn = conexao.conectar();
+    try {
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, aluno.getMatricula());
+        pstmt.setString(2, aluno.getNome());
+        pstmt.setString(3, aluno.getSenha());
+        pstmt.setString(4, aluno.getEmail());
+        pstmt.setString(5, aluno.getCpf());
+        pstmt.setString(6, aluno.getTurma());
 
-public class AlunoDAO {
-
-    /*
-     * Cria um aluno e retorna a matrícula.
-     */
-    public int create(Aluno aluno) throws SQLException {
-
-        String sql = "INSERT INTO aluno (matricula, nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?, ?)";
-        Conexao conexao = new Conexao();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-
-            pstmt.setInt(1, aluno.getMatricula());
-            pstmt.setString(2, aluno.getNome());
-            pstmt.setString(3, aluno.getSenha());
-            pstmt.setString(4, aluno.getEmail());
-            pstmt.setString(5, aluno.getCpf());
-            pstmt.setString(6, aluno.getTurma());
-
-            int linhas = pstmt.executeUpdate();
-
-            if (linhas == 0) {
-                throw new SQLException("Criação do aluno falhou.");
-            }
-
-            return aluno.getMatricula();
-        }
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException sqle) {
+        sqle.printStackTrace();
+        return false;
+    } finally {
+        conexao.desconectar(conn);
     }
-
-    /*
-     * Busca todos os alunos.
-     */
-    public List<Aluno> read() throws SQLException {
-
-        String sql = "SELECT * FROM aluno ORDER BY matricula";
+}
+    public List<Aluno> read() {
+        ArrayList<Aluno> alunoList = new ArrayList<>();
         Conexao conexao = new Conexao();
-        List<Aluno> alunos = new LinkedList<>();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                ResultSet rs = pstmt.executeQuery()
-        ) {
+        Connection conn = conexao.conectar();
+        ResultSet rs;
+        try {
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM aluno");
 
             while (rs.next()) {
-
                 Aluno aluno = new Aluno(
                         rs.getInt("matricula"),
                         rs.getString("nome"),
-                        rs.getString("cpf"),
-                        rs.getString("email"),
                         rs.getString("senha"),
+                        rs.getString("email"),
+                        rs.getString("cpf"),
                         rs.getString("turma")
+
                 );
-
-                alunos.add(aluno);
+                alunoList.add(aluno);
             }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
-
-        return alunos;
+        conexao.desconectar(conn);
+        return alunoList;
     }
-
-    /*
-     * Busca alunos filtrando por nome e ordenando.
-     */
     public List<Aluno> read(String nome, String orderBy, String direction) throws SQLException {
 
         Conexao conexao = new Conexao();
@@ -142,120 +121,45 @@ public class AlunoDAO {
         return alunos;
     }
 
-    /*
-     * Busca aluno pela matrícula.
-     */
-    public Aluno read(int matricula) throws SQLException {
-
-        String sql = "SELECT * FROM aluno WHERE matricula = ?";
-        Conexao conexao = new Conexao();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-
-            pstmt.setInt(1, matricula);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-
-                if (rs.next()) {
-                    return new Aluno(
-                            rs.getInt("matricula"),
-                            rs.getString("nome"),
-                            rs.getString("cpf"),
-                            rs.getString("email"),
-                            rs.getString("senha"),
-                            rs.getString("turma")
-                    );
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /*
-     * Atualiza um aluno.
-     */
-    public int update(Aluno aluno) throws SQLException {
-
+    public boolean update(Aluno aluno) {
         String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
         Conexao conexao = new Conexao();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-
+        Connection conn = conexao.conectar();
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, aluno.getNome());
             pstmt.setString(2, aluno.getSenha());
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
-            pstmt.setString(5, aluno.getTurma());
-            pstmt.setInt(6, aluno.getMatricula());
+            pstmt.setString(4, aluno.getTurma());
 
-            return pstmt.executeUpdate();
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            return false;
+        } finally {
+            conexao.desconectar(conn);
         }
     }
-
-    /*
-     * Atualiza aluno via parâmetros diretos.
-     */
-    public int update(int matricula, String nome, String senha, String email, String cpf, String turma) throws SQLException {
-
-        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
+    public int delete(int matricula) {
         Conexao conexao = new Conexao();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-
-            pstmt.setString(1, nome);
-            pstmt.setString(2, senha);
-            pstmt.setString(3, email);
-            pstmt.setString(4, cpf);
-            pstmt.setString(5, turma);
-            pstmt.setInt(6, matricula);
-
-            return pstmt.executeUpdate();
-        }
-    }
-
-    /*
-     * Remove aluno pela matrícula.
-     */
-    public int delete(int matricula) throws SQLException {
-
-        String sql = "DELETE FROM aluno WHERE matricula = ?";
-        Conexao conexao = new Conexao();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-
+        Connection conn = conexao.conectar();
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM aluno WHERE matricula = ?");
             pstmt.setInt(1, matricula);
-            return pstmt.executeUpdate();
-        }
-    }
-
-    /*
-     * Remove aluno pelo nome (cuidado).
-     */
-    public int delete(String nome) throws SQLException {
-
-        String sql = "DELETE FROM aluno WHERE nome = ?";
-        Conexao conexao = new Conexao();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-
-            pstmt.setString(1, nome);
-            return pstmt.executeUpdate();
+            if (pstmt.executeUpdate() > 0) {
+                System.out.println("Aluno deletado com sucesso");
+                return 1;
+            }
+            return 0;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            if (sqle.getMessage().contains("still referenced")) {
+                return 0;
+            }
+            return -1;
+        } finally {
+            conexao.desconectar(conn);
         }
     }
 }
