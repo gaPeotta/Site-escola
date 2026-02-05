@@ -6,7 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-public class AlunoDAO { public boolean create(Aluno aluno) {
+public class AlunoDAO {
+
+    public boolean create(Aluno aluno) {
     String sql = "INSERT INTO aluno (matricula, nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?, ?)";
     Conexao conexao = new Conexao();
     Connection conn = conexao.conectar();
