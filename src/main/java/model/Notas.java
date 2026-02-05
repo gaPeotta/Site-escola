@@ -40,7 +40,7 @@ public class Notas {
         return idProfessor;
     }
 
-    public Integer getDisciplina() {
+    public String getDisciplina() {
         return discplina;
     }
 

@@ -16,7 +16,7 @@ public class NotaDAO {public boolean create(Notas notas) {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, notas.getIdNotas());
         pstmt.setInt(2, notas.getMatriculaAluno());
-        pstmt.setInt(3, notas.getDisciplina());
+        pstmt.setString(3, notas.getDisciplina());
         pstmt.setInt(4, notas.getIdProfessor());
         pstmt.setString(5, notas.getObservcao());
         pstmt.setDouble(6, notas.getNota1());
@@ -66,7 +66,7 @@ public class NotaDAO {public boolean create(Notas notas) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, notas.getIdProfessor());
             pstmt.setInt(2, notas.getMatriculaAluno());
-            pstmt.setInt(3, notas.getDisciplina());
+            pstmt.setString(3, notas.getDisciplina());
             pstmt.setString(4, notas.getObservcao());
             pstmt.setDouble(5, notas.getNota1());
             pstmt.setDouble(6, notas.getNota2());
