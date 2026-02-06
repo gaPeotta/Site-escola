@@ -23,10 +23,6 @@ public class CadastroEstudante extends HttpServlet {
             //  CPF vindo da session
             String cpf = (String) request.getSession().getAttribute("cpf");
 
-            if (cpf == null) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
 
             String nome = request.getParameter("nome");
             String email = request.getParameter("email");
