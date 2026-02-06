@@ -12,40 +12,37 @@ import model.Aluno;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ServletUpdateAluno", value = "/ServletUpdateAluno")
-public class ServletUpdateAluno extends HttpServlet {
+@WebServlet(name = "ServletDeleteAluno", value = "/ServletDeleteAluno")
+public class ServletDeleteAluno extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Aluno aluno = new Aluno(
-                request.getParameter("matricula"),
-                request.getParameter("nome"),
-                request.getParameter("senha"),
-                request.getParameter("cpf"),
-                request.getParameter("turma")
-        );
-        AlunoDAO dao = new AlunoDAO();
-        int status = dao.update(aluno);
+        int matricula = Integer.parseInt(request.getParameter("matricula"));
 
+        AlunoDAO dao = new AlunoDAO();
+        // Busca o nome da empresa para montar a mensagem
+        String aluno = dao.buscarPorMatricula(matricula).getNome();
+
+        // Executa a exclusão via DAO e recebe o status da operação
+        int status = dao.delete(matricula);
         String mensagem;
         switch (status) {
             case 1:
-                mensagem = "A atualizaçao de " + aluno.getNome() + " foi realizada com sucesso";
+                mensagem = "A exclusão de " + aluno + " foi realizada com sucesso.";
                 break;
             case 0:
-                mensagem = "A atualizaçao de " + aluno.getNome() + " falhou, esse cpf ja foi vinculado";
+                mensagem = "A exclusão falhou:" + aluno + " está associada a outra tabela. Apague os campos relacionados primeiro.";
                 break;
             case -1:
-                mensagem = "A atualizaçao de " + aluno.getNome() + " falhou, esse email ja foi vinculado";
-                break;
-            case -2:
-                mensagem = "A atualizaçao falhou: erro desconhecido.";
+                mensagem = "A exclusão de " + aluno + " falhou: erro interno.";
                 break;
             default:
-                mensagem = "A atualizaçao falhou: erro interno.";
+                mensagem = "A exclusão de " + aluno + " falhou: erro desconhecido.";
+                break;
         }
+
         request.setAttribute("mensagem", mensagem);
         List<Aluno> lista = dao.read();
-        request.setAttribute("listaAluno", lista);
 
+        request.setAttribute("listaAluno", lista);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/alunoJSP/readAluno.jsp");
         dispatcher.forward(request, response);
     }
