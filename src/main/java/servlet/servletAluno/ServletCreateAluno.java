@@ -26,7 +26,7 @@ public class ServletCreateAluno extends HttpServlet {
         AlunoDAO dao = new AlunoDAO();
         String mensagem;
 
-        if (dao.create(aluno)) {
+        if (dao.create(aluno) > 0) {
             mensagem = "A criação do aluno foi realizada com sucesso.";
         } else {
             mensagem = "A criação do endereço falhou: erro interno.";
