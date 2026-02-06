@@ -14,34 +14,37 @@ public class AlunoDAO {
      */
     public int create(Aluno aluno){
 
-        String sql = "INSERT INTO aluno (matricula, nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma, situacao) VALUES (?, ?, ?, ?, ?, ?)";
+
         Conexao conexao = new Conexao();
 
         try (
                 Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ){
 
-            pstmt.setInt(1, aluno.getMatricula());
-            pstmt.setString(2, aluno.getNome());
-            pstmt.setString(3, aluno.getSenha());
-            pstmt.setString(4, aluno.getEmail());
-            pstmt.setString(5, aluno.getCpf());
-            pstmt.setString(6, aluno.getTurma());
+            pstmt.setString(1, aluno.getNome());
+            pstmt.setString(2, aluno.getSenha());
+            pstmt.setString(3, aluno.getEmail());
+            pstmt.setString(4, aluno.getCpf());
+            pstmt.setString(5, aluno.getTurma());
+            pstmt.setBoolean(6, true);
 
-            int linhas = pstmt.executeUpdate();
+            pstmt.executeUpdate();
 
-            if (linhas == 0) {
-                throw new SQLException("Criação do aluno falhou.");
+            ResultSet rs = pstmt.getGeneratedKeys();
+
+            if(rs.next()){
+                return rs.getInt(1);
             }
 
-            return aluno.getMatricula();
-        }catch (SQLException sqle) {
-            sqle.printStackTrace();
+            return 0;
+
+        } catch (SQLException e){
+            e.printStackTrace();
             return 0;
         }
     }
-
     /*
      * Busca todos os alunos.
      */
