@@ -18,23 +18,22 @@ body, html {
 
 .container {
     display: flex;
-    height: 100vh; /* Altura total da tela */
+    height: 100vh; 
     width: 100%;
 }
 
-/* --- LADO ESQUERDO (SUA IMAGEM PRONTA) --- */
+/* --- LADO ESQUERDO --- */
 .left-side {
     margin-right: 90px;
-    width: 55%; /* Ocupa um pouco mais da metade da tela */
+    width: 55%; 
     height: 100%;
     
     /* CONFIGURAÇÃO DA IMAGEM */
-    background-image: url('../img/imagem-boas.png'); /* Nome do seu arquivo */
-    background-size: cover; /* Ajusta para cobrir todo o espaço */
-    background-position: left center; /* Alinha a parte da onda para a direita */
+    background-image: url('../img/imagem-boas.png');
+    background-size: cover; 
+    background-position: left center;
     background-repeat: no-repeat;
     
-    /* Caso a imagem seja PNG transparente, definimos o fundo base */
 }
 
 /* --- LADO DIREITO (LOGIN) --- */
@@ -62,11 +61,11 @@ body, html {
     max-width: 420px;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 20px; /* Espaço entre botão admin e o card */
+    margin-bottom: 20px; 
 }
 
 .btn-admin {
-    background-color: #1b5e46; /* Verde escuro */
+    background-color: #1b5e46; 
     color: #fff;
     padding: 10px 25px;
     border-radius: 30px;
@@ -86,7 +85,7 @@ body, html {
 
 /* Card Cinza do Formulário */
 .login-card {
-    background-color:#E0EBE2 ; /* Fundo cinza-esverdeado igual à imagem */
+    background-color:#E0EBE2 ;
     padding: 40px 50px;
     border-radius: 40px;
     width: 100%;
@@ -113,7 +112,7 @@ body, html {
 }
 
 .tabs h2.active {
-    color: #1b5e46; /* Verde ativo */
+    color: #1b5e46; 
 }
 
 /* Linha verde abaixo da aba ativa */
@@ -145,7 +144,7 @@ body, html {
     padding: 15px;
     border-radius: 12px;
     border: 1px solid #9db5aa;
-    background-color: #bccbc3; /* Fundo mais escuro do input */
+    background-color: #bccbc3; 
     color: #333;
     font-size: 1rem;
     outline: none;
@@ -179,7 +178,7 @@ body, html {
 }
 
 .radio-box input {
-    display: none; /* Esconde o botão padrão */
+    display: none; 
 }
 
 /* Bolinha customizada */
@@ -242,7 +241,7 @@ body, html {
     }
     .left-side {
         width: 100%;
-        height: 250px; /* Altura da imagem no celular */
+        height: 250px; 
         background-position: center;
     }
     .right-side {
@@ -250,6 +249,6 @@ body, html {
         padding: 40px 20px;
     }
     .admin-btn-container {
-        justify-content: center; /* Centraliza botão admin no mobile */
+        justify-content: center;
     }
 }
