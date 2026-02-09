@@ -150,10 +150,31 @@ public class ProfessorDAO {
         }
         return prof;
     }
+    public Professor buscarPorId(int id) {
+        Professor professor = null;
+        String sql = "SELECT * FROM professor WHERE id_professor = ?";
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                professor = new Professor(
+                        rs.getInt("idprofessor"),
+                        rs.getString("nome"),
+                        rs.getString("disciplina"),
+                        rs.getString("senha"),
+                        rs.getString("usuario")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return professor;
+    }
 
 
 
-    public boolean update(Professor professor) {
+    public int update(Professor professor) {
         String sql = "UPDATE professor SET nome = ?, disciplina = ?, senha = ?, usuario = ? WHERE id_professor = ?";
 
         try (Connection conn = new Conexao().conectar();
@@ -165,26 +186,26 @@ public class ProfessorDAO {
             pstmt.setString(4, professor.getUsuario());
             pstmt.setInt(5, professor.getIdProfessor());
 
-            return pstmt.executeUpdate() > 0;
-
-        } catch (SQLException sqle) {
+            return pstmt.executeUpdate();
+        }catch (SQLException sqle) {
             sqle.printStackTrace();
-            return false;
+            return 0;
         }
     }
 
-    public boolean delete(int idProfessor) {
+    public int delete(int idProfessor) {
         String sql = "DELETE FROM professor WHERE id_professor = ?";
-
-        try (Connection conn = new Conexao().conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Conexao conexao = new Conexao();
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
 
             pstmt.setInt(1, idProfessor);
-            return pstmt.executeUpdate() > 0;
-
-        } catch (SQLException sqle) {
+            return pstmt.executeUpdate();
+        }catch (SQLException sqle){
             sqle.printStackTrace();
-            return false;
+            return 0;
         }
     }
 }
