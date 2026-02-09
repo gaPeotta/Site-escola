@@ -12,7 +12,7 @@ import model.Professor;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("Login-professor")
+@WebServlet("/Login-professor")
 public class LoginProfessor extends HttpServlet {
 
     @Override

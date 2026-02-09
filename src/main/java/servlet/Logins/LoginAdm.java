@@ -11,7 +11,7 @@ import model.Administrador;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("Login-Adm")
+@WebServlet("/Login-Adm")
 public class LoginAdm extends HttpServlet {
 
     @Override
