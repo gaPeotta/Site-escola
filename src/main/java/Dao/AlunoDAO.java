@@ -20,7 +20,7 @@ public class AlunoDAO {
 
         try (
                 Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+                PreparedStatement pstmt = conn.prepareStatement(sql)
         ){
 
             pstmt.setString(1, aluno.getNome());
