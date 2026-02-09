@@ -170,7 +170,8 @@ public class AlunoDAO {
                         rs.getString("senha"),
                         rs.getString("email"),
                         rs.getString("cpf"),
-                        rs.getString("turma")
+                        rs.getString("turma"),
+                        rs.getBoolean("situacao")
                 );
             }
         } catch (SQLException e) {
