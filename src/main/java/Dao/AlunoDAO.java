@@ -28,7 +28,7 @@ public class AlunoDAO {
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
             pstmt.setString(5, aluno.getTurma());
-            pstmt.setBoolean(6, true);
+            pstmt.setBoolean(6, aluno.getSituacao());
 
             pstmt.executeUpdate();
 
@@ -165,7 +165,6 @@ public class AlunoDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 aluno = new Aluno(
-                        rs.getInt("matricula"),
                         rs.getString("nome"),
                         rs.getString("senha"),
                         rs.getString("email"),
