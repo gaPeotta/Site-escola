@@ -156,6 +156,28 @@ public class AlunoDAO {
 
         return alunos;
     }
+    public Aluno buscarPorMatricula(int matricula) {
+        Aluno aluno = null;
+        String sql = "SELECT * FROM aluno WHERE matricula = ?";
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, matricula);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                aluno = new Aluno(
+                        rs.getInt("matricula"),
+                        rs.getString("nome"),
+                        rs.getString("senha"),
+                        rs.getString("email"),
+                        rs.getString("cpf"),
+                        rs.getString("turma")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return aluno;
+    }
 
     /*
      * Busca aluno pela matrícula.
