@@ -183,9 +183,9 @@ public class AlunoDAO {
     /*
      * Busca aluno pela matrícula.
      */
-    public Aluno read(int matricula) {
+    public Aluno read(String email, String senha) {
 
-        String sql = "SELECT * FROM aluno WHERE matricula = ?";
+        String sql = "SELECT * FROM aluno WHERE email = ? and senha = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -193,7 +193,8 @@ public class AlunoDAO {
                 PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
 
-            pstmt.setInt(1, matricula);
+            pstmt.setString(1, email);
+            pstmt.setString(2, senha);
 
             try (ResultSet rs = pstmt.executeQuery()) {
 
