@@ -1,0 +1,153 @@
+/* --- BARRA DE PESQUISA --- */
+.busca-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.busca-box {
+    display: flex;
+    align-items: center;
+    background-color: #edece6;
+    border-radius: 50px;
+    padding: 8px 20px;
+    width: 300px;
+    border: 1px solid #dcdad4;
+}
+
+.busca-box input {
+    background: none;
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    color: #666;
+}
+
+/* --- TABELA E REGISTROS --- */
+.div2 {
+    background-color: #f7f6f2;
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid #e0ddd5;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed; /* Trava as colunas no lugar */
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+thead th {
+    background-color: #d9d9d9;
+    padding: 15px;
+    text-align: left;
+    color: #444;
+    font-size: 14px;
+}
+
+tbody td {
+    padding: 12px 15px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/* Linhas Zebradas */
+tbody tr:nth-child(even) td { background-color: #e6e6e6; }
+
+/* --- BOTÕES DE AÇÃO --- */
+td.acoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-editar {
+    background-color: #2f7d4a;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-excluir {
+    background-color: #c63b3b;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* --- PAGINAÇÃO (ESTILO PÍLULA) --- */
+.final {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.paginacao-grupo {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border: 1px solid #d9d9d9;
+    border-radius: 50px;
+    padding: 5px 12px;
+    gap: 12px;
+}
+
+.btn-seta {
+    background: none;
+    border: none;
+    color: #214e3b;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.contador-pagina {
+    border: 1.5px solid #214e3b;
+    border-radius: 10px;
+    padding: 3px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #214e3b;
+}
+
+.busca-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.busca-box {
+    display: flex;
+    align-items: center;
+    background-color: #edece6;
+    border-radius: 50px;
+    padding: 10px 20px;
+    width: 350px;
+    border: 1px solid #dcdad4;
+}
+
+.busca-box input {
+    background: none;
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+}
