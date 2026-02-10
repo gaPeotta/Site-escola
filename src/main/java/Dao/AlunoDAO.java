@@ -38,7 +38,7 @@ public class AlunoDAO {
                 return rs.getInt(1);
             }
 
-            return 0;
+            return -1;
 
         } catch (SQLException e){
             e.printStackTrace();
@@ -164,12 +164,14 @@ public class AlunoDAO {
             stmt.setInt(1, matricula);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                aluno = new Aluno(
+                return new Aluno(
+                        rs.getInt("matricula"),
                         rs.getString("nome"),
-                        rs.getString("senha"),
-                        rs.getString("email"),
                         rs.getString("cpf"),
-                        rs.getString("turma")
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("turma"),
+                        rs.getBoolean("situacao")
                 );
             }
         } catch (SQLException e) {

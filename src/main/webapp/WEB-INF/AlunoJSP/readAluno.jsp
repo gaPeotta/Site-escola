@@ -36,6 +36,7 @@
                     <th>Email</th>
                     <th>Senha</th>
                     <th>Turma</th>
+                    <th>Situação</th>
                     <th>Update</th>
                     <th>Delete</th>
                 </tr>
@@ -54,15 +55,16 @@
                         <td title="Email do aluno:"><%= aluno.getEmail() %>
                         <td title="Senha do aluno:"><%= aluno.getSenha() %>
                         <td title="Turma do aluno:"><%= aluno.getTurma() %>
+                        <td title="Situação do aluno:"><%= aluno.getSituacao() %>
                         </td>
                         <td class="acoes">
-                            <a href="<%= request.getContextPath() %>/ServletReadAluno?view=update&id=<%= aluno.getMatricula() %>" title="Editar aluno">
+                            <a href="<%= request.getContextPath() %>/ServletReadAluno?view=update&matricula=<%= aluno.getMatricula() %>" title="Editar aluno">editar aluno
                             </a>
                         </td>
                         <td class="acoes">
-                            <a href="<%= request.getContextPath() %>/ServletDeleteAluno?id=<%= aluno.getMatricula() %>"
+                            <a href="<%= request.getContextPath() %>/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>"
                                onclick="return confirm('Tem certeza que deseja excluir este aluno?');"
-                               title="Excluir aluno">
+                               title="Excluir aluno">exluir aluno
                             </a>
                         </td>
                     </tr>

@@ -23,15 +23,23 @@ public class Aluno {
         this.setEmail(email);
         this.setSenha(senha);
         this.setTurma(turma);
-        this.situacao = situacao;
+        this.setSituacao(situacao);
     }
 
-    public Aluno(String nome, String cpf, String email, String senha, String turma) {
+    public Aluno(String nome, String cpf, String email, String senha, String turma, boolean situacao) {
         this.setNome(nome);
         this.setCpf(cpf);
         this.setEmail(email);
         this.setSenha(senha);
         this.setTurma(turma);
+        this.setSituacao(situacao);
+    }
+    public Aluno(String nome, String email, String senha, String turma, boolean situacao) {
+        this.setNome(nome);
+        this.setEmail(email);
+        this.setSenha(senha);
+        this.setTurma(turma);
+        this.setSituacao(situacao);
     }
 
     // =========================
@@ -76,7 +84,6 @@ public class Aluno {
         }
 
         String cpfLimpo = cpf.replaceAll("[^\\d]", "");
-        validateCpf(cpfLimpo);
 
         this.cpf = cpfLimpo;
     }
@@ -91,7 +98,6 @@ public class Aluno {
         }
 
         String emailTratado = email.trim().toLowerCase();
-        validateEmail(emailTratado);
 
         this.email = emailTratado;
     }
@@ -108,7 +114,6 @@ public class Aluno {
             throw new IllegalArgumentException("A senha não pode estar em branco.");
         }
 
-        validateSenha(senha);
         this.senha = senha;
     }
 
@@ -168,34 +173,5 @@ public class Aluno {
     // Métodos de Validação
     // =========================
 
-    private void validateCpf(String cpfLimpo) {
-        if (cpfLimpo.length() != 11) {
-            throw new IllegalArgumentException("CPF inválido. Deve conter 11 dígitos.");
-        }
-    }
 
-    private void validateEmail(String email) {
-        if (!PATTERN_EMAIL.matcher(email).matches()) {
-            throw new IllegalArgumentException("Email inválido.");
-        }
-    }
-
-    private void validateSenha(String senha) {
-
-        if (senha.length() < 8) {
-            throw new IllegalArgumentException("A senha deve ter no mínimo 8 caracteres.");
-        }
-        if (!PATTERN_MINUSCULA.matcher(senha).find()) {
-            throw new IllegalArgumentException("A senha deve conter letra minúscula.");
-        }
-        if (!PATTERN_MAIUSCULA.matcher(senha).find()) {
-            throw new IllegalArgumentException("A senha deve conter letra maiúscula.");
-        }
-        if (!PATTERN_DIGITO.matcher(senha).find()) {
-            throw new IllegalArgumentException("A senha deve conter número.");
-        }
-        if (!PATTERN_ESPECIAL.matcher(senha).find()) {
-            throw new IllegalArgumentException("A senha deve conter caractere especial.");
-        }
-    }
 }

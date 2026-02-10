@@ -17,10 +17,11 @@ public class ServletCreateAluno extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Aluno aluno = new Aluno(
                 request.getParameter("nome"),
+                request.getParameter("cpf"),
                 request.getParameter("senha"),
                 request.getParameter("email"),
-                request.getParameter("cpf"),
-                request.getParameter("turma")
+                request.getParameter("turma"),
+                Boolean.parseBoolean(request.getParameter("situacao"))
         );
 
         AlunoDAO dao = new AlunoDAO();
@@ -28,8 +29,11 @@ public class ServletCreateAluno extends HttpServlet {
 
         if (dao.create(aluno) > 0) {
             mensagem = "A criação do aluno foi realizada com sucesso.";
-        } else {
-            mensagem = "A criação do endereço falhou: erro interno.";
+        } else if(dao.create(aluno)==0) {
+            mensagem = "A criação do endereço falhou: erro sql.";
+        }
+        else {
+            mensagem="erro interno";
         }
 
         request.setAttribute("mensagem", mensagem);

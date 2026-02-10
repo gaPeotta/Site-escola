@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet(name = "ServletDeleteAluno", value = "/ServletDeleteAluno")
 public class ServletDeleteAluno extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int matricula = Integer.parseInt(request.getParameter("matricula"));
 
         AlunoDAO dao = new AlunoDAO();
@@ -43,7 +43,7 @@ public class ServletDeleteAluno extends HttpServlet {
         List<Aluno> lista = dao.read();
 
         request.setAttribute("listaAluno", lista);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/alunoJSP/readAluno.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/AlunoJSP/readAluno.jsp");
         dispatcher.forward(request, response);
     }
 }
