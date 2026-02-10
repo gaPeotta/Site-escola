@@ -28,9 +28,10 @@ public class CadastroEstudante extends HttpServlet {
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
             String turma = request.getParameter("turma");
+            boolean situacao = Boolean.parseBoolean(request.getParameter("situacao"));
 
             // Criar aluno
-            Aluno aluno = new Aluno(nome, cpf, email, senha, turma);
+            Aluno aluno = new Aluno(nome, cpf, email, senha, turma, situacao);
 
             // Salvar no banco
             AlunoDAO alunoDAO = new AlunoDAO();

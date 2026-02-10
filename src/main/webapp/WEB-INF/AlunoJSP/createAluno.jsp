@@ -18,7 +18,7 @@
                    placeholder="Nome do aluno" maxlength="100" required
                    title="Informe o nome do aluno"><br><br>
 
-            <label for="senha">nome:</label><br>
+            <label for="senha">senha:</label><br>
             <input type="text" id="senha" name="senha"
                    placeholder="Senha do aluno" maxlength="100" required
                    title="Informe a senha do aluno"><br><br>
@@ -37,6 +37,13 @@
             <input type="text" id="turma" name="turma"
                    placeholder="turma do aluno" maxlength="100" required
                    title="Informe a turma do aluno"><br><br>
+
+            <label for="situacao">situação:</label><br>
+            <select name="situacao" id="situacao">
+                <option value="">Selecione a situação</option>
+                <option value="true">Passou</option>
+                <option value="false">Reprovou</option>
+            </select>
 
 
             <button type="submit" class="novo" title="Salvar novo aluno">+</button>

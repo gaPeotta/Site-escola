@@ -16,11 +16,13 @@ import java.util.List;
 public class ServletUpdateAluno extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Aluno aluno = new Aluno(
-                request.getParameter("matricula"),
+                Integer.parseInt(request.getParameter("matricula")),
                 request.getParameter("nome"),
-                request.getParameter("senha"),
                 request.getParameter("cpf"),
-                request.getParameter("turma")
+                request.getParameter("email"),
+                request.getParameter("senha"),
+                request.getParameter("turma"),
+                Boolean.parseBoolean(request.getParameter("situacao"))
         );
         AlunoDAO dao = new AlunoDAO();
         int status = dao.update(aluno);
@@ -46,7 +48,7 @@ public class ServletUpdateAluno extends HttpServlet {
         List<Aluno> lista = dao.read();
         request.setAttribute("listaAluno", lista);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/alunoJSP/readAluno.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/AlunoJSP/readAluno.jsp");
         dispatcher.forward(request, response);
     }
 }
