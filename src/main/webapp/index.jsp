@@ -31,25 +31,25 @@
                         <h2><a href="html/cadastro.html"style="text-decoration: none; color: inherit;">Cadastrar</a></h2>
                     </div>
 
-                    <form action="ServletReadAluno">
+                    <form action="<%=request.getContextPath()%>/loginUsuario" method="post">
                         <div class="input-group">
                             <label>E-mail</label>
-                            <input type="email" placeholder="Seunome@email.com">
+                            <input type="email" placeholder="Seunome@email.com" id="usuario" name="usuario">
                         </div>
 
                         <div class="input-group">
                             <label>Password</label>
-                            <input type="password" placeholder="@Password1234">
+                            <input type="password" placeholder="@Password1234" id="senha" name="senha">
                         </div>
 
                         <div class="role-selector">
                             <label class="radio-box">
-                                <input type="radio" name="role" checked>
+                                <input type="radio" name="tipo" value="professor" id="tipo">
                                 <span class="checkmark"></span>
                                 Sou professor
                             </label>
                             <label class="radio-box">
-                                <input type="radio" name="role">
+                                <input type="radio" name="tipo" value="aluno" id="tipo" >
                                 <span class="checkmark"></span>
                                 Sou aluno
                             </label>
