@@ -122,7 +122,7 @@ public class ProfessorDAO {
         // SQLException é propagada
         return listaProfessor;
     }
-    public Professor read(String usuario, String senha){
+    public Professor buscarPorEmailESenha(String usuario, String senha){
         String sql = "SELECT * FROM professor WHERE usuario = ? and senha = ?";
         Conexao conexao = new Conexao();
         Professor prof = null;
