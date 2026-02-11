@@ -15,7 +15,7 @@ import java.util.List;
 @WebServlet(name = "ServletDeleteProfessor", value = "/ServletDeleteProfessor")
 public class ServletDeleteProfessor extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("matricula"));
+        int id = Integer.parseInt(request.getParameter("id"));
 
         ProfessorDAO dao = new ProfessorDAO();
         // Busca o nome da empresa para montar a mensagem
@@ -43,7 +43,7 @@ public class ServletDeleteProfessor extends HttpServlet {
         List<Professor> lista = dao.read();
 
         request.setAttribute("listaProfessor", lista);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/professorJSP/readProfessor.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/ProfessorJSP/readProfessor.jsp");
         dispatcher.forward(request, response);
     }
 }
