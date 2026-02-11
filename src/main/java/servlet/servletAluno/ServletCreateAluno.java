@@ -29,7 +29,7 @@ public class ServletCreateAluno extends HttpServlet {
 
         if (dao.create(aluno) > 0) {
             mensagem = "A criação do aluno foi realizada com sucesso.";
-        } else if(dao.create(aluno)==0) {
+        } else if(dao.create(aluno)<=0) {
             mensagem = "A criação do endereço falhou: erro sql.";
         }
         else {
