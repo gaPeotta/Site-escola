@@ -18,6 +18,7 @@
         aluno = new AlunoDAO().buscarPorMatricula(matricula);
     }
 %>
+<link rel="stylesheet" href="/css/tabelas.css">
 <html>
 <head>
     <title>aluno update</title>
