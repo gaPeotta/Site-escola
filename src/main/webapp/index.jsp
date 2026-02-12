@@ -19,9 +19,9 @@
             <div class="form-wrapper">
 
                 <div class="admin-btn-container">
-                    <button class="btn-admin">
+                    <a href="/WEB-INF/AlunoJSP/createAluno.jsp" class="btn-admin">
                         <i class="fa-regular fa-circle-user"></i> Sou admin
-                    </button>
+                    </a>
                 </div>
 
                 <div class="login-card">
