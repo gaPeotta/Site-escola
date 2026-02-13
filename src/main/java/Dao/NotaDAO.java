@@ -209,6 +209,77 @@ public class NotaDAO {
 
         return null;
     }
+    public List<Notas> buscarPorProfessor(int idProfessor) {
+
+                        String sql = "SELECT * FROM notas WHERE id_professor = ? ORDER BY id_notas";
+                        Conexao conexao = new Conexao();
+                        List<Notas> notas = new LinkedList<>();
+
+                        try (
+                                Connection conn = conexao.conectar();
+                                PreparedStatement pstmt = conn.prepareStatement(sql)
+                        ) {
+
+                            pstmt.setInt(1, idProfessor);
+
+                            try (ResultSet rs = pstmt.executeQuery()) {
+
+                                if (rs.next()) {
+                                    Notas nota = new Notas(
+                                            rs.getInt("id_notas"),
+                                            rs.getInt("matricula_aluno"),
+                            rs.getInt("id_professor"),
+                            rs.getString("disciplina"),
+                            rs.getString("observacao"),
+                            rs.getDouble("nota1"),
+                            rs.getDouble("nota2")
+                    );
+                    notas.add(nota);
+                }
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        return notas;
+    }
+
+    public List<Notas> buscarPorId(int idNota) {
+
+        String sql = "SELECT * FROM notas WHERE id_nota = ? ORDER BY id_notas";
+        Conexao conexao = new Conexao();
+        List<Notas> notas = new LinkedList<>();
+
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+
+            pstmt.setInt(1, idNota);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                if (rs.next()) {
+                    Notas nota = new Notas(
+                            rs.getInt("id_notas"),
+                            rs.getInt("matricula_aluno"),
+                            rs.getInt("id_professor"),
+                            rs.getString("disciplina"),
+                            rs.getString("observacao"),
+                            rs.getDouble("nota1"),
+                            rs.getDouble("nota2")
+                    );
+                    notas.add(nota);
+                }
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        return notas;
+    }
 
     /*
      * Atualiza nota.
