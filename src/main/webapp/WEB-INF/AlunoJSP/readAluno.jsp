@@ -6,78 +6,55 @@
   Time: 14:39
   To change this template use File | Settings | File Templates.
 --%>
+<%
+    List<Aluno> listaAluno = (List<Aluno>) request.getAttribute("listaAluno");
+%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/css/tabelas.css">
 <html>
 <head>
     <title>Read aluno</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
 </head>
 <body>
-<div class="container">
-    <div class="actions">
-        <!-- Botão para cadastrar novo aluno -->
-        <form action="<%= request.getContextPath() %>/ServletReadAluno" method="get">
-            <button type="submit" class="novo" title="Cadastrar novo aluno">+</button>
-            <input  type="hidden" name="view" value="create">
-        </form>
+<div class="div2">
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+        <a href="ServletReadAluno?view=create" class="btn-criar">Novo Aluno</a>
     </div>
-    </form>
-        <% String mensagem = (String) request.getAttribute("mensagem");
-            if (mensagem != null) {
-                String cor = mensagem.toLowerCase().contains("sucesso") ? "green" : "red"; %>
-        <p style="color: <%= cor %>" title="Mensagem do sistema"><%= mensagem %></p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Matrícula</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Turma</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% for (Aluno aluno : listaAluno) { %>
+        <tr>
+            <td><%= aluno.getMatricula() %></td>
+            <td><%= aluno.getNome() %></td>
+            <td><%= aluno.getEmail() %></td>
+            <td><%= aluno.getTurma() %></td>
+            <td class="acoes">
+                <a class="btn-editar"
+                   href="ServletReadAluno?view=update&matricula=<%= aluno.getMatricula() %>">
+                    Editar
+                </a>
+                <a class="btn-excluir"
+                   href="ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>"
+                   onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                    Excluir
+                </a>
+            </td>
+        </tr>
         <% } %>
-        <div class="tabela-container">
-            <table>
-                <thead>
-                <tr>
-                    <th>Matricula</th>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Email</th>
-                    <th>Senha</th>
-                    <th>Turma</th>
-                    <th>Situação</th>
-                    <th>Update</th>
-                    <th>Delete</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <%
-                    // Recupera lista de endereços e exibe na tabela
-                    List<Aluno> lista = (List<Aluno>) request.getAttribute("listaAluno");
-                    if (lista != null && !lista.isEmpty()) {
-                        for (Aluno aluno : lista) {
-                %>
-                    <tr>
-                        <td title="Matricula do aluno:"><%= aluno.getMatricula() %>
-                        <td title="Nome do aluno:"><%= aluno.getNome() %>
-                        <td title="CPF do aluno:"><%= aluno.getCpf() %>
-                        <td title="Email do aluno:"><%= aluno.getEmail() %>
-                        <td title="Senha do aluno:"><%= aluno.getSenha() %>
-                        <td title="Turma do aluno:"><%= aluno.getTurma() %>
-                        <td title="Situação do aluno:"><%= aluno.getSituacao() %>
-                        </td>
-                        <td class="acoes">
-                            <a href="<%= request.getContextPath() %>/ServletReadAluno?view=update&matricula=<%= aluno.getMatricula() %>" title="Editar aluno">editar aluno
-                            </a>
-                        </td>
-                        <td class="acoes">
-                            <a href="<%= request.getContextPath() %>/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>"
-                               onclick="return confirm('Tem certeza que deseja excluir este aluno?');"
-                               title="Excluir aluno">exluir aluno
-                            </a>
-                        </td>
-                    </tr>
-                    <%     }
-                    } else { %>
-                    <tr>
-                        <td colspan="9" title="Nenhum aluno foi encontrado">Nenhum sluno encontrado.</td>
-                    </tr>
-                    <% } %>
-                </tbody>
-            </table>
-        </div>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
