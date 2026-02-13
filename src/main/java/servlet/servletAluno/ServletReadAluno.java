@@ -26,6 +26,9 @@ public class ServletReadAluno extends HttpServlet {
             if ("create".equals(view)) {
                 destino = "/WEB-INF/AlunoJSP/createAluno.jsp";
             } else if ("update".equals(view)) {
+                Integer matricula = Integer.valueOf(request.getParameter("matricula"));
+                Aluno aluno = alunoDAO.buscarPorMatricula(matricula);
+                request.setAttribute("aluno", aluno);
                 destino = "/WEB-INF/AlunoJSP/updateAluno.jsp";
             } else {
                 destino = "/WEB-INF/AlunoJSP/readAluno.jsp";
