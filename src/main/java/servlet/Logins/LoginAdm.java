@@ -23,7 +23,7 @@ public class LoginAdm extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
 
-        String email = request.getParameter("email");
+        String email = request.getParameter("usuario");
         String senha = request.getParameter("senha");
         Administrador admin = null;
         boolean login = false;
@@ -47,7 +47,7 @@ public class LoginAdm extends HttpServlet {
 
         if(login){
             System.out.println("Login bem-sucedido para: " + email);
-            response.sendRedirect(request.getContextPath() + "/telaadm");
+            response.sendRedirect(request.getContextPath() + "/alunoOuProfessor.jsp");
         }
         else{
             System.err.println("Falha no login para: " + email + ". Erro: " + erro);

@@ -19,7 +19,7 @@
             <div class="form-wrapper">
 
                 <div class="admin-btn-container">
-                    <a href="/WEB-INF/AlunoJSP/createAluno.jsp" class="btn-admin">
+                    <a href="<%=request.getContextPath()%>/loginAdm.jsp" class="btn-admin">
                         <i class="fa-regular fa-circle-user"></i> Sou admin
                     </a>
                 </div>
