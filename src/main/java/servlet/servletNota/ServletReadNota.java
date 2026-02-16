@@ -1,49 +1,72 @@
 package servlet.servletNota;
-
 import Dao.NotaDAO;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+
 import model.Notas;
-import model.Professor;
+
 import java.io.IOException;
 import java.util.List;
 
+@WebServlet("/ServletReadNotas")
 public class ServletReadNota extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Professor prof = (Professor) session.getAttribute("usuarioLogado");
 
-        // 1. Verifica primeiro se o professor está logado para evitar erro
-        if (prof == null) {
-            response.sendRedirect("index.jsp");
-            return; // Encerra a execução aqui
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-        // 2. Busca apenas as notas vinculadas ao ID deste professor
-        NotaDAO notaDao = new NotaDAO();
-        List<Notas> listaFiltrada = notaDao.buscarPorProfessor(prof.getIdProfessor());
+        String tipo = (String) session.getAttribute("tipoUsuario");
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        //adicional
+        String disciplina = request.getParameter("disciplina");
+        String orderBy = request.getParameter("orderBy");
+        String direction = request.getParameter("direction");
 
-        // 3. Define a lista filtrada como atributo para a JSP
-        request.setAttribute("listaNotas", listaFiltrada);
+        Integer matriculaAluno = null;
+        Integer idProfessor = null;
 
-        // 4. Decide para onde o usuário vai (View Manager)
-        String view = request.getParameter("view");
-        String destino;
+        if ("aluno".equals(tipo)) {
 
-        if ("create".equals(view)) {
-            destino = "/WEB-INF/NotaJSP/createNota.jsp";
-        } else if ("update".equals(view)) {
-            destino = "/WEB-INF/NotaJSP/updateNota.jsp";
+            matriculaAluno = idUsuario;
+
+        } else if ("professor".equals(tipo)) {
+
+            idProfessor = idUsuario;
+
+        } else if ("adm".equals(tipo)) {
+
+            // ADM pode ver tudo
+            // filtros continuam null
+
         } else {
-            destino = "/WEB-INF/NotaJSP/readNota.jsp";
+
+            // tipo inválido
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-        // 5. Um ÚNICO forward no final do método
-        RequestDispatcher dispatcher = request.getRequestDispatcher(destino);
-        dispatcher.forward(request, response);
+        NotaDAO dao = new NotaDAO();
+
+        List<Notas> listaNotas = dao.read(
+                matriculaAluno,
+                idProfessor,
+                disciplina,
+                orderBy,
+                direction
+        );
+
+        request.setAttribute("listaNotas", listaNotas);
+
+        // Você decide depois qual view usar
+        request.getRequestDispatcher("/WEB-INF/NotasJSP/readNotas.jsp")
+                .forward(request, response);
     }
 }
