@@ -25,7 +25,7 @@ public class LoginAdm extends HttpServlet {
 
         String email = request.getParameter("usuario");
         String senha = request.getParameter("senha");
-        Administrador admin = null;
+        Administrador admin;
         boolean login = false;
         String erro = null;
 
@@ -36,7 +36,6 @@ public class LoginAdm extends HttpServlet {
                 login = true;
                 HttpSession session = request.getSession();
                 session.setAttribute("adminLogado", admin);
-                session.setMaxInactiveInterval(30 * 60);
             }else {
                 System.out.println("Email ou senha incorretos");
             }
@@ -47,7 +46,7 @@ public class LoginAdm extends HttpServlet {
 
         if(login){
             System.out.println("Login bem-sucedido para: " + email);
-            response.sendRedirect(request.getContextPath() + "/alunoOuProfessor.jsp");
+            response.sendRedirect("/alunoOuProfessor.jsp");
         }
         else{
             System.err.println("Falha no login para: " + email + ". Erro: " + erro);
