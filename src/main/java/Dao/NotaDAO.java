@@ -89,56 +89,88 @@ public class NotaDAO {
     /*
      * Busca notas com filtros dinâmicos.
      */
-    public List<Notas> read(Integer matriculaAluno, Integer idProfessor, String disciplina, String orderBy, String direction) {
+    public List<Notas> read(Integer matriculaAluno,
+                            Integer idProfessor,
+                            String disciplina,
+                            String buscaProfessor,
+                            String buscaAluno,
+                            String orderBy,
+                            String direction) {
 
         Conexao conexao = new Conexao();
         List<Notas> lista = new LinkedList<>();
         List<Object> parametros = new LinkedList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM notas WHERE 1=1 ");
-//      e se quiser ver todas as notas de todos os alunos? -> matriculaAluno = null
+        StringBuilder sql = new StringBuilder(
+                "SELECT n.*, " +
+                        "a.nome AS nome_aluno, " +
+                        "p.nome AS nome_professor " +
+                        "FROM notas n " +
+                        "JOIN aluno a ON a.matricula = n.matricula_aluno " +
+                        "JOIN professor p ON p.id_professor = n.id_professor " +
+                        "WHERE 1=1 "
+        );
+
+        // ================= FILTROS POR USUÁRIO =================
         if (matriculaAluno != null) {
-            sql.append(" AND matricula_aluno = ?");
+            sql.append(" AND n.matricula_aluno = ?");
             parametros.add(matriculaAluno);
         }
-//      e se quiser ver todas as notas de todos os professores? -> idProfessor = null
+
         if (idProfessor != null) {
-            sql.append(" AND id_professor = ?");
+            sql.append(" AND n.id_professor = ?");
             parametros.add(idProfessor);
         }
-//      e se quiser ver todas as notas de todas disciplinas? -> disciplina = null
+
+        // ================= FILTRO POR DISCIPLINA =================
         if (disciplina != null && !disciplina.trim().isEmpty()) {
-            sql.append(" AND disciplina ILIKE ?");
+            sql.append(" AND n.disciplina ILIKE ?");
             parametros.add("%" + disciplina.trim() + "%");
         }
 
-        // whitelist ordenação
-        String coluna = "id_notas";
+        // ================= FILTRO POR NOME DO ALUNO =================
+        if (buscaAluno != null && !buscaAluno.trim().isEmpty()) {
+            sql.append(" AND (p.nome ILIKE ? OR n.disciplina ILIKE ?)");
+            parametros.add("%" + buscaAluno.trim() + "%");
+            parametros.add("%" +  buscaAluno.trim() + "%");
+        }
+
+        if (buscaProfessor != null && !buscaProfessor.trim().isEmpty()) {
+            sql.append(" AND a.nome ILIKE ?");
+            parametros.add("%" + buscaProfessor.trim() + "%");
+        }
+
+        // ================= ORDENAÇÃO (WHITELIST) =================
+        String coluna = "n.id_notas";
 
         if (orderBy != null) {
             switch (orderBy.toLowerCase()) {
                 case "disciplina":
-                    coluna = "disciplina";
+                    coluna = "n.disciplina";
                     break;
                 case "nota1":
-                    coluna = "nota1";
+                    coluna = "n.nota1";
                     break;
                 case "nota2":
-                    coluna = "nota2";
+                    coluna = "n.nota2";
                     break;
                 case "matricula":
-                    coluna = "matricula_aluno";
+                    coluna = "n.matricula_aluno";
+                    break;
+                case "id_notas":
+                    coluna = "n.id_notas";
                     break;
             }
         }
 
         String dir = "ASC";
-        if (direction != null && direction.equalsIgnoreCase("DESC")) {
+        if ("DESC".equalsIgnoreCase(direction)) {
             dir = "DESC";
         }
 
         sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
 
+        // ================= EXECUÇÃO =================
         try (
                 Connection conn = conexao.conectar();
                 PreparedStatement pstmt = conn.prepareStatement(sql.toString())
@@ -162,6 +194,10 @@ public class NotaDAO {
                             rs.getDouble("nota2")
                     );
 
+                    // nomes vindos do JOIN
+                    notas.setNomeAluno(rs.getString("nome_aluno"));
+                    notas.setNomeProfessor(rs.getString("nome_professor"));
+
                     lista.add(notas);
                 }
             }
@@ -172,7 +208,6 @@ public class NotaDAO {
 
         return lista;
     }
-
     /*
      * Busca nota pelo ID.
      */

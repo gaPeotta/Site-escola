@@ -23,11 +23,11 @@ public class ServletCreateProfessor extends HttpServlet {
             // Captura os parâmetros do formulário
             String nome = request.getParameter("nome");
             String disciplina = request.getParameter("disciplina");
-            String usuario = request.getParameter("usuario");
+            String email = request.getParameter("email");
             String senha =  request.getParameter("senha");
 
             // Cria o objeto Professor (o construtor chama os setters com validação)
-            Professor professor = new Professor(nome, disciplina, senha, usuario);
+            Professor professor = new Professor(nome, disciplina, senha, email);
 
             if (dao.create(professor)) {
                 mensagem = "O cadastro do professor foi realizado com sucesso!";

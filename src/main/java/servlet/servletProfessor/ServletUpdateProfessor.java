@@ -18,7 +18,7 @@ public class ServletUpdateProfessor extends HttpServlet {
         Professor professor = new Professor(
                 request.getParameter("nome"),
                 request.getParameter("discplina"),
-                request.getParameter("usuario"),
+                request.getParameter("email"),
                 request.getParameter("senha")
         );
         ProfessorDAO dao = new ProfessorDAO();
