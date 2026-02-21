@@ -1,7 +1,6 @@
 package Dao;
 
 import conexao.Conexao;
-import model.Administrador;
 import model.Professor;
 
 import java.sql.*;
@@ -11,8 +10,9 @@ import java.util.List;
 
 public class ProfessorDAO {
 
+    // ================= CREATE =================
     public boolean create(Professor professor) {
-        String sql = "INSERT INTO professor (nome, disciplina, senha, usuario) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO professor (nome, disciplina, senha, email) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -20,7 +20,7 @@ public class ProfessorDAO {
             pstmt.setString(1, professor.getNome());
             pstmt.setString(2, professor.getDisciplina());
             pstmt.setString(3, professor.getSenha());
-            pstmt.setString(4, professor.getUsuario());
+            pstmt.setString(4, professor.getEmail());
 
             return pstmt.executeUpdate() > 0;
 
@@ -30,6 +30,7 @@ public class ProfessorDAO {
         }
     }
 
+    // ================= READ =================
     public List<Professor> read() {
         List<Professor> lista = new ArrayList<>();
         String sql = "SELECT * FROM professor";
@@ -44,7 +45,7 @@ public class ProfessorDAO {
                         rs.getString("nome"),
                         rs.getString("disciplina"),
                         rs.getString("senha"),
-                        rs.getString("usuario")
+                        rs.getString("email")
                 );
 
                 lista.add(professor);
@@ -57,23 +58,20 @@ public class ProfessorDAO {
         return lista;
     }
 
-
-    public List<Professor> read(String nome, String orderBy, String direction){
+    // ================= READ COM FILTRO =================
+    public List<Professor> read(String nome, String orderBy, String direction) {
         Conexao conexao = new Conexao();
         List<Professor> listaProfessor = new LinkedList<>();
 
-        // Usa StringBuilder para construir a query dinamicamente de forma segura
         StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM professor");
-        List<Object> parametros = new LinkedList<>(); // Lista para guardar parâmetros do PreparedStatement
+        List<Object> parametros = new LinkedList<>();
 
-        // Adiciona filtro WHERE com placeholder se 'nome' for fornecido
         if (nome != null && !nome.trim().isEmpty()) {
             sqlBuilder.append(" WHERE nome ILIKE ?");
-            parametros.add("%" + nome.trim() + "%"); // Adiciona valor à lista de parâmetros
+            parametros.add("%" + nome.trim() + "%");
         }
 
-        // Validação (Whitelisting) da coluna de ordenação
-        String colunaOrdenacao = "id"; // Default seguro
+        String colunaOrdenacao = "id_professor";
         if (orderBy != null) {
             String lowerOrderBy = orderBy.trim().toLowerCase();
             if (lowerOrderBy.equals("nome")) {
@@ -83,99 +81,112 @@ public class ProfessorDAO {
             }
         }
 
-        // Validação da direção da ordenação
         String dir = "ASC";
-        if (direction != null && direction.trim().equalsIgnoreCase("DESC")) {
+        if ("DESC".equalsIgnoreCase(direction)) {
             dir = "DESC";
         }
 
-        // Adiciona ORDER BY seguro (após validação/whitelisting)
         sqlBuilder.append(" ORDER BY ").append(colunaOrdenacao).append(" ").append(dir);
         String sql = sqlBuilder.toString();
 
-        // Usa try-with-resources
         try (Connection conn = conexao.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // Define os parâmetros na ordem em que foram adicionados
             for (int i = 0; i < parametros.size(); i++) {
                 pstmt.setObject(i + 1, parametros.get(i));
             }
 
-            // Executa a query
             try (ResultSet rset = pstmt.executeQuery()) {
-                // Processa os resultados
                 while (rset.next()) {
                     Professor prof = new Professor(
-                            rset.getInt("idprofessor"),
+                            rset.getInt("id_professor"),
                             rset.getString("nome"),
                             rset.getString("disciplina"),
                             rset.getString("senha"),
-                            rset.getString("usuario")
+                            rset.getString("email")
                     );
                     listaProfessor.add(prof);
                 }
-            } // rset é fechado automaticamente
-        }catch (SQLException sqle){
+            }
+
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
-        }// pstmt e conn são fechados automaticamente
-        // SQLException é propagada
+        }
+
         return listaProfessor;
     }
-    public Professor buscarPorEmailESenha(String usuario, String senha){
-        String sql = "SELECT * FROM professor WHERE usuario = ? and senha = ?";
+
+    // ================= LOGIN =================
+    public Professor buscarPorEmailESenha(String email, String senha){
+        String sql = "SELECT * FROM professor WHERE email = ? AND senha = ?";
         Conexao conexao = new Conexao();
         Professor prof = null;
 
-        // Usa try-with-resources
         try (Connection conn = conexao.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, usuario);
+            System.out.println("=== LOGIN PROFESSOR DAO ===");
+            System.out.println("Email recebido: [" + email + "]");
+            System.out.println("Senha recebida: [" + senha + "]");
+
+            pstmt.setString(1, email);
             pstmt.setString(2, senha);
 
             try (ResultSet rset = pstmt.executeQuery()) {
+
                 if (rset.next()) {
-                    Professor professor = new Professor(
-                            rset.getInt("idprofessor"),
+                    System.out.println("Professor ENCONTRADO no banco!");
+
+                    prof = new Professor(
+                            rset.getInt("id_professor"),
                             rset.getString("nome"),
                             rset.getString("disciplina"),
                             rset.getString("senha"),
-                            rset.getString("usuario")
+                            rset.getString("email")
                     );
+
+                } else {
+                    System.out.println("Professor NÃO encontrado na query.");
                 }
             }
+
         } catch (SQLException sqle){
             sqle.printStackTrace();
         }
+
         return prof;
     }
+    // ================= BUSCAR POR ID =================
     public Professor buscarPorId(int id) {
         Professor professor = null;
         String sql = "SELECT * FROM professor WHERE id_professor = ?";
+
         try (Connection conn = new Conexao().conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
                 professor = new Professor(
-                        rs.getInt("idprofessor"),
+                        rs.getInt("id_professor"),
                         rs.getString("nome"),
                         rs.getString("disciplina"),
                         rs.getString("senha"),
-                        rs.getString("usuario")
+                        rs.getString("email")
                 );
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return professor;
     }
 
-
-
+    // ================= UPDATE =================
     public int update(Professor professor) {
-        String sql = "UPDATE professor SET nome = ?, disciplina = ?, senha = ?, usuario = ? WHERE id_professor = ?";
+        String sql = "UPDATE professor SET nome = ?, disciplina = ?, senha = ?, email = ? WHERE id_professor = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -183,27 +194,28 @@ public class ProfessorDAO {
             pstmt.setString(1, professor.getNome());
             pstmt.setString(2, professor.getDisciplina());
             pstmt.setString(3, professor.getSenha());
-            pstmt.setString(4, professor.getUsuario());
+            pstmt.setString(4, professor.getEmail());
             pstmt.setInt(5, professor.getIdProfessor());
 
             return pstmt.executeUpdate();
-        }catch (SQLException sqle) {
+
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return 0;
         }
     }
 
+    // ================= DELETE =================
     public int delete(int idProfessor) {
         String sql = "DELETE FROM professor WHERE id_professor = ?";
-        Conexao conexao = new Conexao();
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
+
+        try (Connection conn = new Conexao().conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idProfessor);
             return pstmt.executeUpdate();
-        }catch (SQLException sqle){
+
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
             return 0;
         }

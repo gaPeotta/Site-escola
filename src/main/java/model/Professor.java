@@ -8,23 +8,23 @@ public class Professor {
     private String nome;
     private String disciplina;
     private String senha;
-    private String usuario;
+    private String email;
 
     // ---------------- CONSTRUTORES ----------------
 
-    public Professor(Integer idProfessor, String nome, String disciplina, String senha, String usuario) {
+    public Professor(Integer idProfessor, String nome, String disciplina, String senha, String email) {
         this.setIdProfessor(idProfessor);
         this.setNome(nome);
         this.setDisciplina(disciplina);
         this.setSenha(senha);
-        this.setUsuario(usuario);
+        this.setEmail(email);
     }
 
-    public Professor(String nome, String disciplina, String senha, String usuario) {
+    public Professor(String nome, String disciplina, String senha, String email) {
         this.setNome(nome);
         this.setDisciplina(disciplina);
         this.setSenha(senha);
-        this.setUsuario(usuario);
+        this.setEmail(email);
     }
 
     // ---------------- GETTERS E SETTERS ----------------
@@ -37,11 +37,9 @@ public class Professor {
         if (idProfessor == null) {
             throw new NullPointerException("O ID do professor não pode ser nulo.");
         }
-
         if (idProfessor <= 0) {
             throw new IllegalArgumentException("O ID do professor deve ser maior que zero.");
         }
-
         this.idProfessor = idProfessor;
     }
 
@@ -50,15 +48,12 @@ public class Professor {
     }
 
     public void setNome(String nome) {
-
         if (nome == null) {
             throw new NullPointerException("O nome não pode ser nulo.");
         }
-
         if (nome.trim().isEmpty()) {
             throw new IllegalArgumentException("O nome não pode estar em branco.");
         }
-
         this.nome = nome.trim();
     }
 
@@ -67,15 +62,12 @@ public class Professor {
     }
 
     public void setDisciplina(String disciplina) {
-
         if (disciplina == null) {
             throw new NullPointerException("A disciplina não pode ser nula.");
         }
-
         if (disciplina.trim().isEmpty()) {
             throw new IllegalArgumentException("A disciplina não pode estar em branco.");
         }
-
         this.disciplina = disciplina.trim();
     }
 
@@ -84,11 +76,9 @@ public class Professor {
     }
 
     public void setSenha(String senha) {
-
         if (senha == null) {
             throw new NullPointerException("A senha não pode ser nula.");
         }
-
         if (senha.trim().isEmpty()) {
             throw new IllegalArgumentException("A senha não pode estar em branco.");
         }
@@ -97,22 +87,20 @@ public class Professor {
         this.senha = senha;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsuario(String usuario) {
-
-        if (usuario == null) {
-            throw new NullPointerException("O usuário não pode ser nulo.");
+    public void setEmail(String email) {
+        if (email == null) {
+            throw new NullPointerException("O email não pode ser nulo.");
+        }
+        if (email.trim().isEmpty()) {
+            throw new IllegalArgumentException("O email não pode estar em branco.");
         }
 
-        if (usuario.trim().isEmpty()) {
-            throw new IllegalArgumentException("O usuário não pode estar em branco.");
-        }
-
-        validateUsuario(usuario);
-        this.usuario = usuario.trim();
+        validateEmail(email);
+        this.email = email.trim().toLowerCase();
     }
 
     // ---------------- TO STRING ----------------
@@ -120,11 +108,11 @@ public class Professor {
     @Override
     public String toString() {
         return String.format(
-                "Professor | ID: %-3d | Nome: %-20s | Disciplina: %-20s | Usuário: %-15s | Senha: [PROTEGIDA]",
+                "Professor | ID: %-3d | Nome: %-20s | Disciplina: %-20s | Email: %-25s | Senha: [PROTEGIDA]",
                 this.idProfessor,
                 this.nome,
                 this.disciplina,
-                this.usuario
+                this.email
         );
     }
 
@@ -135,7 +123,9 @@ public class Professor {
     private static final Pattern PATTERN_DIGITO = Pattern.compile("\\d");
     private static final Pattern PATTERN_ESPECIAL = Pattern.compile("[^\\sA-Za-z0-9]");
 
-    private static final Pattern PATTERN_USUARIO = Pattern.compile("^[a-zA-Z0-9._-]{4,20}$");
+    // ✅ regex básica de email (suficiente para sistemas web)
+    private static final Pattern PATTERN_EMAIL =
+            Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
     /*
      * Regras senha:
@@ -168,17 +158,9 @@ public class Professor {
         }
     }
 
-    /*
-     * Regras usuário:
-     * - 4 a 20 caracteres
-     * - letras, números, ponto, underline ou hífen
-     */
-    private void validateUsuario(String usuario) {
-
-        if (!PATTERN_USUARIO.matcher(usuario).matches()) {
-            throw new IllegalArgumentException(
-                    "Usuário inválido. Use entre 4 e 20 caracteres com letras, números, ponto, underline ou hífen."
-            );
+    private void validateEmail(String email) {
+        if (!PATTERN_EMAIL.matcher(email).matches()) {
+            throw new IllegalArgumentException("Email inválido.");
         }
     }
 }

@@ -9,6 +9,8 @@ public class Notas {
     private String observacao;
     private double nota1;
     private double nota2;
+    private String nomeAluno;
+    private String nomeProfessor;
 
     // Construtor SEM ID (para inserts)
     public Notas(Integer matriculaAluno, Integer idProfessor, String disciplina,
@@ -91,5 +93,20 @@ public class Notas {
 
     public void setNota2(double nota2) {
         this.nota2 = nota2;
+    }
+    public String getNomeAluno() {
+        return nomeAluno;
+    }
+
+    public void setNomeAluno(String nomeAluno) {
+        this.nomeAluno = nomeAluno;
+    }
+
+    public String getNomeProfessor() {
+        return nomeProfessor;
+    }
+
+    public void setNomeProfessor(String nomeProfessor) {
+        this.nomeProfessor = nomeProfessor;
     }
 }

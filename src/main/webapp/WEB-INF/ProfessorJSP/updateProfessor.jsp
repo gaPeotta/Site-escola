@@ -28,7 +28,7 @@
         <input type="text" name="disciplina" value="<%= professor.getDisciplina() %>"><br><br>
 
         <label>Email</label><br>
-        <input type="text" name="usuario" value="<%= professor.getUsuario() %>"><br><br>
+        <input type="text" name="email" value="<%= professor.getEmail() %>"><br><br>
 
         <label>Senha</label><br>
         <input type="text" name="senha" value="<%= professor.getSenha() %>"><br><br>

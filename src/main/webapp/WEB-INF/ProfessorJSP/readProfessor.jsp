@@ -29,7 +29,7 @@
             <th>Id</th>
             <th>Nome</th>
             <th>Disciplina</th>
-            <th>Usuario</th>
+            <th>Email</th>
             <th>Senha</th>
             <th>Ações</th>
         </tr>
@@ -41,7 +41,7 @@
             <td><%= professor.getIdProfessor() %></td>
             <td><%= professor.getNome() %></td>
             <td><%= professor.getDisciplina() %></td>
-            <td><%= professor.getUsuario() %></td>
+            <td><%= professor.getEmail() %></td>
             <td><%= professor.getSenha() %></td>
             <td class="acoes">
                 <a class="btn-editar"
