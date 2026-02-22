@@ -31,7 +31,6 @@
             <th>Senha</th>
             <th>cpf</th>
             <th>Turma</th>
-            <th>Situação</th>
             <th>Ações</th>
         </tr>
         </thead>
@@ -45,7 +44,6 @@
             <td><%= aluno.getSenha() %></td>
             <td><%= aluno.getTurma() %></td>
             <td><%= aluno.getCpf() %></td>
-            <td><%= aluno.getSituacao() %></td>
             <td class="acoes">
                 <a class="btn-editar"
                    href="ServletReadAluno?view=update&matricula=<%= aluno.getMatricula() %>">

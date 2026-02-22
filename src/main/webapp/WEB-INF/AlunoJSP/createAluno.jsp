@@ -31,12 +31,6 @@
         <label>Turma</label><br>
         <input type="text" name="turma"><br><br>
 
-        <label>Situação</label><br>
-        <select name="situacao">
-            <option value="true">Passou</option>
-            <option value="false">Reprovou</option>
-        </select><br><br>
-
         <button class="btn-editar">Cadastrar</button>
     </form>
 </div>

@@ -3,59 +3,84 @@ package servlet.servletNota;
 import jakarta.servlet.http.HttpServlet;
 import Dao.NotaDAO;
 import jakarta.servlet.ServletException;
-
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Notas;
 import model.Professor;
+
 import java.io.IOException;
 
+@WebServlet("/ServletUpdateNota")
 public class ServletUpdateNota extends HttpServlet {
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-    HttpSession session = request.getSession();
-    Professor profLogado = (Professor) session.getAttribute("usuarioLogado");
+        HttpSession session = request.getSession(false);
+        Professor profLogado = (Professor) session.getAttribute("usuarioLogado");
 
-    if (profLogado == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
-    try {
-        // 1. Pega o ID da nota que está sendo editada
-        int idNota = Integer.parseInt(request.getParameter("idNotas"));
-
-        NotaDAO dao = new NotaDAO();
-        // 2. BUSCA A NOTA ORIGINAL NO BANCO (Segurança)
-        Notas notaExistente = dao.read(idNota);
-
-        // 3. Verifica se o professor logado é o dono da nota
-        if (notaExistente != null && notaExistente.getIdProfessor().equals(profLogado.getIdProfessor())) {
-
-            // 4. Captura os novos dados do formulário
-            int matricula = Integer.parseInt(request.getParameter("matriculaAluno"));
-            String disciplina = request.getParameter("disciplina");
-            String observacao = request.getParameter("observacao");
-            double n1 = Double.parseDouble(request.getParameter("nota1"));
-            double n2 = Double.parseDouble(request.getParameter("nota2"));
-
-            // 5. Monta o objeto Notas atualizado (Mantendo o ID original e o ID do professor)
-            Notas notaAtualizada = new Notas(idNota, matricula, profLogado.getIdProfessor(),
-                    disciplina, observacao, n1, n2);
-
-            dao.update(notaAtualizada);
-            session.setAttribute("mensagem", "Nota atualizada com sucesso!");
-        } else {
-            session.setAttribute("erro", "Erro: Você não tem permissão para editar esta nota.");
+        if (profLogado == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        session.setAttribute("erro", "Erro ao processar atualização.");
-    }
+        try {
+            int idNota = Integer.parseInt(request.getParameter("idNotas"));
 
-        response.sendRedirect("ServletReadNota");
+            NotaDAO dao = new NotaDAO();
+            Notas notaExistente = dao.read(idNota);
+
+            if (notaExistente != null &&
+                    profLogado.getIdProfessor().equals(notaExistente.getIdProfessor())) {
+
+                int matricula = Integer.parseInt(request.getParameter("matriculaAluno"));
+                String disciplina = request.getParameter("disciplina");
+                String observacao = request.getParameter("observacao");
+
+                String n1Param = request.getParameter("nota1");
+                String n2Param = request.getParameter("nota2");
+
+                double n1 = (n1Param != null && !n1Param.trim().isEmpty()) ? Double.parseDouble(n1Param) : 0;
+                double n2 = (n2Param != null && !n2Param.trim().isEmpty()) ? Double.parseDouble(n2Param) : 0;
+
+                // Calcula média e situação
+                double media;
+                if (n1 > 0 && n2 > 0) {
+                    media = (n1 + n2) / 2;
+                } else if (n1 > 0) {
+                    media = n1 / 2;
+                } else {
+                    media = 0;
+                }
+
+                boolean situacao = media >= 7;
+
+                Notas notaAtualizada = new Notas(
+                        idNota,
+                        matricula,
+                        profLogado.getIdProfessor(),
+                        disciplina,
+                        observacao,
+                        n1,
+                        n2,
+                        situacao
+                );
+
+                dao.update(notaAtualizada);
+                session.setAttribute("mensagem", "Nota atualizada com sucesso!");
+
+            } else {
+                session.setAttribute("erro", "Erro: Você não tem permissão para editar esta nota.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("erro", "Erro ao processar atualização.");
+        }
+
+        response.sendRedirect(request.getContextPath() + "/ServletReadNotas");
     }
 }

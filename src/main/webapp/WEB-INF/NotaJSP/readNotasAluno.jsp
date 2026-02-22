@@ -27,7 +27,6 @@
 
     <h2 style="margin-bottom: 15px;">Minhas Notas</h2>
 
-    <!-- 🔍 FILTROS -->
     <form method="get"
           action="${pageContext.request.contextPath}/ServletReadNotas"
           style="margin-bottom: 15px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -51,8 +50,7 @@
 
         <button type="submit" class="btn-criar">🔍 Filtrar</button>
 
-        <a href="${pageContext.request.contextPath}/ServletReadNotas"
-           class="btn-criar">
+        <a href="${pageContext.request.contextPath}/ServletReadNotas" class="btn-criar">
             🧹 Limpar
         </a>
     </form>
@@ -68,6 +66,7 @@
             <th>Nota 1</th>
             <th>Nota 2</th>
             <th>Média</th>
+            <th>Situação</th>
         </tr>
         </thead>
 
@@ -85,11 +84,12 @@
             <td><%= nota.getNota1() %></td>
             <td><%= nota.getNota2() %></td>
             <td><%= String.format("%.2f", media) %></td>
+            <td><%= nota.getSituacao() ? "Aprovado" : "Reprovado" %></td>
         </tr>
         <% } %>
         <% } else { %>
         <tr>
-            <td colspan="8" style="text-align:center; padding:20px;">
+            <td colspan="9" style="text-align:center; padding:20px;">
                 Nenhuma nota encontrada.
             </td>
         </tr>

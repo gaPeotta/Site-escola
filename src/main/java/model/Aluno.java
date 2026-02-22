@@ -10,36 +10,33 @@ public class Aluno {
     private String email;
     private String senha;
     private String turma;
-    private boolean situacao;
 
     // =========================
     // Construtores
     // =========================
 
-    public Aluno(Integer matricula, String nome, String cpf, String email, String senha, String turma, boolean situacao) {
+    public Aluno(Integer matricula, String nome, String cpf, String email, String senha, String turma) {
         this.setMatricula(matricula);
         this.setNome(nome);
         this.setCpf(cpf);
         this.setEmail(email);
         this.setSenha(senha);
         this.setTurma(turma);
-        this.setSituacao(situacao);
     }
 
-    public Aluno(String nome, String cpf, String email, String senha, String turma, boolean situacao) {
+    public Aluno(String nome, String cpf, String email, String senha, String turma) {
         this.setNome(nome);
         this.setCpf(cpf);
         this.setEmail(email);
         this.setSenha(senha);
         this.setTurma(turma);
-        this.setSituacao(situacao);
     }
-    public Aluno(String nome, String email, String senha, String turma, boolean situacao) {
+
+    public Aluno(String nome, String email, String senha, String turma) {
         this.setNome(nome);
         this.setEmail(email);
         this.setSenha(senha);
         this.setTurma(turma);
-        this.setSituacao(situacao);
     }
 
     // =========================
@@ -132,15 +129,6 @@ public class Aluno {
         this.turma = turma.trim().toUpperCase();
     }
 
-    public boolean getSituacao() {
-        return situacao;
-    }
-    public void setSituacao(boolean situacao) {
-        this.situacao = situacao;
-    }
-
-
-
     // =========================
     // toString protegido
     // =========================
@@ -172,6 +160,5 @@ public class Aluno {
     // =========================
     // Métodos de Validação
     // =========================
-
 
 }

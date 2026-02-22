@@ -35,20 +35,7 @@
         <label>Turma</label><br>
         <input type="text" name="turma" value="<%= aluno.getTurma() %>"><br><br>
 
-        <label>Situação</label><br>
-        <select name="situacao">
-
-            <option value="true"
-                    <% if (aluno.getSituacao()) { %> selected <% } %>>
-                Passou
-            </option>
-
-            <option value="false"
-                    <% if (!aluno.getSituacao()) { %> selected <% } %>>
-                Reprovou
-            </option>
-
-        </select><br><br>
+       <br><br>
 
         <button class="btn-editar">Atualizar</button>
     </form>
