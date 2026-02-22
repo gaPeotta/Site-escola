@@ -20,20 +20,16 @@ public class CadastroEstudante extends HttpServlet {
 
         try {
 
-            //  CPF vindo da session
             String cpf = (String) request.getSession().getAttribute("cpf");
-
 
             String nome = request.getParameter("nome");
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
             String turma = request.getParameter("turma");
-            boolean situacao = Boolean.parseBoolean(request.getParameter("situacao"));
 
-            // Criar aluno
-            Aluno aluno = new Aluno(nome, cpf, email, senha, turma, situacao);
+            // Criar aluno sem situacao
+            Aluno aluno = new Aluno(nome, cpf, email, senha, turma);
 
-            // Salvar no banco
             AlunoDAO alunoDAO = new AlunoDAO();
             int matriculaGerada = alunoDAO.create(aluno);
 
@@ -41,11 +37,9 @@ public class CadastroEstudante extends HttpServlet {
                 throw new Exception("Erro ao cadastrar aluno");
             }
 
-            // Remove prematricula
             PreMatriculaDAO preDAO = new PreMatriculaDAO();
             preDAO.deleteByCpf(cpf);
 
-            // Limpa session
             request.getSession().invalidate();
 
             response.sendRedirect("login.jsp");
@@ -65,3 +59,4 @@ public class CadastroEstudante extends HttpServlet {
         }
     }
 }
+

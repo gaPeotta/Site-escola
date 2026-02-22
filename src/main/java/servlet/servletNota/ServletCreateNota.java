@@ -14,49 +14,59 @@ import java.io.IOException;
 public class ServletCreateNota extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
-    // 1. Pega a sessão para identificar QUEM está lançando a nota
-    HttpSession session = request.getSession();
-    Professor profLogado = (Professor) session.getAttribute("usuarioLogado");
+        HttpSession session = request.getSession();
+        Professor profLogado = (Professor) session.getAttribute("usuarioLogado");
 
-    // Segurança básica
-    if (profLogado == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
+        if (profLogado == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
 
-    try {
-        // 2. Captura os dados vindos do formulário (JSP)
-        // Note que os nomes dentro do getParameter devem ser iguais aos 'name' do seu HTML
-        int matricula = Integer.parseInt(request.getParameter("matriculaAluno"));
-        String disciplina = request.getParameter("disciplina");
-        String observacao = request.getParameter("observacao");
-        double n1 = Double.parseDouble(request.getParameter("nota1"));
-        double n2 = Double.parseDouble(request.getParameter("nota2"));
+        try {
+            int matricula = Integer.parseInt(request.getParameter("matriculaAluno"));
+            String disciplina = request.getParameter("disciplina");
+            String observacao = request.getParameter("observacao");
 
-        // 3. Instancia o objeto usando o seu Construtor SEM ID
-        // Ordem: matriculaAluno, idProfessor, disciplina, observacao, nota1, nota2
-        Notas novaNota = new Notas(
-                matricula,
-                profLogado.getIdProfessor(), // Aqui injetamos o ID do professor logado
-                disciplina,
-                observacao,
-                n1,
-                n2
-        );
+            String n1Param = request.getParameter("nota1");
+            String n2Param = request.getParameter("nota2");
 
-        // 4. Envia para o DAO salvar no banco
-        NotaDAO dao = new NotaDAO();
-        dao.create(novaNota);
+            double n1 = (n1Param != null && !n1Param.trim().isEmpty()) ? Double.parseDouble(n1Param) : 0;
+            double n2 = (n2Param != null && !n2Param.trim().isEmpty()) ? Double.parseDouble(n2Param) : 0;
 
-        // 5. Sucesso! Redireciona para a listagem de notas
-        response.sendRedirect("ServletReadNota");
+            // Calcula média e situação
+            double media;
+            if (n1 > 0 && n2 > 0) {
+                media = (n1 + n2) / 2;
+            } else if (n1 > 0) {
+                media = n1 / 2;
+            } else {
+                media = 0;
+            }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        request.setAttribute("erro", "Falha ao cadastrar nota. Verifique os valores inseridos.");
-        request.getRequestDispatcher("/WEB-INF/NotaJSP/createNota.jsp").forward(request, response);
+            boolean situacao = media >= 7;
+
+            Notas novaNota = new Notas(
+                    matricula,
+                    profLogado.getIdProfessor(),
+                    disciplina,
+                    observacao,
+                    n1,
+                    n2,
+                    situacao
+            );
+
+            NotaDAO dao = new NotaDAO();
+            dao.create(novaNota);
+
+            response.sendRedirect("ServletReadNota");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erro", "Falha ao cadastrar nota. Verifique os valores inseridos.");
+            request.getRequestDispatcher("/WEB-INF/NotaJSP/createNota.jsp").forward(request, response);
+        }
     }
 }
-}
+

@@ -14,7 +14,7 @@ public class AlunoDAO {
      */
     public int create(Aluno aluno){
 
-        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma, situacao) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?)";
 
         Conexao conexao = new Conexao();
 
@@ -28,7 +28,6 @@ public class AlunoDAO {
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
             pstmt.setString(5, aluno.getTurma());
-            pstmt.setBoolean(6, aluno.getSituacao());
 
             pstmt.executeUpdate();
 
@@ -45,6 +44,7 @@ public class AlunoDAO {
             return 0;
         }
     }
+
     /*
      * Busca todos os alunos.
      */
@@ -68,8 +68,7 @@ public class AlunoDAO {
                         rs.getString("cpf"),
                         rs.getString("email"),
                         rs.getString("senha"),
-                        rs.getString("turma"),
-                        rs.getBoolean("situacao")
+                        rs.getString("turma")
                 );
 
                 alunos.add(aluno);
@@ -83,7 +82,6 @@ public class AlunoDAO {
 
     /*
      * Busca alunos filtrando por nome e ordenando.
-     * Busca pela situacao.
      */
     public List<Aluno> read(String nome, String orderBy, String direction) {
 
@@ -98,7 +96,6 @@ public class AlunoDAO {
             parametros.add("%" + nome.trim() + "%");
         }
 
-        // Whitelist ordenação
         String coluna = "matricula";
 
         if (orderBy != null) {
@@ -118,10 +115,8 @@ public class AlunoDAO {
         String dir = "ASC";
         if (direction != null && direction.equalsIgnoreCase("DESC")) {
             dir = "DESC";
-        } else if (direction != null && direction.equalsIgnoreCase("SIT")) {
-            dir = "situacao DESC";
-
         }
+
         sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
 
         try (
@@ -143,8 +138,7 @@ public class AlunoDAO {
                             rs.getString("cpf"),
                             rs.getString("email"),
                             rs.getString("senha"),
-                            rs.getString("turma"),
-                            rs.getBoolean("situacao")
+                            rs.getString("turma")
                     );
 
                     alunos.add(aluno);
@@ -156,6 +150,7 @@ public class AlunoDAO {
 
         return alunos;
     }
+
     public Aluno buscarPorMatricula(int matricula) {
         Aluno aluno = null;
         String sql = "SELECT * FROM aluno WHERE matricula = ?";
@@ -170,8 +165,7 @@ public class AlunoDAO {
                         rs.getString("cpf"),
                         rs.getString("email"),
                         rs.getString("senha"),
-                        rs.getString("turma"),
-                        rs.getBoolean("situacao")
+                        rs.getString("turma")
                 );
             }
         } catch (SQLException e) {
@@ -181,11 +175,11 @@ public class AlunoDAO {
     }
 
     /*
-     * Busca aluno pela matrícula.
+     * Busca aluno por email e senha.
      */
     public Aluno buscarPorEmailESenha(String email, String senha) {
 
-        String sql = "SELECT * FROM aluno WHERE email = ? and senha = ?";
+        String sql = "SELECT * FROM aluno WHERE email = ? AND senha = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -205,8 +199,7 @@ public class AlunoDAO {
                             rs.getString("cpf"),
                             rs.getString("email"),
                             rs.getString("senha"),
-                            rs.getString("turma"),
-                            rs.getBoolean("situacao")
+                            rs.getString("turma")
                     );
                 }
             }
@@ -222,7 +215,7 @@ public class AlunoDAO {
      */
     public int update(Aluno aluno){
 
-        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ?, situacao = ? WHERE matricula = ?";
+        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -235,8 +228,7 @@ public class AlunoDAO {
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
             pstmt.setString(5, aluno.getTurma());
-            pstmt.setBoolean(6, aluno.getSituacao());
-            pstmt.setInt(7, aluno.getMatricula());
+            pstmt.setInt(6, aluno.getMatricula());
 
             return pstmt.executeUpdate();
         }catch (SQLException sqle) {
@@ -248,9 +240,9 @@ public class AlunoDAO {
     /*
      * Atualiza aluno via parâmetros diretos.
      */
-    public int update(int matricula, String nome, String senha, String email, String cpf, String turma, boolean situacao){
+    public int update(int matricula, String nome, String senha, String email, String cpf, String turma){
 
-        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ?, situacao = ? WHERE matricula = ?";
+        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -263,8 +255,7 @@ public class AlunoDAO {
             pstmt.setString(3, email);
             pstmt.setString(4, cpf);
             pstmt.setString(5, turma);
-            pstmt.setBoolean(6, situacao);
-            pstmt.setInt(7, matricula);
+            pstmt.setInt(6, matricula);
 
             return pstmt.executeUpdate();
 

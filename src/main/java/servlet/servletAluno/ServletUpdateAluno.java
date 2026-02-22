@@ -21,8 +21,7 @@ public class ServletUpdateAluno extends HttpServlet {
                 request.getParameter("cpf"),
                 request.getParameter("email"),
                 request.getParameter("senha"),
-                request.getParameter("turma"),
-                Boolean.parseBoolean(request.getParameter("situacao"))
+                request.getParameter("turma")
         );
         AlunoDAO dao = new AlunoDAO();
         int status = dao.update(aluno);

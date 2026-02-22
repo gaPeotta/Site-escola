@@ -5,12 +5,11 @@
 
     String orderBySelecionado = (String) request.getAttribute("orderBySelecionado");
     String directionSelecionada = (String) request.getAttribute("directionSelecionada");
-    String buscaProfessor = (String) request.getParameter("buscaProfessor");
+    String buscaAluno = (String) request.getParameter("buscaAluno");
 
     if (orderBySelecionado == null) orderBySelecionado = "id_notas";
-    if (buscaProfessor == null) buscaProfessor = "";
+    if (buscaAluno == null) buscaAluno = "";
     if (directionSelecionada == null) directionSelecionada = "ASC";
-
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -22,14 +21,14 @@
 <body>
 <div class="div2">
 
-    <!-- 🔍 FILTROS -->
+    <!-- FILTROS -->
     <form method="get" action="${pageContext.request.contextPath}/ServletReadNotas"
           style="margin-bottom: 15px; display:flex; gap:10px; flex-wrap:wrap;">
 
         <input type="text"
-               name="disciplina"
-               placeholder="Pesquisar alunos..."
-               value="<%=buscaProfessor%>">
+               name="buscaAluno"
+               placeholder="Pesquisar aluno ou disciplina..."
+               value="<%= buscaAluno %>">
 
         <select name="orderBy">
             <option value="id_notas" <%= orderBySelecionado.equals("id_notas") ? "selected" : "" %>>ID</option>
@@ -65,6 +64,7 @@
             <th>Nota 1</th>
             <th>Nota 2</th>
             <th>Média</th>
+            <th>Situação</th>
             <th>Ações</th>
         </tr>
         </thead>
@@ -83,6 +83,7 @@
             <td><%= nota.getNota1() %></td>
             <td><%= nota.getNota2() %></td>
             <td><%= String.format("%.2f", media) %></td>
+            <td><%= nota.getSituacao() ? "Aprovado" : "Reprovado" %></td>
             <td class="acoes">
                 <a class="btn-editar"
                    href="${pageContext.request.contextPath}/ServletReadNotas?view=update&id=<%= nota.getIdNotas() %>">
@@ -98,7 +99,7 @@
         <% } %>
         <% } else { %>
         <tr>
-            <td colspan="9" style="text-align:center;">Nenhuma nota encontrada.</td>
+            <td colspan="10" style="text-align:center;">Nenhuma nota encontrada.</td>
         </tr>
         <% } %>
         </tbody>

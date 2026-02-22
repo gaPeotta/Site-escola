@@ -14,7 +14,7 @@ public class NotaDAO {
      */
     public int create(Notas notas){
 
-        String sql = "INSERT INTO notas (matricula_aluno, id_professor, disciplina, observacao, nota1, nota2) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO nota (matricula_aluno, id_professor, disciplina, observacao, nota1, nota2, situacao) VALUES (?, ?, ?, ?, ?, ?, ?)";
         Conexao conexao = new Conexao();
 
         try (
@@ -28,6 +28,7 @@ public class NotaDAO {
             pstmt.setString(4, notas.getObservacao());
             pstmt.setDouble(5, notas.getNota1());
             pstmt.setDouble(6, notas.getNota2());
+            pstmt.setBoolean(7, notas.getSituacao());
 
             int linhas = pstmt.executeUpdate();
 
@@ -54,7 +55,7 @@ public class NotaDAO {
      */
     public List<Notas> read(){
 
-        String sql = "SELECT * FROM notas ORDER BY id_notas";
+        String sql = "SELECT * FROM nota ORDER BY id_notas";
         Conexao conexao = new Conexao();
         List<Notas> lista = new LinkedList<>();
 
@@ -73,7 +74,8 @@ public class NotaDAO {
                         rs.getString("disciplina"),
                         rs.getString("observacao"),
                         rs.getDouble("nota1"),
-                        rs.getDouble("nota2")
+                        rs.getDouble("nota2"),
+                        rs.getBoolean("situacao")
                 );
 
                 lista.add(notas);
@@ -105,13 +107,12 @@ public class NotaDAO {
                 "SELECT n.*, " +
                         "a.nome AS nome_aluno, " +
                         "p.nome AS nome_professor " +
-                        "FROM notas n " +
+                        "FROM nota n " +
                         "JOIN aluno a ON a.matricula = n.matricula_aluno " +
                         "JOIN professor p ON p.id_professor = n.id_professor " +
                         "WHERE 1=1 "
         );
 
-        // ================= FILTROS POR USUÁRIO =================
         if (matriculaAluno != null) {
             sql.append(" AND n.matricula_aluno = ?");
             parametros.add(matriculaAluno);
@@ -122,17 +123,15 @@ public class NotaDAO {
             parametros.add(idProfessor);
         }
 
-        // ================= FILTRO POR DISCIPLINA =================
         if (disciplina != null && !disciplina.trim().isEmpty()) {
             sql.append(" AND n.disciplina ILIKE ?");
             parametros.add("%" + disciplina.trim() + "%");
         }
 
-        // ================= FILTRO POR NOME DO ALUNO =================
         if (buscaAluno != null && !buscaAluno.trim().isEmpty()) {
             sql.append(" AND (p.nome ILIKE ? OR n.disciplina ILIKE ?)");
             parametros.add("%" + buscaAluno.trim() + "%");
-            parametros.add("%" +  buscaAluno.trim() + "%");
+            parametros.add("%" + buscaAluno.trim() + "%");
         }
 
         if (buscaProfessor != null && !buscaProfessor.trim().isEmpty()) {
@@ -140,26 +139,15 @@ public class NotaDAO {
             parametros.add("%" + buscaProfessor.trim() + "%");
         }
 
-        // ================= ORDENAÇÃO (WHITELIST) =================
         String coluna = "n.id_notas";
 
         if (orderBy != null) {
             switch (orderBy.toLowerCase()) {
-                case "disciplina":
-                    coluna = "n.disciplina";
-                    break;
-                case "nota1":
-                    coluna = "n.nota1";
-                    break;
-                case "nota2":
-                    coluna = "n.nota2";
-                    break;
-                case "matricula":
-                    coluna = "n.matricula_aluno";
-                    break;
-                case "id_notas":
-                    coluna = "n.id_notas";
-                    break;
+                case "disciplina": coluna = "n.disciplina"; break;
+                case "nota1":      coluna = "n.nota1";      break;
+                case "nota2":      coluna = "n.nota2";      break;
+                case "matricula":  coluna = "n.matricula_aluno"; break;
+                case "id_notas":   coluna = "n.id_notas";   break;
             }
         }
 
@@ -170,7 +158,6 @@ public class NotaDAO {
 
         sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
 
-        // ================= EXECUÇÃO =================
         try (
                 Connection conn = conexao.conectar();
                 PreparedStatement pstmt = conn.prepareStatement(sql.toString())
@@ -191,10 +178,10 @@ public class NotaDAO {
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2")
+                            rs.getDouble("nota2"),
+                            rs.getBoolean("situacao")
                     );
 
-                    // nomes vindos do JOIN
                     notas.setNomeAluno(rs.getString("nome_aluno"));
                     notas.setNomeProfessor(rs.getString("nome_professor"));
 
@@ -208,12 +195,13 @@ public class NotaDAO {
 
         return lista;
     }
+
     /*
      * Busca nota pelo ID.
      */
     public Notas read(int idNotas) {
 
-        String sql = "SELECT * FROM notas WHERE id_notas = ?";
+        String sql = "SELECT * FROM nota WHERE id_notas = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -233,7 +221,8 @@ public class NotaDAO {
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2")
+                            rs.getDouble("nota2"),
+                            rs.getBoolean("situacao")
                     );
                 }
             }
@@ -244,30 +233,35 @@ public class NotaDAO {
 
         return null;
     }
+
+    /*
+     * Busca notas por professor.
+     */
     public List<Notas> buscarPorProfessor(int idProfessor) {
 
-                        String sql = "SELECT * FROM notas WHERE id_professor = ? ORDER BY id_notas";
-                        Conexao conexao = new Conexao();
-                        List<Notas> notas = new LinkedList<>();
+        String sql = "SELECT * FROM nota WHERE id_professor = ? ORDER BY id_notas";
+        Conexao conexao = new Conexao();
+        List<Notas> notas = new LinkedList<>();
 
-                        try (
-                                Connection conn = conexao.conectar();
-                                PreparedStatement pstmt = conn.prepareStatement(sql)
-                        ) {
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
 
-                            pstmt.setInt(1, idProfessor);
+            pstmt.setInt(1, idProfessor);
 
-                            try (ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = pstmt.executeQuery()) {
 
-                                if (rs.next()) {
-                                    Notas nota = new Notas(
-                                            rs.getInt("id_notas"),
-                                            rs.getInt("matricula_aluno"),
+                while (rs.next()) {
+                    Notas nota = new Notas(
+                            rs.getInt("id_notas"),
+                            rs.getInt("matricula_aluno"),
                             rs.getInt("id_professor"),
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2")
+                            rs.getDouble("nota2"),
+                            rs.getBoolean("situacao")
                     );
                     notas.add(nota);
                 }
@@ -280,9 +274,12 @@ public class NotaDAO {
         return notas;
     }
 
+    /*
+     * Busca nota pelo ID.
+     */
     public List<Notas> buscarPorId(int idNota) {
 
-        String sql = "SELECT * FROM notas WHERE id_nota = ? ORDER BY id_notas";
+        String sql = "SELECT * FROM nota WHERE id_notas = ? ORDER BY id_notas";
         Conexao conexao = new Conexao();
         List<Notas> notas = new LinkedList<>();
 
@@ -295,7 +292,7 @@ public class NotaDAO {
 
             try (ResultSet rs = pstmt.executeQuery()) {
 
-                if (rs.next()) {
+                while (rs.next()) {
                     Notas nota = new Notas(
                             rs.getInt("id_notas"),
                             rs.getInt("matricula_aluno"),
@@ -303,7 +300,8 @@ public class NotaDAO {
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2")
+                            rs.getDouble("nota2"),
+                            rs.getBoolean("situacao")
                     );
                     notas.add(nota);
                 }
@@ -321,7 +319,7 @@ public class NotaDAO {
      */
     public int update(Notas notas){
 
-        String sql = "UPDATE notas SET matricula_aluno = ?, id_professor = ?, disciplina = ?, observacao = ?, nota1 = ?, nota2 = ? WHERE id_notas = ?";
+        String sql = "UPDATE nota SET matricula_aluno = ?, id_professor = ?, disciplina = ?, observacao = ?, nota1 = ?, nota2 = ?, situacao = ? WHERE id_notas = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -335,7 +333,8 @@ public class NotaDAO {
             pstmt.setString(4, notas.getObservacao());
             pstmt.setDouble(5, notas.getNota1());
             pstmt.setDouble(6, notas.getNota2());
-            pstmt.setInt(7, notas.getIdNotas());
+            pstmt.setBoolean(7, notas.getSituacao());
+            pstmt.setInt(8, notas.getIdNotas());
 
             return pstmt.executeUpdate();
 
@@ -349,9 +348,9 @@ public class NotaDAO {
      * Atualiza nota via parâmetros diretos.
      */
     public int update(int idNotas, Integer matriculaAluno, Integer idProfessor, String disciplina,
-                      String observacao, double nota1, double nota2){
+                      String observacao, double nota1, double nota2, boolean situacao){
 
-        String sql = "UPDATE notas SET matricula_aluno = ?, id_professor = ?, disciplina = ?, observacao = ?, nota1 = ?, nota2 = ? WHERE id_notas = ?";
+        String sql = "UPDATE nota SET matricula_aluno = ?, id_professor = ?, disciplina = ?, observacao = ?, nota1 = ?, nota2 = ?, situacao = ? WHERE id_notas = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -365,7 +364,8 @@ public class NotaDAO {
             pstmt.setString(4, observacao);
             pstmt.setDouble(5, nota1);
             pstmt.setDouble(6, nota2);
-            pstmt.setInt(7, idNotas);
+            pstmt.setBoolean(7, situacao);
+            pstmt.setInt(8, idNotas);
 
             return pstmt.executeUpdate();
 
@@ -380,7 +380,7 @@ public class NotaDAO {
      */
     public int delete(int idNotas){
 
-        String sql = "DELETE FROM notas WHERE id_notas = ?";
+        String sql = "DELETE FROM nota WHERE id_notas = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -402,7 +402,7 @@ public class NotaDAO {
      */
     public int deleteByMatricula(int matriculaAluno){
 
-        String sql = "DELETE FROM notas WHERE matricula_aluno = ?";
+        String sql = "DELETE FROM nota WHERE matricula_aluno = ?";
         Conexao conexao = new Conexao();
 
         try (
