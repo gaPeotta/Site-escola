@@ -16,46 +16,45 @@ public class LoginAdm extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        request.getRequestDispatcher("caminho login adm").forward(request, response);
+        request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);
 
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
 
         String email = request.getParameter("usuario");
         String senha = request.getParameter("senha");
-        Administrador admin;
-        boolean login = false;
-        String erro = null;
 
-        AdministradorDAO dao = new AdministradorDAO();
-        try{
-            admin = dao.read(email, senha);
-            if(admin != null){
-                login = true;
+        if (email == null || email.isBlank() || senha == null || senha.isBlank()) {
+            request.setAttribute("erro", "Preencha todos os campos.");
+            request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            AdministradorDAO dao = new AdministradorDAO();
+            Administrador admin = dao.read(email, senha);
+
+            if (admin != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("adminLogado", admin);
-            }else {
-                System.out.println("Email ou senha incorretos");
+                session.setAttribute("adminLogado",  admin);         // objeto completo
+                session.setAttribute("tipoUsuario",  "adm");         //  necessário para controle de acesso
+                session.setAttribute("idUsuario",    admin.getId()); //  necessário para controle de acesso
+                session.setAttribute("nomeUsuario",  admin.getNome());
+
+                response.sendRedirect(request.getContextPath() + "/ServletReadProfessor"); //  via servlet
+            } else {
+                request.setAttribute("erro", "Email ou senha incorretos.");
+                request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);
             }
-        }catch (Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
-            erro = "Erro inesperado ao processar o login: " + e.getMessage();
+            request.setAttribute("erro", "Erro interno ao processar o login.");
+            request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);
         }
-
-        if(login){
-            System.out.println("Login bem-sucedido para: " + email);
-            response.sendRedirect("/alunoOuProfessor.jsp");
-        }
-        else{
-            System.err.println("Falha no login para: " + email + ". Erro: " + erro);
-            request.setAttribute("erro", erro);
-            request.getRequestDispatcher("volta pra tela de login").forward(request, response);
-        }
-
     }
-
 
 
 }

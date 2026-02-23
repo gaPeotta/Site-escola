@@ -1,52 +1,77 @@
 <%@ page import="model.Aluno" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <%
     Aluno aluno = (Aluno) request.getAttribute("aluno");
+    String erro = (String) request.getAttribute("erro");
 %>
-
 <html>
 <head>
-    <title>Atualizar Aluno</title>
+    <title>Editar Aluno</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
 <body>
 
-<div class="div2">
+<div class="layout-adm">
 
-    <% if (aluno != null) { %>
+    <div class="sidebar">
+        <h3>Painel ADM</h3>
+        <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
+        <a href="${pageContext.request.contextPath}/ServletReadAluno" class="active">🎓 Alunos</a>
+        <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
+        <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
+    </div>
 
-    <form action="<%= request.getContextPath() %>/ServletUpdateAluno" method="post">
+    <div class="conteudo">
 
-        <input type="hidden" name="matricula" value="<%= aluno.getMatricula() %>">
+        <h2 style="color: #214e3b; margin-bottom: 25px;">Editar Aluno</h2>
 
-        <label>Nome</label><br>
-        <input type="text" name="nome" value="<%= aluno.getNome() %>"><br><br>
+        <div class="div2" style="max-width: 500px;">
 
-        <label>CPF</label><br>
-        <input type="text" name="cpf" value="<%= aluno.getCpf() %>"><br><br>
+                <% if (erro != null) { %>
+            <p style="color: #c63b3b; font-weight: bold; margin-bottom: 20px;">⚠ <%= erro %></p>
+                <% } %>
 
-        <label>Email</label><br>
-        <input type="text" name="email" value="<%= aluno.getEmail() %>"><br><br>
+                <% if (aluno != null) { %>
 
-        <label>Senha</label><br>
-        <input type="text" name="senha" value="<%= aluno.getSenha() %>"><br><br>
+            <form action="${pageContext.request.contextPath}/ServletUpdateAluno" method="post">
 
-        <label>Turma</label><br>
-        <input type="text" name="turma" value="<%= aluno.getTurma() %>"><br><br>
+                <input type="hidden" name="matricula" value="<%= aluno.getMatricula() %>">
 
-       <br><br>
+                <div style="margin-bottom: 8px;">
+                    <label style="display:block; font-weight:600; color:#888; font-size:13px; margin-bottom:4px;">Matrícula</label>
+                    <p style="font-size:15px; color:#214e3b; font-weight:bold;">#<%= aluno.getMatricula() %></p>
+                </div>
 
-        <button class="btn-editar">Atualizar</button>
-    </form>
+                <hr style="border:none; border-top:1px solid #e0ddd5; margin: 15px 0;">
 
-    <% } else { %>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Nome</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="text" name="nome" value="<%= aluno.getNome() %>" required>
+                    </div>
+                </div>
 
-    <p style="color: red;">Aluno não encontrado ou matrícula inválida.</p>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">CPF</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="text" name="cpf" value="<%= aluno.getCpf() %>" maxlength="11" required>
+                    </div>
+                </div>
 
-    <% } %>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Email</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="email" name="email" value="<%= aluno.getEmail() %>" required>
+                    </div>
+                </div>
 
-</div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Nova Senha</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="password" name="senha" placeholder="Digite a nova senha" required>
+                    </div>
+                </div>
 
-</body>
-</html>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; co

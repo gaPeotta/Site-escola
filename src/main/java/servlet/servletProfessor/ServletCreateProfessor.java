@@ -1,53 +1,88 @@
 package servlet.servletProfessor;
+
 import Dao.ProfessorDAO;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import model.Professor;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "ServletCreateProfessor", value = "/ServletCreateProfessor")
+@WebServlet("/ServletCreateProfessor")
 public class ServletCreateProfessor extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String mensagem;
-        ProfessorDAO dao = new ProfessorDAO();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        try {
-            // Captura os parâmetros do formulário
-            String nome = request.getParameter("nome");
-            String disciplina = request.getParameter("disciplina");
-            String email = request.getParameter("email");
-            String senha =  request.getParameter("senha");
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
 
-            // Cria o objeto Professor (o construtor chama os setters com validação)
-            Professor professor = new Professor(nome, disciplina, senha, email);
-
-            if (dao.create(professor)) {
-                mensagem = "O cadastro do professor foi realizado com sucesso!";
-            } else {
-                mensagem = "Erro ao cadastrar: falha no banco de dados.";
-            }
-
-        } catch (Exception e) {
-            // Captura erros de validação (Regex, null, etc) definidos no Model
-            mensagem = "Erro de validação: " + e.getMessage();
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-        request.setAttribute("mensagem", mensagem);
+        String tipo = (String) session.getAttribute("tipoUsuario");
 
-        // Atualiza a lista para exibir na tela de consulta
-        List<Professor> lista = dao.read();
-        request.setAttribute("listaProfessor", lista);
+        if (tipo == null || !tipo.equalsIgnoreCase("adm")) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/ProfessorJSP/readProfessor.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/ProfessorJSP/createProfessor.jsp")
+                .forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        String tipo = (String) session.getAttribute("tipoUsuario");
+
+        if (tipo == null || !tipo.equalsIgnoreCase("adm")) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // ================= CREATE =================
+        try {
+            String nome       = request.getParameter("nome");
+            String disciplina = request.getParameter("disciplina");
+            String email      = request.getParameter("email");
+            String senha      = request.getParameter("senha");
+
+            Professor professor = new Professor(nome, disciplina, senha, email);
+
+            ProfessorDAO dao = new ProfessorDAO();
+            boolean sucesso = dao.create(professor);
+
+            if (sucesso) {
+                session.setAttribute("mensagem", "Professor cadastrado com sucesso!");
+            } else {
+                throw new Exception("Falha ao cadastrar professor.");
+            }
+
+            response.sendRedirect(request.getContextPath() + "/ServletReadProfessor");
+
+        } catch (IllegalArgumentException | NullPointerException e) {
+            request.setAttribute("erro", e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/ProfessorJSP/createProfessor.jsp")
+                    .forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erro", "Erro interno ao cadastrar.");
+            request.getRequestDispatcher("/WEB-INF/ProfessorJSP/createProfessor.jsp")
+                    .forward(request, response);
+        }
     }
 }
-

@@ -1,49 +1,59 @@
 package servlet.servletProfessor;
 
 import Dao.ProfessorDAO;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import model.Professor;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "ServletDeleteProfessor", value = "/ServletDeleteProfessor")
+@WebServlet("/ServletDeleteProfessor")
 public class ServletDeleteProfessor extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
 
-        ProfessorDAO dao = new ProfessorDAO();
-        // Busca o nome da empresa para montar a mensagem
-        String professor = dao.buscarPorId(id).getNome();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        // Executa a exclusão via DAO e recebe o status da operação
-        int status = dao.delete(id);
-        String mensagem;
-        switch (status) {
-            case 1:
-                mensagem = "A exclusão de " + professor + " foi realizada com sucesso.";
-                break;
-            case 0:
-                mensagem = "A exclusão falhou:" + professor + " está associada a outra tabela. Apague os campos relacionados primeiro.";
-                break;
-            case -1:
-                mensagem = "A exclusão de " + professor + " falhou: erro interno.";
-                break;
-            default:
-                mensagem = "A exclusão de " + professor + " falhou: erro desconhecido.";
-                break;
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-        request.setAttribute("mensagem", mensagem);
-        List<Professor> lista = dao.read();
+        String tipo = (String) session.getAttribute("tipoUsuario");
 
-        request.setAttribute("listaProfessor", lista);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/ProfessorJSP/readProfessor.jsp");
-        dispatcher.forward(request, response);
+        if (tipo == null || !tipo.equalsIgnoreCase("adm")) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // ================= DELETE =================
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            ProfessorDAO dao = new ProfessorDAO();
+            String nomeProfessor = dao.buscarPorId(id).getNome();
+            int status = dao.delete(id);
+
+            switch (status) {
+                case 1:
+                    session.setAttribute("mensagem", "Professor " + nomeProfessor + " removido com sucesso!");
+                    break;
+                case 0:
+                    session.setAttribute("erro", nomeProfessor + " está associado a outra tabela. Remova os registros relacionados primeiro.");
+                    break;
+                default:
+                    session.setAttribute("erro", "Erro ao remover professor.");
+                    break;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("erro", "Erro interno ao remover professor.");
+        }
+
+        response.sendRedirect(request.getContextPath() + "/ServletReadProfessor");
     }
 }

@@ -73,7 +73,7 @@ public class AdministradorDAO {
         List<Administrador> listaAdministracao = new LinkedList<>();
 
         // Usa StringBuilder para construir a query dinamicamente de forma segura
-        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM administracao");
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM administrador");
         List<Object> parametros = new LinkedList<>(); // Lista para guardar parâmetros do PreparedStatement
 
         // Adiciona filtro WHERE com placeholder se 'nome' for fornecido
@@ -166,11 +166,10 @@ public class AdministradorDAO {
 
 
     public Administrador read(String email, String senha) {
-        String sql = "SELECT * FROM administrador WHERE email = ? and senha = ?";
+        String sql = "SELECT * FROM administrador WHERE email = ? AND senha = ?";
         Conexao conexao = new Conexao();
         Administrador admin = null;
 
-        // Usa try-with-resources
         try (Connection conn = conexao.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -179,16 +178,19 @@ public class AdministradorDAO {
 
             try (ResultSet rset = pstmt.executeQuery()) {
                 if (rset.next()) {
+                    System.out.println("ACHOU NO BANCO: " + rset.getString("email")); // <- log
                     admin = new Administrador(
-                            rset.getInt("id"),
+                            rset.getInt("id_administrador"),
                             rset.getString("nome"),
                             rset.getString("email"),
                             rset.getString("senha")
                     );
+                } else {
+                    System.out.println("NÃO ACHOU NO BANCO"); // <- log
                 }
             }
-        }catch (SQLException slqe){
-            slqe.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return admin;
     }

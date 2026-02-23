@@ -4,7 +4,7 @@
 <%
     List<Professor> listaProfessor = (List<Professor>) request.getAttribute("listaProfessor");
 
-    String busca = (String) request.getAttribute("buscaSelecionada");
+    String busca= (String) request.getAttribute("buscaSelecionada");
     String orderBy = (String) request.getAttribute("orderBySelecionado");
     String direction = (String) request.getAttribute("directionSelecionada");
 
@@ -30,12 +30,10 @@
 <div class="layout-adm">
 
     <div class="sidebar">
-        <h3>Painel ADM</h3>
-        <a href="${pageContext.request.contextPath}/ServletReadAdm">👤 Admins</a>
+        <h3>MENU</h3>
+        <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="active">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
-        <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
-        <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
     </div>
 
     <div class="conteudo">
@@ -78,8 +76,6 @@
                 <a href="${pageContext.request.contextPath}/ServletReadProfessor"
                    class="btn-editar">🧹 Limpar</a>
 
-                <a href="${pageContext.request.contextPath}/ServletCreateProfessor"
-                   class="btn-editar" style="margin-left: auto;">➕ Novo Professor</a>
 
             </form>
 
@@ -90,7 +86,6 @@
                     <th>Nome</th>
                     <th>Disciplina</th>
                     <th>Email</th>
-                    <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -101,15 +96,6 @@
                     <td><%= professor.getNome() %></td>
                     <td><%= professor.getDisciplina() %></td>
                     <td><%= professor.getEmail() %></td>
-                    <td class="acoes">
-                        <a href="${pageContext.request.contextPath}/ServletUpdateProfessor?id=<%= professor.getIdProfessor() %>"
-                           class="btn-editar">✏ Editar</a>
-                        <button class="btn-excluir"
-                                onclick="if(confirm('Remover professor <%= professor.getNome() %>?'))
-                                        window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
-                            🗑
-                        </button>
-                    </td>
                 </tr>
                 <% } } else { %>
                 <tr>

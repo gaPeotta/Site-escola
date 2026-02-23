@@ -112,3 +112,59 @@ body {
 .menu:hover:not(.ativo) {
     background-color: rgba(33, 78, 59, 0.1);
 }
+/* --- SIDEBAR (Painel ADM) --- */
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #edece6;
+    padding: 30px 15px;
+    border-right: 1px solid #d1cfc8;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.sidebar h3 {
+    color: #214e3b;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.sidebar a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #214e3b;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover:not(.active) {
+    background-color: rgba(33, 78, 59, 0.1);
+}
+
+.sidebar a.active {
+    background-color: #214e3b;
+    color: white;
+}
+
+/* --- LAYOUT COM SIDEBAR --- */
+.layout-adm {
+    display: flex;
+    min-height: 100vh;
+}
+
+.conteudo {
+    flex: 1;
+    padding: 30px 40px;
+    overflow-y: auto;
+}

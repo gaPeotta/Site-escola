@@ -1,15 +1,18 @@
-package servlet.servletProfessor;
+package servlet.servletPreMatricula;
 
-import Dao.ProfessorDAO;
+import Dao.PreMatriculaDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import model.Professor;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.PreMatricula;
 
 import java.io.IOException;
 
-@WebServlet("/ServletUpdateProfessor")
-public class ServletUpdateProfessor extends HttpServlet {
+@WebServlet("/ServletUpdatePreMatricula")
+public class ServletUpdatePreMatricula extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,23 +37,23 @@ public class ServletUpdateProfessor extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
 
-            ProfessorDAO dao = new ProfessorDAO();
-            Professor professor = dao.buscarPorId(id);
+            PreMatriculaDAO dao = new PreMatriculaDAO();
+            PreMatricula pre = dao.read(id);
 
-            if (professor == null) {
-                session.setAttribute("erro", "Professor não encontrado.");
-                response.sendRedirect(request.getContextPath() + "/ServletReadProfessor");
+            if (pre == null) {
+                session.setAttribute("erro", "Pré-matrícula não encontrada.");
+                response.sendRedirect(request.getContextPath() + "/ServletReadPreMatricula");
                 return;
             }
 
-            request.setAttribute("professor", professor);
-            request.getRequestDispatcher("/WEB-INF/ProfessorJSP/updateProfessor.jsp")
+            request.setAttribute("preMatricula", pre);
+            request.getRequestDispatcher("/WEB-INF/PreMatriculaJSP/updatePreMatricula.jsp")
                     .forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("erro", "Erro ao carregar professor.");
-            response.sendRedirect(request.getContextPath() + "/ServletReadProfessor");
+            session.setAttribute("erro", "Erro ao carregar pré-matrícula.");
+            response.sendRedirect(request.getContextPath() + "/ServletReadPreMatricula");
         }
     }
 
@@ -75,34 +78,38 @@ public class ServletUpdateProfessor extends HttpServlet {
 
         // ================= UPDATE =================
         try {
-            int    id         = Integer.parseInt(request.getParameter("id"));
-            String nome       = request.getParameter("nome");
-            String disciplina = request.getParameter("disciplina"); // estava "discplina" no seu código original — typo corrigido
-            String email      = request.getParameter("email");
-            String senha      = request.getParameter("senha");
+            int id   = Integer.parseInt(request.getParameter("id"));
+            String cpf = request.getParameter("cpf");
 
-            Professor professor = new Professor(id, nome, disciplina, senha, email);
+            if (cpf == null || cpf.isBlank()) {
+                request.setAttribute("erro", "CPF não informado.");
+                request.getRequestDispatcher("/WEB-INF/PreMatriculaJSP/updatePreMatricula.jsp")
+                        .forward(request, response);
+                return;
+            }
 
-            ProfessorDAO dao = new ProfessorDAO();
-            int linhas = dao.update(professor);
+            PreMatricula pre = new PreMatricula(id, cpf);
+
+            PreMatriculaDAO dao = new PreMatriculaDAO();
+            int linhas = dao.update(pre);
 
             if (linhas > 0) {
-                session.setAttribute("mensagem", "Professor atualizado com sucesso!");
+                session.setAttribute("mensagem", "Pré-matrícula atualizada com sucesso!");
             } else {
                 session.setAttribute("erro", "Nenhum registro atualizado.");
             }
 
-            response.sendRedirect(request.getContextPath() + "/ServletReadProfessor");
+            response.sendRedirect(request.getContextPath() + "/ServletReadPreMatricula");
 
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             request.setAttribute("erro", e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/ProfessorJSP/updateProfessor.jsp")
+            request.getRequestDispatcher("/WEB-INF/PreMatriculaJSP/updatePreMatricula.jsp")
                     .forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("erro", "Erro interno ao atualizar.");
-            response.sendRedirect(request.getContextPath() + "/ServletReadProfessor");
+            response.sendRedirect(request.getContextPath() + "/ServletReadPreMatricula");
         }
     }
 }
