@@ -47,15 +47,7 @@ public class ServletUpdateNota extends HttpServlet {
                 double n2 = (n2Param != null && !n2Param.trim().isEmpty()) ? Double.parseDouble(n2Param) : 0;
 
                 // Calcula média e situação
-                double media;
-                if (n1 > 0 && n2 > 0) {
-                    media = (n1 + n2) / 2;
-                } else if (n1 > 0) {
-                    media = n1 / 2;
-                } else {
-                    media = 0;
-                }
-
+                double media = (n1 + n2) / 2.0;
                 boolean situacao = media >= 7;
 
                 Notas notaAtualizada = new Notas(

@@ -142,6 +142,64 @@ public class PreMatriculaDAO {
     }
 
     /*
+     * Busca pré-matrículas com filtros dinâmicos.
+     */
+    public List<PreMatricula> read(String buscaCpf,
+                                   String orderBy,
+                                   String direction) {
+
+        Conexao conexao = new Conexao();
+        List<PreMatricula> lista = new LinkedList<>();
+        List<Object> parametros = new LinkedList<>();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT * FROM pre_matricula WHERE 1=1"
+        );
+
+        if (buscaCpf != null && !buscaCpf.trim().isEmpty()) {
+            sql.append(" AND cpf ILIKE ?");
+            parametros.add("%" + buscaCpf.replaceAll("[^\\d]", "") + "%");
+        }
+
+        // ===== ORDER BY =====
+        String coluna = "id_prematricula"; // default
+
+        if (orderBy != null) {
+            switch (orderBy.toLowerCase()) {
+                case "cpf":            coluna = "cpf";            break;
+                case "id_prematricula": coluna = "id_prematricula"; break;
+            }
+        }
+
+        String dir = "DESC".equalsIgnoreCase(direction) ? "DESC" : "ASC";
+
+        sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
+
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql.toString())
+        ) {
+
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new PreMatricula(
+                            rs.getInt("id_prematricula"),
+                            rs.getString("cpf")
+                    ));
+                }
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        return lista;
+    }
+    /*
      * Atualiza CPF da pré-matrícula.
      */
     public int update(PreMatricula preMatricula){
@@ -169,7 +227,6 @@ public class PreMatriculaDAO {
      * Remove pré-matrícula pelo ID.
      */
     public int deleteByCpf(String cpf){
-
         String sql = "DELETE FROM pre_matricula WHERE cpf = ?";
         Conexao conexao = new Conexao();
 
@@ -177,10 +234,8 @@ public class PreMatriculaDAO {
                 Connection conn = conexao.conectar();
                 PreparedStatement pstmt = conn.prepareStatement(sql)
         ){
-
-            pstmt.setString(1, cpf);
+            pstmt.setString(1, cpf.replaceAll("[^\\d]", "")); // <- adicionar isso
             return pstmt.executeUpdate();
-
         } catch (SQLException e){
             e.printStackTrace();
             return 0;

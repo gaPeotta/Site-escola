@@ -1,53 +1,109 @@
 package servlet.servletAluno;
 
 import Dao.AlunoDAO;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import model.Aluno;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "ServletUpdateAluno", value = "/ServletUpdateAluno")
+@WebServlet("/ServletUpdateAluno")
 public class ServletUpdateAluno extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Aluno aluno = new Aluno(
-                Integer.parseInt(request.getParameter("matricula")),
-                request.getParameter("nome"),
-                request.getParameter("cpf"),
-                request.getParameter("email"),
-                request.getParameter("senha"),
-                request.getParameter("turma")
-        );
-        AlunoDAO dao = new AlunoDAO();
-        int status = dao.update(aluno);
 
-        String mensagem;
-        switch (status) {
-            case 1:
-                mensagem = "A atualizaçao de " + aluno.getNome() + " foi realizada com sucesso";
-                break;
-            case 0:
-                mensagem = "A atualizaçao de " + aluno.getNome() + " falhou, esse cpf ja foi vinculado";
-                break;
-            case -1:
-                mensagem = "A atualizaçao de " + aluno.getNome() + " falhou, esse email ja foi vinculado";
-                break;
-            case -2:
-                mensagem = "A atualizaçao falhou: erro desconhecido.";
-                break;
-            default:
-                mensagem = "A atualizaçao falhou: erro interno.";
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
-        request.setAttribute("mensagem", mensagem);
-        List<Aluno> lista = dao.read();
-        request.setAttribute("listaAluno", lista);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/AlunoJSP/readAluno.jsp");
-        dispatcher.forward(request, response);
+        String tipo = (String) session.getAttribute("tipoUsuario");
+
+        if (tipo == null || !tipo.equalsIgnoreCase("adm")) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // ================= CARREGA DADOS PARA O FORM =================
+        try {
+            int matricula = Integer.parseInt(request.getParameter("matricula"));
+
+            AlunoDAO dao = new AlunoDAO();
+            Aluno aluno = dao.buscarPorMatricula(matricula);
+
+            if (aluno == null) {
+                session.setAttribute("erro", "Aluno não encontrado.");
+                response.sendRedirect(request.getContextPath() + "/ServletReadAluno");
+                return;
+            }
+
+            request.setAttribute("aluno", aluno);
+            request.getRequestDispatcher("/WEB-INF/AlunoJSP/updateAluno.jsp")
+                    .forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("erro", "Erro ao carregar aluno.");
+            response.sendRedirect(request.getContextPath() + "/ServletReadAluno");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        String tipo = (String) session.getAttribute("tipoUsuario");
+
+        if (tipo == null || !tipo.equalsIgnoreCase("adm")) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // ================= UPDATE =================
+        try {
+            int    matricula = Integer.parseInt(request.getParameter("matricula"));
+            String nome      = request.getParameter("nome");
+            String cpf       = request.getParameter("cpf");
+            String email     = request.getParameter("email");
+            String senha     = request.getParameter("senha");
+            String turma     = request.getParameter("turma");
+
+            Aluno aluno = new Aluno(matricula, nome, cpf, email, senha, turma);
+
+            AlunoDAO dao = new AlunoDAO();
+            int status = dao.update(aluno);
+
+            if (status > 0) {
+                session.setAttribute("mensagem", "Aluno " + nome + " atualizado com sucesso!");
+            } else {
+                session.setAttribute("erro", "Falha ao atualizar aluno.");
+            }
+
+            response.sendRedirect(request.getContextPath() + "/ServletReadAluno");
+
+        } catch (IllegalArgumentException | NullPointerException e) {
+            request.setAttribute("erro", e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/AlunoJSP/updateAluno.jsp")
+                    .forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("erro", "Erro interno ao atualizar.");
+            response.sendRedirect(request.getContextPath() + "/ServletReadAluno");
+        }
     }
 }

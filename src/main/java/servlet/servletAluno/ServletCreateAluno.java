@@ -1,47 +1,89 @@
 package servlet.servletAluno;
 
 import Dao.AlunoDAO;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import model.Aluno;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "ServletCreateAluno", value = "/ServletCreateAluno")
+@WebServlet("/ServletCreateAluno")
 public class ServletCreateAluno extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Aluno aluno = new Aluno(
-                request.getParameter("nome"),
-                request.getParameter("cpf"),
-                request.getParameter("senha"),
-                request.getParameter("email"),
-                request.getParameter("turma")
-        );
 
-        AlunoDAO dao = new AlunoDAO();
-        String mensagem;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        if (dao.create(aluno) > 0) {
-            mensagem = "A criação do aluno foi realizada com sucesso.";
-        } else if(dao.create(aluno)<=0) {
-            mensagem = "A criação do endereço falhou: erro sql.";
-        }
-        else {
-            mensagem="erro interno";
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-        request.setAttribute("mensagem", mensagem);
+        String tipo = (String) session.getAttribute("tipoUsuario");
 
-        //  Atualiza a lista de endereços para exibir na JSP
-        List<Aluno> lista = dao.read();
-        request.setAttribute("listaAluno", lista);
+        if (tipo == null || !tipo.equalsIgnoreCase("adm")) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/AlunoJSP/readAluno.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/AlunoJSP/createAluno.jsp")
+                .forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        String tipo = (String) session.getAttribute("tipoUsuario");
+
+        if (tipo == null || !tipo.equalsIgnoreCase("adm")) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // ================= CREATE =================
+        try {
+            String nome  = request.getParameter("nome");
+            String cpf   = request.getParameter("cpf");
+            String email = request.getParameter("email");
+            String senha = request.getParameter("senha");
+            String turma = request.getParameter("turma");
+
+            Aluno aluno = new Aluno(nome, cpf, senha, email, turma);
+
+            AlunoDAO dao = new AlunoDAO();
+            int matricula = dao.create(aluno);
+
+            if (matricula > 0) {
+                session.setAttribute("mensagem", "Aluno cadastrado com sucesso!");
+            } else {
+                throw new Exception("Falha ao cadastrar aluno.");
+            }
+
+            response.sendRedirect(request.getContextPath() + "/ServletReadAluno");
+
+        } catch (IllegalArgumentException | NullPointerException e) {
+            request.setAttribute("erro", e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/AlunoJSP/createAluno.jsp")
+                    .forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erro", "Erro interno ao cadastrar.");
+            request.getRequestDispatcher("/WEB-INF/AlunoJSP/createAluno.jsp")
+                    .forward(request, response);
+        }
     }
 }
