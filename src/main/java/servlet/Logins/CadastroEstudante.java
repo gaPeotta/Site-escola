@@ -46,7 +46,7 @@ public class CadastroEstudante extends HttpServlet {
             request.getSession().invalidate();
 
             // Redireciona para o login após cadastro bem-sucedido
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/loginAluno.jsp");
 
         } catch (IllegalArgumentException e) {
             request.setAttribute("erro", e.getMessage());
