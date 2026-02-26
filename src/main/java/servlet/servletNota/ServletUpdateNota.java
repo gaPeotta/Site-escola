@@ -32,7 +32,7 @@ public class ServletUpdateNota extends HttpServlet {
 
             NotaDAO dao = new NotaDAO();
             Notas notaExistente = dao.read(idNota);
-
+            request.setAttribute("nota", notaExistente);
             if (notaExistente != null &&
                     profLogado.getIdProfessor().equals(notaExistente.getIdProfessor())) {
 
@@ -73,6 +73,6 @@ public class ServletUpdateNota extends HttpServlet {
             session.setAttribute("erro", "Erro ao processar atualização.");
         }
 
-        response.sendRedirect(request.getContextPath() + "/ServletReadNotas");
+        response.sendRedirect(request.getContextPath() + "/ServletReadNota");
     }
 }
