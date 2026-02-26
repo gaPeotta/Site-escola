@@ -1,65 +1,107 @@
 <%@ page import="model.Notas" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <%
     Notas nota = (Notas) request.getAttribute("nota");
+    String erro = (String) request.getAttribute("erro");
+    String tipoLogado = (String) session.getAttribute("tipoUsuario");
+    if (tipoLogado == null) tipoLogado = "";
 %>
-
 <html>
 <head>
-    <title>Atualizar Nota</title>
+    <title>Editar Nota</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
 <body>
 
-<div class="div2">
+<div class="layout-adm">
 
-    <% if (nota != null) { %>
+    <div class="sidebar">
+        <h3><%= tipoLogado.equalsIgnoreCase("adm") ? "Painel ADM" : "Menu" %></h3>
+        <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
+        <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
+        <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
+        <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
+        <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
+        <% } %>
+    </div>
 
-    <form action="<%= request.getContextPath() %>/ServletUpdateNota" method="post">
+    <div class="conteudo">
 
-        <input type="hidden" name="idNotas" value="<%= nota.getIdNotas() %>">
+        <h2 style="color: #214e3b; margin-bottom: 25px;">Editar Nota</h2>
 
-        <label>Matricula do Aluno</label><br>
-        <input type="number"
-               name="matriculaAluno"
-               value="<%= nota.getMatriculaAluno() %>"><br><br>
+        <div class="div2" style="max-width: 500px;">
 
-        <label>Disciplina</label><br>
-        <input type="text"
-               name="disciplina"
-               value="<%= nota.getDisciplina() %>"><br><br>
+            <% if (erro != null) { %>
+            <p style="color: #c63b3b; font-weight: bold; margin-bottom: 20px;">⚠ <%= erro %></p>
+            <% } %>
 
-        <label>Observação</label><br>
-        <input type="text"
-               name="observacao"
-               value="<%= nota.getObservacao() %>"><br><br>
+            <% if (nota != null) { %>
 
-        <label>Nota 1</label><br>
-        <input type="number"
-               step="0.01"
-               min="0"
-               max="10"
-               name="nota1"
-               value="<%= nota.getNota1() %>"><br><br>
+            <form action="${pageContext.request.contextPath}/ServletUpdateNota" method="post">
 
-        <label>Nota 2</label><br>
-        <input type="number"
-               step="0.01"
-               min="0"
-               max="10"
-               name="nota2"
-               value="<%= nota.getNota2() %>"><br><br>
+                <input type="hidden" name="idNotas" value="<%= nota.getIdNotas() %>">
 
-        <button class="btn-editar">Atualizar</button>
-    </form>
+                <div style="margin-bottom: 8px;">
+                    <label style="display:block; font-weight:600; color:#888; font-size:13px; margin-bottom:4px;">ID</label>
+                    <p style="font-size:15px; color:#214e3b; font-weight:bold;">#<%= nota.getIdNotas() %></p>
+                </div>
 
-    <% } else { %>
+                <hr style="border:none; border-top:1px solid #e0ddd5; margin: 15px 0;">
 
-    <p style="color: red;">Nota não encontrada ou id inválido.</p>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Matrícula do Aluno</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="number" name="matriculaAluno" value="<%= nota.getMatriculaAluno() %>" required>
+                    </div>
+                </div>
 
-    <% } %>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Disciplina</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="text" name="disciplina" value="<%= nota.getDisciplina() %>" required>
+                    </div>
+                </div>
 
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Observação</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="text" name="observacao" value="<%= nota.getObservacao() %>">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Nota 1</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="number" step="0.01" min="0" max="10" name="nota1" value="<%= nota.getNota1() %>" required>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Nota 2</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="number" step="0.01" min="0" max="10" name="nota2" value="<%= nota.getNota2() %>" required>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button type="submit" class="btn-editar">✔ Salvar</button>
+                    <a href="${pageContext.request.contextPath}/ServletReadNotas"
+                       class="btn-excluir"
+                       style="padding: 8px 15px; border-radius: 6px; text-decoration:none; display:flex; align-items:center;">
+                        ✖ Cancelar
+                    </a>
+                </div>
+
+            </form>
+
+            <% } else { %>
+            <p style="color: #c63b3b;">Nota não encontrada.</p>
+            <a href="${pageContext.request.contextPath}/ServletReadNotas" class="btn-editar">← Voltar</a>
+            <% } %>
+
+        </div>
+    </div>
 </div>
 
 </body>

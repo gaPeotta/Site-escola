@@ -1,27 +1,26 @@
 <%@ page import="java.util.List" %>
-<%@ page import="model.Professor" %>
+<%@ page import="model.PreMatricula" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    List<Professor> listaProfessor = (List<Professor>) request.getAttribute("listaProfessor");
+    List<PreMatricula> lista = (List<PreMatricula>) request.getAttribute("listaPreMatricula");
 
-    String busca = (String) request.getAttribute("buscaSelecionada");
-    String orderBy = (String) request.getAttribute("orderBySelecionado");
+    String buscaCpf  = (String) request.getAttribute("buscaCpfSelecionada");
+    String orderBy   = (String) request.getAttribute("orderBySelecionado");
     String direction = (String) request.getAttribute("directionSelecionada");
 
     String mensagem  = (String) session.getAttribute("mensagem");
-    String erro = (String) session.getAttribute("erro");
+    String erro      = (String) session.getAttribute("erro");
 
     session.removeAttribute("mensagem");
     session.removeAttribute("erro");
 
-    if (listaProfessor == null) listaProfessor = new java.util.LinkedList<>();
-    if (busca == null) busca = "";
-    if (orderBy == null) orderBy = "id_professor";
+    if (buscaCpf  == null) buscaCpf  = "";
+    if (orderBy   == null) orderBy   = "id_prematricula";
     if (direction == null) direction = "ASC";
 %>
 <html>
 <head>
-    <title>Professores</title>
+    <title>Pré-Matrículas</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
@@ -29,18 +28,21 @@
 
 <div class="layout-adm">
 
+    <%-- ===== SIDEBAR ===== --%>
     <div class="sidebar">
         <h3>Painel ADM</h3>
         <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
-        <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="active">🧑‍🏫 Professores</a>
+        <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
-        <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
+        <a href="${pageContext.request.contextPath}/ServletReadPreMatricula" class="active">📋 Pré-Matrículas</a>
     </div>
 
+    <%-- ===== CONTEÚDO ===== --%>
     <div class="conteudo">
 
-        <h2 style="color: #214e3b; margin-bottom: 20px;">Professores</h2>
+        <h2 style="color: #214e3b; margin-bottom: 20px;">Pré-Matrículas Pendentes</h2>
 
+        <%-- ===== FEEDBACK ===== --%>
         <% if (mensagem != null) { %>
         <p style="color: #2f7d4a; font-weight: bold; margin-bottom: 15px;">✔ <%= mensagem %></p>
         <% } %>
@@ -50,70 +52,68 @@
 
         <div class="div2">
 
+            <%-- ===== FILTROS + BOTÃO NOVO ===== --%>
             <form method="get"
-                  action="${pageContext.request.contextPath}/ServletReadProfessor"
+                  action="${pageContext.request.contextPath}/ServletReadPreMatricula"
                   style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom: 20px;">
 
                 <div class="busca-box">
                     <input type="text"
-                           name="busca"
-                           placeholder="Pesquisar por nome..."
-                           value="<%= busca %>">
+                           name="buscaCpf"
+                           placeholder="Pesquisar por CPF..."
+                           value="<%= buscaCpf %>">
                 </div>
 
                 <select name="orderBy" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="id_professor" <%= orderBy.equals("id_professor") ? "selected" : "" %>>Ordenar por ID</option>
-                    <option value="nome" <%= orderBy.equals("nome") ? "selected" : "" %>>Ordenar por Nome</option>
-                    <option value="email" <%= orderBy.equals("email") ? "selected" : "" %>>Ordenar por Email</option>
+                    <option value="id_prematricula" <%= orderBy.equals("id_prematricula") ? "selected" : "" %>>Ordenar por ID</option>
+                    <option value="cpf"             <%= orderBy.equals("cpf") ? "selected" : "" %>>Ordenar por CPF</option>
                 </select>
 
                 <select name="direction" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="ASC"  <%= direction.equalsIgnoreCase("ASC")  ? "selected" : "" %>>Crescente</option>
+                    <option value="ASC"  <%= direction.equalsIgnoreCase("ASC") ? "selected" : "" %>>Crescente</option>
                     <option value="DESC" <%= direction.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
                 </select>
 
                 <button type="submit" class="btn-editar">🔍 Filtrar</button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadProfessor"
+                <a href="${pageContext.request.contextPath}/ServletReadPreMatricula"
                    class="btn-editar">🧹 Limpar</a>
 
-                <a href="${pageContext.request.contextPath}/ServletCreateProfessor"
-                   class="btn-editar" style="margin-left: auto;">➕ Novo Professor</a>
+                <a href="${pageContext.request.contextPath}/ServletCreatePreMatricula"
+                   class="btn-editar" style="margin-left: auto;">➕ Nova Pré-Matrícula</a>
 
             </form>
 
+            <%-- ===== TABELA ===== --%>
             <table>
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nome</th>
-                    <th>Disciplina</th>
-                    <th>Email</th>
+                    <th>CPF</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
-                <% if (!listaProfessor.isEmpty()) {
-                    for (Professor professor : listaProfessor) { %>
+                <% if (lista != null && !lista.isEmpty()) {
+                    for (PreMatricula pre : lista) { %>
                 <tr>
-                    <td><%= professor.getIdProfessor() %></td>
-                    <td><%= professor.getNome() %></td>
-                    <td><%= professor.getDisciplina() %></td>
-                    <td><%= professor.getEmail() %></td>
+                    <td><%= pre.getId_prematricula() %></td>
+                    <td><%= pre.getCpf() %></td>
                     <td class="acoes">
-                        <a href="${pageContext.request.contextPath}/ServletUpdateProfessor?id=<%= professor.getIdProfessor() %>"
+                        <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>"
                            class="btn-editar">✏ Editar</a>
+
                         <button class="btn-excluir"
-                                onclick="if(confirm('Remover professor <%= professor.getNome() %>?'))
-                                        window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
+                                onclick="if(confirm('Remover CPF <%= pre.getCpf() %> da pré-matrícula?'))
+                                        window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
                             🗑
                         </button>
                     </td>
                 </tr>
                 <% } } else { %>
                 <tr>
-                    <td colspan="5" style="text-align:center; padding:20px; color:#888;">
-                        Nenhum professor encontrado.
+                    <td colspan="3" style="text-align:center; padding:20px; color:#888;">
+                        Nenhuma pré-matrícula encontrada.
                     </td>
                 </tr>
                 <% } %>

@@ -12,6 +12,35 @@ public class AlunoDAO {
     /*
      * Cria um aluno e retorna a matrícula.
      */
+    public int create(Aluno aluno, boolean semTurma) {
+
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf) VALUES (?, ?, ?, ?)";
+        Conexao conexao = new Conexao();
+
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ) {
+            pstmt.setString(1, aluno.getNome());
+            pstmt.setString(2, aluno.getSenha());
+            pstmt.setString(3, aluno.getEmail());
+            pstmt.setString(4, aluno.getCpf());
+
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return -1;
+
+        }catch (SQLException e) {
+            System.err.println("Erro SQL: " + e.getMessage());
+            System.err.println("SQLState: " + e.getSQLState());
+            e.printStackTrace();
+            return 0;
+        }
+    }
     public int create(Aluno aluno){
 
         String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?)";

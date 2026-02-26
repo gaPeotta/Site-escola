@@ -27,7 +27,7 @@
 
                         <div class="tabs">
                             <h2 class="active">Login</h2>
-                            <h2><a href="html/cadastro.html"style="text-decoration: none; color: inherit;">Cadastrar</a></h2>
+                            <h2><a href="cadastro.jsp" style="text-decoration: none; color: inherit;">Cadastrar</a></h2>
                         </div>
 
                         <form action="<%=request.getContextPath()%>/loginUsuario" method="post">

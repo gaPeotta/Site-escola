@@ -1,12 +1,12 @@
 package servlet.Logins;
 
 import Dao.AlunoDAO;
+import Dao.PreMatriculaDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import Dao.PreMatriculaDAO;
 import model.Aluno;
 
 import java.io.IOException;
@@ -19,22 +19,25 @@ public class CadastroEstudante extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-
             String cpf = (String) request.getSession().getAttribute("cpf");
 
-            String nome = request.getParameter("nome");
+            // Valida se a sessão ainda contém o CPF
+            if (cpf == null || cpf.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/precadastro");
+                return;
+            }
+
+            String nome  = request.getParameter("nome");
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
-            String turma = request.getParameter("turma");
 
-            // Criar aluno sem situacao
-            Aluno aluno = new Aluno(nome, cpf, email, senha, turma);
+            Aluno aluno = new Aluno(nome, cpf, email, senha);
 
             AlunoDAO alunoDAO = new AlunoDAO();
-            int matriculaGerada = alunoDAO.create(aluno);
+            int matriculaGerada = alunoDAO.create(aluno, true);
 
             if (matriculaGerada == 0) {
-                throw new Exception("Erro ao cadastrar aluno");
+                throw new Exception("Erro ao cadastrar aluno.");
             }
 
             PreMatriculaDAO preDAO = new PreMatriculaDAO();
@@ -42,21 +45,17 @@ public class CadastroEstudante extends HttpServlet {
 
             request.getSession().invalidate();
 
-            response.sendRedirect("login.jsp");
+            // Redireciona para o login após cadastro bem-sucedido
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
 
         } catch (IllegalArgumentException e) {
-
             request.setAttribute("erro", e.getMessage());
-            request.getRequestDispatcher("caminho cadastroEstudante")
-                    .forward(request, response);
+            request.getRequestDispatcher("/cadastro2.jsp").forward(request, response);
 
         } catch (Exception e) {
-
             e.printStackTrace();
             request.setAttribute("erro", "Erro interno do sistema.");
-            request.getRequestDispatcher("erro.jsp")
-                    .forward(request, response);
+            request.getRequestDispatcher("/cadastro.jsp").forward(request, response);
         }
     }
 }
-

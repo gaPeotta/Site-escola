@@ -1,42 +1,75 @@
 package servlet.servletProfessor;
 
 import Dao.ProfessorDAO;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import model.Professor;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ServletReadProfessor", value = "/ServletReadProfessor")
+@WebServlet("/ServletReadProfessor")
 public class ServletReadProfessor extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ProfessorDAO professorDAO = new ProfessorDAO();
-        List<Professor> lista = professorDAO.read();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-        // Define a lista como atributo da request
-        request.setAttribute("listaProfessor", lista);
+        // ================= VALIDA SESSÃO =================
+        HttpSession session = request.getSession(false);
 
-        // Lógica de navegação baseada no parâmetro "view"
-        String view = request.getParameter("view");
-        String destino;
-
-        if ("create".equals(view)) {
-            destino = "/WEB-INF/ProfessorJSP/createProfessor.jsp";
-        } else if ("update".equals(view)) {
-            // Caso queira carregar os dados para atualizar futuramente
-            destino = "/WEB-INF/ProfessorJSP/updateProfessor.jsp";
-        } else {
-            destino = "/WEB-INF/ProfessorJSP/readProfessor.jsp";
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher(destino);
-        dispatcher.forward(request, response);
+        String tipo = (String)  session.getAttribute("tipoUsuario");
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+
+        if (tipo == null || idUsuario == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // ================= PARÂMETROS DE FILTRO =================
+        String busca = request.getParameter("busca");
+        String orderBy = request.getParameter("orderBy");
+        String direction = request.getParameter("direction");
+
+        if (busca != null && busca.isBlank()) busca = null;
+        if (orderBy == null || orderBy.isBlank()) orderBy = "id_professor";
+        if (direction == null || direction.isBlank()) direction = "ASC";
+
+        // ================= BUSCA NO BANCO =================
+        ProfessorDAO dao = new ProfessorDAO();
+        List<Professor> lista = dao.read(busca, orderBy, direction);
+
+        // ================= ENVIA PARA A VIEW =================
+        request.setAttribute("listaProfessor", lista);
+        request.setAttribute("buscaSelecionada", busca != null ? busca : "");
+        request.setAttribute("orderBySelecionado", orderBy);
+        request.setAttribute("directionSelecionada", direction);
+
+        // ================= ESCOLHA DA JSP =================
+        String view;
+
+        switch (tipo.toLowerCase()) {
+
+            case "adm":
+                view = "/WEB-INF/ProfessorJSP/readProfessor.jsp"; // tabela completa + ações
+                break;
+
+            case "professor":
+            case "aluno":
+                view = "/WEB-INF/ProfessorJSP/readProfessorAluno.jsp"; // só leitura
+                break;
+
+            default:
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+                return;
+        }
+
+        request.getRequestDispatcher(view).forward(request, response);
     }
 }

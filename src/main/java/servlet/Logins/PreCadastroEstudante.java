@@ -8,16 +8,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.PreMatricula;
 
-
 import java.io.IOException;
+
 @WebServlet("/precadastro")
 public class PreCadastroEstudante extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        request.getRequestDispatcher("caminho precadastro").forward(request, response);
+        // Exibe a tela de pré-cadastro (coleta de CPF)
+        request.getRequestDispatcher("/cadastro.jsp").forward(request, response);
     }
 
     @Override
@@ -26,9 +26,9 @@ public class PreCadastroEstudante extends HttpServlet {
 
         String cpf = request.getParameter("cpf");
 
-        if(cpf == null || cpf.isEmpty()){
+        if (cpf == null || cpf.isEmpty()) {
             request.setAttribute("erro", "Informe um CPF.");
-            request.getRequestDispatcher("caminho precadastro").forward(request, response);
+            request.getRequestDispatcher("/cadastro.jsp").forward(request, response);
             return;
         }
 
@@ -36,21 +36,22 @@ public class PreCadastroEstudante extends HttpServlet {
         PreMatriculaDAO preDao = new PreMatriculaDAO();
 
         try {
-
             PreMatricula preMatricula = preDao.readByCpf(cpf);
 
-            if(preMatricula == null){
-                request.setAttribute("erro", "CPF não encontrado");
-                request.getRequestDispatcher("caminho precadastro").forward(request, response);
+            if (preMatricula == null) {
+                request.setAttribute("erro", "CPF não encontrado.");
+                request.getRequestDispatcher("/cadastro.jsp").forward(request, response);
                 return;
             }
 
+            // CPF válido — salva na sessão e redireciona para cadastro completo
             request.getSession().setAttribute("cpf", cpf);
-            request.getRequestDispatcher("caminho cadastro").forward(request, response);
+            request.getRequestDispatcher("/cadastro2.jsp").forward(request, response);
 
         } catch (Exception e) {
+            e.printStackTrace();
             request.setAttribute("erro", "Erro interno.");
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
+            request.getRequestDispatcher("/cadastro2.jsp").forward(request, response);
         }
     }
 }
