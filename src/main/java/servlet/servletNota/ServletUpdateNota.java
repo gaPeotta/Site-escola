@@ -73,6 +73,6 @@ public class ServletUpdateNota extends HttpServlet {
             session.setAttribute("erro", "Erro ao processar atualização.");
         }
 
-        response.sendRedirect(request.getContextPath() + "/ServletReadNotas");
+        response.sendRedirect(request.getContextPath() + "/ServletReadNota");
     }
 }

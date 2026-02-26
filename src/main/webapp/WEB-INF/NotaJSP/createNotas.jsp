@@ -16,7 +16,7 @@
 
     <div class="sidebar">
         <h3><%= tipoLogado.equalsIgnoreCase("adm") ? "Painel ADM" : "Menu" %></h3>
-        <a href="${pageContext.request.contextPath}/ServletReadNotas" class="active">📝 Notas</a>
+        <a href="${pageContext.request.contextPath}/ServletReadNota" class="active">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
 
@@ -74,7 +74,7 @@
 
                 <div style="display:flex; gap:10px; margin-top:10px;">
                     <button type="submit" class="btn-editar">✔ Cadastrar</button>
-                    <a href="${pageContext.request.contextPath}/ServletReadNotas"
+                    <a href="${pageContext.request.contextPath}/ServletReadNota"
                        class="btn-excluir"
                        style="padding: 8px 15px; border-radius: 6px; text-decoration:none; display:flex; align-items:center;">
                         ✖ Cancelar
