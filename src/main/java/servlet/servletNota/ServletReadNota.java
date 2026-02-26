@@ -9,7 +9,7 @@ import model.Notas;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ServletReadNotas")
+@WebServlet("/ServletReadNota")
 public class ServletReadNota extends HttpServlet {
 
     @Override
@@ -89,17 +89,19 @@ public class ServletReadNota extends HttpServlet {
         request.setAttribute("directionSelecionada", direction);
 
         // ================= ESCOLHA DA JSP =================
-        String view;
+        String view=request.getParameter("view");
+        String destino;
+
 
         switch (tipo.toLowerCase()) {
 
             case "aluno":
-                view = "/WEB-INF/NotaJSP/readNotasAluno.jsp";
+                destino = "/WEB-INF/NotaJSP/readNotasAluno.jsp";
                 break;
 
             case "professor":
             case "adm":
-                view = "/WEB-INF/NotaJSP/readNotasProfessor.jsp";
+                destino = "/WEB-INF/NotaJSP/readNotasProfessor.jsp";
                 break;
 
             default:
@@ -107,7 +109,21 @@ public class ServletReadNota extends HttpServlet {
                 return;
         }
 
-        request.getRequestDispatcher(view)
+        if ("create".equals(view)) {
+            destino = "/WEB-INF/NotaJSP/createNotas.jsp";
+        } else if ("update".equals(view)) {
+            String idParam = request.getParameter("id");
+            if (idParam != null) {
+                int idNota = Integer.parseInt(idParam);
+                Notas nota = dao.read(idNota);
+                request.setAttribute("nota", nota); }
+            // Caso queira carregar os dados para atualizar futuramente
+            destino = "/WEB-INF/NotaJSP/updateNotas.jsp";
+        } else {
+            destino = "/WEB-INF/NotaJSP/readNotasProfessor.jsp";
+        }
+
+        request.getRequestDispatcher(destino)
                 .forward(request, response);
     }
 }

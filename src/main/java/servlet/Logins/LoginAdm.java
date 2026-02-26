@@ -46,7 +46,7 @@ public class LoginAdm extends HttpServlet {
 
         if(login){
             System.out.println("Login bem-sucedido para: " + email);
-            response.sendRedirect("/alunoOuProfessor.jsp");
+            response.sendRedirect("/readProfessor.jsp");
         }
         else{
             System.err.println("Falha no login para: " + email + ". Erro: " + erro);

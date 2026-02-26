@@ -22,7 +22,7 @@
 <div class="div2">
 
     <!-- FILTROS -->
-    <form method="get" action="${pageContext.request.contextPath}/ServletReadNotas"
+    <form method="get" action="${pageContext.request.contextPath}/ServletReadNota"
           style="margin-bottom: 15px; display:flex; gap:10px; flex-wrap:wrap;">
 
         <input type="text"
@@ -44,12 +44,12 @@
 
         <button type="submit" class="btn-criar">🔍 Filtrar</button>
 
-        <a href="${pageContext.request.contextPath}/ServletReadNotas" class="btn-criar">🧹 Limpar</a>
+        <a href="${pageContext.request.contextPath}/ServletReadNota" class="btn-criar">🧹 Limpar</a>
     </form>
 
     <!-- BOTÃO NOVA NOTA -->
     <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
-        <a href="${pageContext.request.contextPath}/ServletReadNotas?view=create"
+        <a href="${pageContext.request.contextPath}/ServletReadNota?view=create"
            class="btn-criar">Nova Nota</a>
     </div>
 
@@ -86,7 +86,7 @@
             <td><%= nota.getSituacao() ? "Aprovado" : "Reprovado" %></td>
             <td class="acoes">
                 <a class="btn-editar"
-                   href="${pageContext.request.contextPath}/ServletReadNotas?view=update&id=<%= nota.getIdNotas() %>">
+                   href="${pageContext.request.contextPath}/ServletReadNota?view=update&id=<%= nota.getIdNotas() %>">
                     Editar
                 </a>
                 <a class="btn-excluir"

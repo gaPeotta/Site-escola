@@ -58,7 +58,7 @@
                 💾 Salvar
             </button>
 
-            <a href="${pageContext.request.contextPath}/ServletReadNotas"
+            <a href="${pageContext.request.contextPath}/ServletReadNota"
                class="btn-criar">
                 ↩ Voltar
             </a>

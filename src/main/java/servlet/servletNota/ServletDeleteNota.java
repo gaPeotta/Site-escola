@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import model.Notas;
 import model.Professor;
 import java.io.IOException;
-
+@WebServlet("/ServletDeleteNota")
 public class ServletDeleteNota extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -28,7 +28,7 @@
     <h2 style="margin-bottom: 15px;">Minhas Notas</h2>
 
     <form method="get"
-          action="${pageContext.request.contextPath}/ServletReadNotas"
+          action="${pageContext.request.contextPath}/ServletReadNota"
           style="margin-bottom: 15px; display:flex; gap:10px; flex-wrap:wrap;">
 
         <input type="text"
@@ -50,7 +50,7 @@
 
         <button type="submit" class="btn-criar">🔍 Filtrar</button>
 
-        <a href="${pageContext.request.contextPath}/ServletReadNotas" class="btn-criar">
+        <a href="${pageContext.request.contextPath}/ServletReadNota" class="btn-criar">
             🧹 Limpar
         </a>
     </form>
