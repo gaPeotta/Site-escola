@@ -16,9 +16,9 @@
 
     <div class="sidebar">
         <h3>Painel ADM</h3>
+        <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno" class="active">🎓 Alunos</a>
-        <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
     </div>
 
@@ -74,4 +74,23 @@
                 </div>
 
                 <div style="margin-bottom: 20px;">
-                    <label style="display:block; font-weight:600; co
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Turma</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="text" name="turma" value="<%= aluno.getTurma() %>" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-acao editar">Salvar Alterações</button>
+
+            </form>
+
+            <% } else { %>
+            <p style="color:#c63b3b;">Aluno não encontrado.</p>
+            <% } %>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

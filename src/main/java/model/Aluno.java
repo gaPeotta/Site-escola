@@ -31,13 +31,13 @@ public class Aluno {
         this.setSenha(senha);
         this.setTurma(turma);
     }
-
-    public Aluno(String nome, String email, String senha, String turma) {
+    public Aluno(String nome, String cpf, String email, String senha) {
         this.setNome(nome);
+        this.setCpf(cpf);
         this.setEmail(email);
         this.setSenha(senha);
-        this.setTurma(turma);
     }
+
 
     // =========================
     // Getters e Setters

@@ -18,15 +18,9 @@
 
     <div class="sidebar">
         <h3><%= tipoLogado.equalsIgnoreCase("adm") ? "Painel ADM" : "Menu" %></h3>
-
-        <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
-        <a href="${pageContext.request.contextPath}/ServletReadAdm">👤 Admins</a>
-        <% } %>
-
+        <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
-        <a href="${pageContext.request.contextPath}/ServletReadNotas" class="active">📝 Notas</a>
-
         <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
         <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
         <% } %>
