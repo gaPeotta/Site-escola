@@ -86,6 +86,6 @@ public class LoginUsuario extends HttpServlet {
 
         // ================= ERRO =================
         request.setAttribute("erro", erro);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("loginAluno.jsp").forward(request, response);
     }
 }
