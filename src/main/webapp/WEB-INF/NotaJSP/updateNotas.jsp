@@ -18,7 +18,7 @@
 
     <div class="sidebar">
         <h3><%= tipoLogado.equalsIgnoreCase("adm") ? "Painel ADM" : "Menu" %></h3>
-        <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
+        <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
         <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
@@ -86,7 +86,7 @@
 
                 <div style="display:flex; gap:10px; margin-top:10px;">
                     <button type="submit" class="btn-editar">✔ Salvar</button>
-                    <a href="${pageContext.request.contextPath}/ServletReadNotas"
+                    <a href="${pageContext.request.contextPath}/ServletReadNota"
                        class="btn-excluir"
                        style="padding: 8px 15px; border-radius: 6px; text-decoration:none; display:flex; align-items:center;">
                         ✖ Cancelar
@@ -97,7 +97,7 @@
 
             <% } else { %>
             <p style="color: #c63b3b;">Nota não encontrada.</p>
-            <a href="${pageContext.request.contextPath}/ServletReadNotas" class="btn-editar">← Voltar</a>
+            <a href="${pageContext.request.contextPath}/ServletReadNota" class="btn-editar">← Voltar</a>
             <% } %>
 
         </div>
