@@ -32,7 +32,7 @@ public class ServletUpdateNota extends HttpServlet {
 
             NotaDAO dao = new NotaDAO();
             Notas notaExistente = dao.read(idNota);
-
+            request.setAttribute("nota", notaExistente);
             if (notaExistente != null &&
                     profLogado.getIdProfessor().equals(notaExistente.getIdProfessor())) {
 

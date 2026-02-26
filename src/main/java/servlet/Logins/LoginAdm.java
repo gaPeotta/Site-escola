@@ -49,10 +49,14 @@ public class LoginAdm extends HttpServlet {
                 request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("erro", "Erro interno ao processar o login.");
-            request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);
+        if(login){
+            System.out.println("Login bem-sucedido para: " + email);
+            response.sendRedirect("/readProfessor.jsp");
+        }
+        else{
+            System.err.println("Falha no login para: " + email + ". Erro: " + erro);
+            request.setAttribute("erro", erro);
+            request.getRequestDispatcher("volta pra tela de login").forward(request, response);
         }
     }
 

@@ -27,30 +27,83 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
 <body>
+<div class="div2">
 
-<div class="layout-adm">
+    <!-- FILTROS -->
+    <form method="get" action="${pageContext.request.contextPath}/ServletReadNota"
+          style="margin-bottom: 15px; display:flex; gap:10px; flex-wrap:wrap;">
 
-    <%-- ===== SIDEBAR ===== --%>
-    <div class="sidebar">
-        <h3><%= tipoLogado.equalsIgnoreCase("adm") ? "Painel ADM" : "Menu" %></h3>
+        <input type="text"
+               name="buscaAluno"
+               placeholder="Pesquisar aluno ou disciplina..."
+               value="<%= buscaAluno %>">
 
-        <a href="${pageContext.request.contextPath}/ServletReadNotas" class="active">📝 Notas</a>
-        <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
-        <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
+        <select name="orderBy">
+            <option value="id_notas" <%= orderBySelecionado.equals("id_notas") ? "selected" : "" %>>ID</option>
+            <option value="disciplina" <%= orderBySelecionado.equals("disciplina") ? "selected" : "" %>>Disciplina</option>
+            <option value="nota1" <%= orderBySelecionado.equals("nota1") ? "selected" : "" %>>Nota 1</option>
+            <option value="nota2" <%= orderBySelecionado.equals("nota2") ? "selected" : "" %>>Nota 2</option>
+        </select>
 
-        <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
-        <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
-        <% } %>
+        <select name="direction">
+            <option value="ASC" <%= directionSelecionada.equalsIgnoreCase("ASC") ? "selected" : "" %>>Crescente</option>
+            <option value="DESC" <%= directionSelecionada.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
+        </select>
+
+        <button type="submit" class="btn-criar">🔍 Filtrar</button>
+
+        <a href="${pageContext.request.contextPath}/ServletReadNota" class="btn-criar">🧹 Limpar</a>
+    </form>
+
+    <!-- BOTÃO NOVA NOTA -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+        <a href="${pageContext.request.contextPath}/ServletReadNota?view=create"
+           class="btn-criar">Nova Nota</a>
     </div>
 
-    <%-- ===== CONTEÚDO ===== --%>
-    <div class="conteudo">
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Aluno</th>
+            <th>Professor</th>
+            <th>Disciplina</th>
+            <th>Observação</th>
+            <th>Nota 1</th>
+            <th>Nota 2</th>
+            <th>Média</th>
+            <th>Situação</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
 
-        <h2 style="color: #214e3b; margin-bottom: 20px;">Notas</h2>
-
-        <%-- ===== FEEDBACK ===== --%>
-        <% if (mensagem != null) { %>
-        <p style="color: #2f7d4a; font-weight: bold; margin-bottom: 15px;">✔ <%= mensagem %></p>
+        <tbody>
+        <% if (listaNotas != null && !listaNotas.isEmpty()) { %>
+        <% for (Notas nota : listaNotas) {
+            double media = (nota.getNota1() + nota.getNota2()) / 2.0;
+        %>
+        <tr>
+            <td><%= nota.getIdNotas() %></td>
+            <td><%= nota.getNomeAluno() %></td>
+            <td><%= nota.getNomeProfessor() %></td>
+            <td><%= nota.getDisciplina() %></td>
+            <td><%= nota.getObservacao() %></td>
+            <td><%= nota.getNota1() %></td>
+            <td><%= nota.getNota2() %></td>
+            <td><%= String.format("%.2f", media) %></td>
+            <td><%= nota.getSituacao() ? "Aprovado" : "Reprovado" %></td>
+            <td class="acoes">
+                <a class="btn-editar"
+                   href="${pageContext.request.contextPath}/ServletReadNota?view=update&id=<%= nota.getIdNotas() %>">
+                    Editar
+                </a>
+                <a class="btn-excluir"
+                   href="${pageContext.request.contextPath}/ServletDeleteNota?id=<%= nota.getIdNotas() %>"
+                   onclick="return confirm('Tem certeza que deseja excluir esta nota?')">
+                    Excluir
+                </a>
+            </td>
+        </tr>
         <% } %>
         <% if (erro != null) { %>
         <p style="color: #c63b3b; font-weight: bold; margin-bottom: 15px;">⚠ <%= erro %></p>
