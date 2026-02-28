@@ -25,7 +25,7 @@ public class ServletReadProfessor extends HttpServlet {
         }
 
         String tipo = (String)  session.getAttribute("tipoUsuario");
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Object idUsuario = session.getAttribute("idUsuario");
 
         if (tipo == null || idUsuario == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -66,7 +66,7 @@ public class ServletReadProfessor extends HttpServlet {
                 break;
 
             default:
-                response.sendRedirect(request.getContextPath() + "/login.jsp");
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
                 return;
         }
 

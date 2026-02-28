@@ -25,7 +25,7 @@ public class ServletReadAluno extends HttpServlet {
         }
 
         String tipo = (String)  session.getAttribute("tipoUsuario");
-        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+        Object idUsuario = session.getAttribute("idUsuario");
 
         if (tipo == null || idUsuario == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");

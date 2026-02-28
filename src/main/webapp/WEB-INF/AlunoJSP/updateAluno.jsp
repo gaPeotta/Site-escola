@@ -69,7 +69,7 @@
                 <div style="margin-bottom: 20px;">
                     <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Nova Senha</label>
                     <div class="busca-box" style="width:100%;">
-                        <input type="password" name="senha" placeholder="Digite a nova senha" required>
+                        <input type="password" name="senha" value="<%= aluno.getSenha() %>" required>
                     </div>
                 </div>
 
