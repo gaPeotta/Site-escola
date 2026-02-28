@@ -35,7 +35,6 @@
             <% if (erro != null) { %>
             <p style="color: #c63b3b; font-weight: bold; margin-bottom: 20px;">⚠ <%= erro %></p>
             <% } %>
-
             <% if (nota != null) { %>
 
             <form action="${pageContext.request.contextPath}/ServletUpdateNota" method="post">

@@ -28,11 +28,11 @@
 
         <div class="div2" style="max-width: 500px;">
 
-                <% if (erro != null) { %>
+            <% if (erro != null) { %>
             <p style="color: #c63b3b; font-weight: bold; margin-bottom: 20px;">⚠ <%= erro %></p>
-                <% } %>
+            <% } %>
 
-                <% if (professor != null) { %>
+            <% if (professor != null) { %>
 
             <form action="${pageContext.request.contextPath}/ServletUpdateProfessor" method="post">
 
@@ -67,10 +67,31 @@
                 </div>
 
                 <div style="margin-bottom: 20px;">
-                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Nova Senha</label>
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Senha</label>
                     <div class="busca-box" style="width:100%;">
-                        <input type="password" name="senha" placeholder="Digite a nova senha" required>
+                        <input type="text" name="senha" value="<%= professor.getSenha() %>" required>
                     </div>
                 </div>
 
-                <div style="display:flex; gap:10px; margin-t
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button type="submit" class="btn-editar">✔ Salvar</button>
+                    <a href="${pageContext.request.contextPath}/ServletReadProfessor"
+                       class="btn-excluir"
+                       style="padding: 8px 15px; border-radius: 6px; text-decoration:none; display:flex; align-items:center;">
+                        ✖ Cancelar
+                    </a>
+                </div>
+
+            </form>
+
+            <% } else { %>
+            <p style="color: #c63b3b;">Professor não encontrado.</p>
+            <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="btn-editar">← Voltar</a>
+            <% } %>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
