@@ -56,7 +56,7 @@ header{
 nav{
     display: flex;
     align-items: center;
-    gap: 70px;
+    gap: 50px;
     font-size: 20px;
 }
 
@@ -106,6 +106,7 @@ nav a:hover{
     display: flex;
     align-items: center;
     gap: 15px;
+    right: 50px;
 }
 
 
@@ -113,7 +114,7 @@ nav a:hover{
 main{
     position: fixed;
     top: 200px;
-    left: 200px;
+    left: 160px;
 }
 
 .main1{
@@ -132,8 +133,8 @@ p{
 }
 
 #Com{
-    margin-top: 10px;
-    margin-left: -10px;
+    margin-top: 15px;
+    margin-left: -5px;
     font-size: 18px;
     background-color: #235347;
     color: white;
@@ -178,14 +179,14 @@ p{
 #pFooter{
     width: 400px;
     font-size: 20px;
-    margin-top: 550px;
-    margin-left: 560px;
+    margin-top: 600px;
+    margin-left: 32%;
 }
 
 .barra {
     position: absolute;
-    left: 46%;
-    margin-top: 10px;
+    left: 40%;
+    margin-top: 20px;
     transform: translateX(-50%);
     background-color: rgba(203, 203, 203, 0.54);
     border-radius: 50px;
@@ -199,4 +200,12 @@ p{
 .logo {
     height: 80px; 
     padding: -9 0px;
+}
+
+#icon{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+
 }
