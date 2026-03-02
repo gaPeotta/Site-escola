@@ -31,7 +31,7 @@ public class CadastroEstudante extends HttpServlet {
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
 
-            Aluno aluno = new Aluno(nome, cpf, email, senha);
+            Aluno aluno = new Aluno(nome, cpf, email, senha, "-");
 
             AlunoDAO alunoDAO = new AlunoDAO();
             int matriculaGerada = alunoDAO.create(aluno, true);
