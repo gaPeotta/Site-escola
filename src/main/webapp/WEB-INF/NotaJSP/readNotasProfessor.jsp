@@ -92,6 +92,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Matricula</th>
                     <th>Aluno</th>
                     <th>Professor</th>
                     <th>Disciplina</th>
@@ -112,6 +113,7 @@
                 %>
                 <tr>
                     <td><%= nota.getIdNotas() %></td>
+                    <td><%= nota.getMatriculaAluno() %></td>
                     <td><%= nota.getNomeAluno() %></td>
                     <td><%= nota.getNomeProfessor() %></td>
                     <td><%= nota.getDisciplina() %></td>
