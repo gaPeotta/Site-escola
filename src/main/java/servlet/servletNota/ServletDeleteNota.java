@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Administrador;
 import model.Notas;
 import model.Professor;
 import java.io.IOException;
@@ -15,10 +16,20 @@ public class ServletDeleteNota extends HttpServlet{
             throws ServletException, IOException {
 
         // 1. Recupera o professor logado na sessão
-        HttpSession session = request.getSession();
-        Professor profLogado = (Professor) session.getAttribute("usuarioLogado");
+        HttpSession session = request.getSession(false);
+        String tipoUsuario = (String) session.getAttribute("tipoUsuario");
 
-        if (profLogado == null) {
+        // Pega o usuário logado conforme o tipo
+        Professor profLogado = null;
+        Administrador adminLogado = null;
+
+        if ("professor".equalsIgnoreCase(tipoUsuario)) {
+            profLogado = (Professor) session.getAttribute("usuarioLogado");
+        } else if ("adm".equalsIgnoreCase(tipoUsuario)) {
+            adminLogado = (Administrador) session.getAttribute("adminLogado");
+        }
+
+        if (profLogado == null && adminLogado == null) {
             response.sendRedirect("login.jsp");
             return;
         }

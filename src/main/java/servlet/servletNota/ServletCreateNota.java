@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Administrador;
 import model.Notas;
 import model.Professor;
 import java.io.IOException;
@@ -16,10 +17,20 @@ public class ServletCreateNota extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        Professor profLogado = (Professor) session.getAttribute("usuarioLogado");
+        HttpSession session = request.getSession(false);
+        String tipoUsuario = (String) session.getAttribute("tipoUsuario");
 
-        if (profLogado == null) {
+        // Pega o usuário logado conforme o tipo
+        Professor profLogado = null;
+        Administrador adminLogado = null;
+
+        if (tipoUsuario.equalsIgnoreCase("professor")) {
+            profLogado = (Professor) session.getAttribute("usuarioLogado");
+        } else if (tipoUsuario.equalsIgnoreCase("adm")) {
+            adminLogado = (Administrador) session.getAttribute("adminLogado");
+        }
+
+        if (profLogado == null && adminLogado == null) {
             response.sendRedirect("login.jsp");
             return;
         }
