@@ -35,8 +35,9 @@
         <a href="${pageContext.request.contextPath}/ServletReadNota" class="active">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
+        <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
         <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
-    </div>
+        <% } %>    </div>
 
     <div class="conteudo">
 
