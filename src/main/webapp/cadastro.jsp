@@ -23,7 +23,7 @@
 
             <div class="login-card">
                 <div class="tabs">
-                    <h2><a href="index.jsp" style="text-decoration: none; color: inherit;">Login</a></h2>
+                    <h2><a href="loginAluno.jsp" style="text-decoration: none; color: inherit;">Login</a></h2>
                     <h2 class="active">Cadastrar</h2>
                 </div>
 
