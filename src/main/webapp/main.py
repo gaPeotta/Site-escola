@@ -18,7 +18,7 @@ app.add_middleware(
 
 # Cliente Gemini
 client = genai.Client(
-    api_key="AIzaSyBVQBobK5kwGgQf8MLryfhoHAnG12-Ya_o"
+    api_key=""
 )
 
 # System Instruction
