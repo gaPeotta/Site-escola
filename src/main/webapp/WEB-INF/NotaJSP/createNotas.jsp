@@ -1,8 +1,11 @@
+<%@ page import="model.Professor" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String erro = (String) request.getAttribute("erro");
     String tipoLogado = (String) session.getAttribute("tipoUsuario");
     if (tipoLogado == null) tipoLogado = "";
+    List<Professor> professores = (List<Professor>) request.getAttribute("professores");
 %>
 <html>
 <head>
@@ -19,7 +22,6 @@
         <a href="${pageContext.request.contextPath}/ServletReadNota" class="active">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
-
         <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
         <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
         <% } %>

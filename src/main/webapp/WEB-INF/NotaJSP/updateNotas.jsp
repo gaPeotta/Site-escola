@@ -54,6 +54,12 @@
                         <input type="number" name="matriculaAluno" value="<%= nota.getMatriculaAluno() %>" required>
                     </div>
                 </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Id do Professor</label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="text" name="id_Professor" value="<%= nota.getDisciplina() %>" required>
+                    </div>
+                </div>
 
                 <div style="margin-bottom: 20px;">
                     <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Disciplina</label>

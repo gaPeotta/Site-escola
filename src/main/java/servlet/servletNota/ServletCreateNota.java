@@ -11,6 +11,7 @@ import model.Administrador;
 import model.Notas;
 import model.Professor;
 import java.io.IOException;
+
 @WebServlet("/ServletCreateNota")
 public class ServletCreateNota extends HttpServlet {
 
@@ -20,7 +21,6 @@ public class ServletCreateNota extends HttpServlet {
         HttpSession session = request.getSession(false);
         String tipoUsuario = (String) session.getAttribute("tipoUsuario");
 
-        // Pega o usuário logado conforme o tipo
         Professor profLogado = null;
         Administrador adminLogado = null;
 
@@ -46,13 +46,20 @@ public class ServletCreateNota extends HttpServlet {
             double n1 = (n1Param != null && !n1Param.trim().isEmpty()) ? Double.parseDouble(n1Param) : 0;
             double n2 = (n2Param != null && !n2Param.trim().isEmpty()) ? Double.parseDouble(n2Param) : 0;
 
-            // Calcula média e situação
             double media = (n1 + n2) / 2.0;
             boolean situacao = media >= 7;
 
+            // Determina o idProfessor conforme quem está logado
+            Integer idProfessor = null;
+
+            if (adminLogado != null) {
+                idProfessor = 14;
+            } else if (profLogado != null) {
+                idProfessor = profLogado.getIdProfessor();
+            }
             Notas novaNota = new Notas(
                     matricula,
-                    profLogado.getIdProfessor(),
+                    idProfessor,
                     disciplina,
                     observacao,
                     n1,
@@ -68,8 +75,8 @@ public class ServletCreateNota extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("erro", "Falha ao cadastrar nota. Verifique os valores inseridos.");
-            request.getRequestDispatcher("/WEB-INF/NotaJSP/createNota.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/NotaJSP/criarNota.jsp") // ajuste pro nome real do JSP
+                    .forward(request, response);
         }
     }
 }
-
