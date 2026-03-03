@@ -31,7 +31,7 @@
 
     <div class="sidebar">
         <h3>Menu</h3>
-        <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
+        <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno" class="active">🎓 Alunos</a>
     </div>
