@@ -18,6 +18,9 @@
     if (busca == null) busca = "";
     if (orderBy == null) orderBy = "matricula";
     if (direction == null) direction = "ASC";
+
+    String tipoUsuario = (String) session.getAttribute("tipoUsuario");
+    boolean isProfessor = "professor".equalsIgnoreCase(tipoUsuario);
 %>
 <html>
 <head>
@@ -38,7 +41,11 @@
 
     <div class="conteudo">
 
+        <% if (isProfessor) { %>
         <h2 style="color: #214e3b; margin-bottom: 20px;">Alunos</h2>
+        <% } else { %>
+        <h2 style="color: #214e3b; margin-bottom: 20px;">Minha Sala</h2>
+        <% } %>
 
         <% if (mensagem != null) { %>
         <p style="color: #2f7d4a; font-weight: bold; margin-bottom: 15px;">✔ <%= mensagem %></p>
@@ -111,7 +118,3 @@
 
         </div>
     </div>
-</div>
-
-</body>
-</html>
