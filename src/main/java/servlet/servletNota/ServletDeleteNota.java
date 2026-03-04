@@ -1,4 +1,5 @@
 package servlet.servletNota;
+
 import Dao.NotaDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,12 +11,13 @@ import model.Administrador;
 import model.Notas;
 import model.Professor;
 import java.io.IOException;
+
 @WebServlet("/ServletDeleteNota")
-public class ServletDeleteNota extends HttpServlet{
+public class ServletDeleteNota extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Recupera o professor logado na sessão
+        // 1. Recupera o usuário logado na sessão
         HttpSession session = request.getSession(false);
         String tipoUsuario = (String) session.getAttribute("tipoUsuario");
 
@@ -29,6 +31,7 @@ public class ServletDeleteNota extends HttpServlet{
             adminLogado = (Administrador) session.getAttribute("adminLogado");
         }
 
+        // Se ninguém estiver logado, manda pro login
         if (profLogado == null && adminLogado == null) {
             response.sendRedirect("login.jsp");
             return;
@@ -41,23 +44,38 @@ public class ServletDeleteNota extends HttpServlet{
             NotaDAO dao = new NotaDAO();
 
             // 3. BUSCA A NOTA ANTES DE DELETAR (Segurança)
-            // Precisamos verificar se o idProfessor da nota é o mesmo do profLogado
             Notas notaExistente = dao.read(idNotaParaDeletar);
 
-            if (notaExistente != null && notaExistente.getIdProfessor().equals(profLogado.getIdProfessor())) {
-                // 4. Se for o dono da nota, deleta
-                dao.delete(idNotaParaDeletar);
-                request.getSession().setAttribute("mensagem", "Nota excluída com sucesso!");
+            if (notaExistente != null) {
+                boolean temPermissao = false;
+
+                // Se for administrador, tem permissão total
+                if (adminLogado != null) {
+                    temPermissao = true;
+                }
+                // Se for professor, verifica se o ID bate com o dono da nota
+                else if (profLogado != null && notaExistente.getIdProfessor().equals(profLogado.getIdProfessor())) {
+                    temPermissao = true;
+                }
+
+                // 4. Executa a deleção caso tenha permissão
+                if (temPermissao) {
+                    dao.delete(idNotaParaDeletar);
+                    request.getSession().setAttribute("mensagem", "Nota excluída com sucesso!");
+                } else {
+                    request.getSession().setAttribute("erro", "Acesso negado: Você não tem permissão para excluir esta nota.");
+                }
             } else {
-                // Se tentar deletar nota de outro professor
-                request.getSession().setAttribute("erro", "Acesso negado: Você não tem permissão para excluir esta nota.");
+                request.getSession().setAttribute("erro", "Erro: A nota que você tentou excluir não existe.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            // Opcional: registrar um erro genérico na sessão caso dê problema no banco
+            // request.getSession().setAttribute("erro", "Erro interno ao tentar excluir a nota.");
         }
 
-        // 5. Redireciona de volta para a listagem filtrada
+        // 5. Redireciona de volta para a listagem
         response.sendRedirect("ServletReadNota");
     }
 }
