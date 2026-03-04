@@ -123,9 +123,8 @@ public class Aluno {
             throw new NullPointerException("A turma não pode ser nula.");
         }
         if (turma.trim().isEmpty()) {
-            throw new IllegalArgumentException("A turma não pode estar em branco.");
+            throw new IllegalArgumentException("A turma não pode estar em branco.");  // ← aqui
         }
-
         this.turma = turma.trim().toUpperCase();
     }
 
@@ -136,12 +135,12 @@ public class Aluno {
     @Override
     public String toString() {
         return String.format(
-                "Aluno | Matrícula: %-5d | Nome: %-20s | CPF: %-11s | Email: %-25s | Senha:[PROTEGIDA] | Turma: %-10s",
-                this.matricula,
+                "Aluno | Matrícula: %-5s | Nome: %-20s | CPF: %-11s | Email: %-25s | Senha:[PROTEGIDA] | Turma: %-10s",
+                this.matricula != null ? this.matricula : "N/A",
                 this.nome,
                 this.cpf,
                 this.email,
-                this.turma
+                this.turma != null ? this.turma : "-"
         );
     }
 

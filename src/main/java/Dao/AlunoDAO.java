@@ -14,7 +14,7 @@ public class AlunoDAO {
      */
     public int create(Aluno aluno, boolean semTurma) {
 
-        String sql = "INSERT INTO aluno (nome, senha, email, cpf) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?)";
         Conexao conexao = new Conexao();
 
         try (
@@ -25,6 +25,7 @@ public class AlunoDAO {
             pstmt.setString(2, aluno.getSenha());
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
+            pstmt.setString(5, "-");
 
             pstmt.executeUpdate();
 
@@ -73,6 +74,7 @@ public class AlunoDAO {
             return 0;
         }
     }
+
 
     /*
      * Busca todos os alunos.
@@ -202,7 +204,64 @@ public class AlunoDAO {
         }
         return aluno;
     }
+    public List<Aluno> read(String nome, String orderBy, String direction, String turma) {
 
+        Conexao conexao = new Conexao();
+        List<Aluno> alunos = new LinkedList<>();
+        List<Object> parametros = new LinkedList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM aluno WHERE 1=1");
+
+        if (nome != null && !nome.trim().isEmpty()) {
+            sql.append(" AND nome ILIKE ?");
+            parametros.add("%" + nome.trim() + "%");
+        }
+
+        if (turma != null && !turma.trim().isEmpty()) {
+            sql.append(" AND turma = ?");
+            parametros.add(turma.trim().toUpperCase());
+        }
+
+        String coluna = "matricula";
+        if (orderBy != null) {
+            switch (orderBy.toLowerCase()) {
+                case "nome":   coluna = "nome";      break;
+                case "turma":  coluna = "turma";     break;
+                case "email":  coluna = "email";     break;
+            }
+        }
+
+        String dir = "ASC";
+        if (direction != null && direction.equalsIgnoreCase("DESC")) dir = "DESC";
+
+        sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
+
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql.toString())
+        ) {
+            for (int i = 0; i < parametros.size(); i++) {
+                pstmt.setObject(i + 1, parametros.get(i));
+            }
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    alunos.add(new Aluno(
+                            rs.getInt("matricula"),
+                            rs.getString("nome"),
+                            rs.getString("cpf"),
+                            rs.getString("email"),
+                            rs.getString("senha"),
+                            rs.getString("turma")
+                    ));
+                }
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        return alunos;
+    }
     /*
      * Busca aluno por email e senha.
      */
