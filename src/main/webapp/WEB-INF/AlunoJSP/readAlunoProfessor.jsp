@@ -86,33 +86,35 @@
 
             </form>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Matrícula</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Turma</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (!listaAluno.isEmpty()) {
-                    for (Aluno aluno : listaAluno) { %>
-                <tr>
-                    <td><%= aluno.getMatricula() %></td>
-                    <td><%= aluno.getNome() %></td>
-                    <td><%= aluno.getEmail() %></td>
-                    <td><%= aluno.getTurma() %></td>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="4" style="text-align:center; padding:20px; color:#888;">
-                        Nenhum aluno encontrado.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Turma</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (!listaAluno.isEmpty()) {
+                        for (Aluno aluno : listaAluno) { %>
+                    <tr>
+                        <td><%= aluno.getMatricula() %></td>
+                        <td><%= aluno.getNome() %></td>
+                        <td><%= aluno.getEmail() %></td>
+                        <td><%= aluno.getTurma() %></td>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding:20px; color:#888;">
+                            Nenhum aluno encontrado.
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>

@@ -124,3 +124,13 @@ td.acoes {
     flex: 1;
     font-size: 14px;
 }
+.tabela-responsiva {
+    width: 100%;
+    overflow-x: auto; 
+    padding-bottom: 10px; 
+}
+
+.tabela-responsiva table {
+    min-width: 1000px; 
+    table-layout: auto; 
+}

@@ -83,45 +83,47 @@
 
             </form>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Matrícula</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>CPF</th>
-                    <th>Turma</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (!listaAluno.isEmpty()) {
-                    for (Aluno aluno : listaAluno) { %>
-                <tr>
-                    <td><%= aluno.getMatricula() %></td>
-                    <td><%= aluno.getNome() %></td>
-                    <td><%= aluno.getEmail() %></td>
-                    <td><%= aluno.getCpf() %></td>
-                    <td><%= aluno.getTurma() %></td>
-                    <td class="acoes">
-                        <a href="${pageContext.request.contextPath}/ServletUpdateAluno?matricula=<%= aluno.getMatricula() %>"
-                           class="btn-editar">✏ Editar</a>
-                        <button class="btn-excluir"
-                                onclick="if(confirm('Remover aluno <%= aluno.getNome() %>?'))
-                                        window.location='${pageContext.request.contextPath}/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>'">
-                            🗑
-                        </button>
-                    </td>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="6" style="text-align:center; padding:20px; color:#888;">
-                        Nenhum aluno encontrado.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>CPF</th>
+                        <th>Turma</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (!listaAluno.isEmpty()) {
+                        for (Aluno aluno : listaAluno) { %>
+                    <tr>
+                        <td><%= aluno.getMatricula() %></td>
+                        <td><%= aluno.getNome() %></td>
+                        <td><%= aluno.getEmail() %></td>
+                        <td><%= aluno.getCpf() %></td>
+                        <td><%= aluno.getTurma() %></td>
+                        <td class="acoes">
+                            <a href="${pageContext.request.contextPath}/ServletUpdateAluno?matricula=<%= aluno.getMatricula() %>"
+                            class="btn-editar">✏ Editar</a>
+                            <button class="btn-excluir"
+                                    onclick="if(confirm('Remover aluno <%= aluno.getNome() %>?'))
+                                            window.location='${pageContext.request.contextPath}/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>'">
+                                🗑
+                            </button>
+                        </td>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:20px; color:#888;">
+                            Nenhum aluno encontrado.
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>

@@ -79,33 +79,35 @@
 
             </form>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Disciplina</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (!listaProfessor.isEmpty()) {
-                    for (Professor professor : listaProfessor) { %>
-                <tr>
-                    <td><%= professor.getIdProfessor() %></td>
-                    <td><%= professor.getNome() %></td>
-                    <td><%= professor.getDisciplina() %></td>
-                    <td><%= professor.getEmail() %></td>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="5" style="text-align:center; padding:20px; color:#888;">
-                        Nenhum professor encontrado.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Disciplina</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (!listaProfessor.isEmpty()) {
+                        for (Professor professor : listaProfessor) { %>
+                    <tr>
+                        <td><%= professor.getIdProfessor() %></td>
+                        <td><%= professor.getNome() %></td>
+                        <td><%= professor.getDisciplina() %></td>
+                        <td><%= professor.getEmail() %></td>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding:20px; color:#888;">
+                            Nenhum professor encontrado.
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>

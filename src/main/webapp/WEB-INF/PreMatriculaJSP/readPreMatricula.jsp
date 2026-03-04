@@ -85,40 +85,42 @@
             </form>
 
             <%-- ===== TABELA ===== --%>
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>CPF</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (lista != null && !lista.isEmpty()) {
-                    for (PreMatricula pre : lista) { %>
-                <tr>
-                    <td><%= pre.getId_prematricula() %></td>
-                    <td><%= pre.getCpf() %></td>
-                    <td class="acoes">
-                        <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>"
-                           class="btn-editar">✏ Editar</a>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>CPF</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (lista != null && !lista.isEmpty()) {
+                        for (PreMatricula pre : lista) { %>
+                    <tr>
+                        <td><%= pre.getId_prematricula() %></td>
+                        <td><%= pre.getCpf() %></td>
+                        <td class="acoes">
+                            <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>"
+                            class="btn-editar">✏ Editar</a>
 
-                        <button class="btn-excluir"
-                                onclick="if(confirm('Remover CPF <%= pre.getCpf() %> da pré-matrícula?'))
-                                        window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
-                            🗑
-                        </button>
-                    </td>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="3" style="text-align:center; padding:20px; color:#888;">
-                        Nenhuma pré-matrícula encontrada.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+                            <button class="btn-excluir"
+                                    onclick="if(confirm('Remover CPF <%= pre.getCpf() %> da pré-matrícula?'))
+                                            window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
+                                🗑
+                            </button>
+                        </td>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="3" style="text-align:center; padding:20px; color:#888;">
+                            Nenhuma pré-matrícula encontrada.
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>
