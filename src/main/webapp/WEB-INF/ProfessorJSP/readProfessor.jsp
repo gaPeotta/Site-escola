@@ -82,43 +82,45 @@
 
             </form>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Disciplina</th>
-                    <th>Email</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (!listaProfessor.isEmpty()) {
-                    for (Professor professor : listaProfessor) { %>
-                <tr>
-                    <td><%= professor.getIdProfessor() %></td>
-                    <td><%= professor.getNome() %></td>
-                    <td><%= professor.getDisciplina() %></td>
-                    <td><%= professor.getEmail() %></td>
-                    <td class="acoes">
-                        <a href="${pageContext.request.contextPath}/ServletUpdateProfessor?id=<%= professor.getIdProfessor() %>"
-                           class="btn-editar">✏ Editar</a>
-                        <button class="btn-excluir"
-                                onclick="if(confirm('Remover professor <%= professor.getNome() %>?'))
-                                        window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
-                            🗑
-                        </button>
-                    </td>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="5" style="text-align:center; padding:20px; color:#888;">
-                        Nenhum professor encontrado.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Disciplina</th>
+                        <th>Email</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (!listaProfessor.isEmpty()) {
+                        for (Professor professor : listaProfessor) { %>
+                    <tr>
+                        <td><%= professor.getIdProfessor() %></td>
+                        <td><%= professor.getNome() %></td>
+                        <td><%= professor.getDisciplina() %></td>
+                        <td><%= professor.getEmail() %></td>
+                        <td class="acoes">
+                            <a href="${pageContext.request.contextPath}/ServletUpdateProfessor?id=<%= professor.getIdProfessor() %>"
+                            class="btn-editar">✏ Editar</a>
+                            <button class="btn-excluir"
+                                    onclick="if(confirm('Remover professor <%= professor.getNome() %>?'))
+                                            window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
+                                🗑
+                            </button>
+                        </td>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding:20px; color:#888;">
+                            Nenhum professor encontrado.
+                        </td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>

@@ -88,64 +88,66 @@
             </form>
 
             <!-- TABELA -->
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Matricula</th>
-                    <th>Aluno</th>
-                    <th>Professor</th>
-                    <th>Disciplina</th>
-                    <th>Observação</th>
-                    <th>Nota 1</th>
-                    <th>Nota 2</th>
-                    <th>Média</th>
-                    <th>Situação</th>
-                    <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
-                    <th>Ações</th>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Matricula</th>
+                        <th>Aluno</th>
+                        <th>Professor</th>
+                        <th>Disciplina</th>
+                        <th>Observação</th>
+                        <th>Nota 1</th>
+                        <th>Nota 2</th>
+                        <th>Média</th>
+                        <th>Situação</th>
+                        <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
+                        <th>Ações</th>
+                        <% } %>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (listaNotas != null && !listaNotas.isEmpty()) {
+                        for (Notas nota : listaNotas) {
+                            double media = (nota.getNota1() + nota.getNota2()) / 2.0;
+                    %>
+                    <tr>
+                        <td><%= nota.getIdNotas() %></td>
+                        <td><%= nota.getMatriculaAluno() %></td>
+                        <td><%= nota.getNomeAluno() %></td>
+                        <td><%= nota.getNomeProfessor() %></td>
+                        <td><%= nota.getDisciplina() %></td>
+                        <td><%= nota.getObservacao() %></td>
+                        <td><%= nota.getNota1() %></td>
+                        <td><%= nota.getNota2() %></td>
+                        <td><%= String.format("%.2f", media) %></td>
+                        <td style="color: <%= media >= 7 ? "#2f7d4a" : "#c63b3b" %>; font-weight: bold;">
+                            <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
+                        </td>
+                        <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
+                        <td class="acoes">
+                            <a href="${pageContext.request.contextPath}/ServletReadNota?view=update&id=<%= nota.getIdNotas() %>"
+                            class="btn-editar">✏ Editar</a>
+                            <button class="btn-excluir"
+                                    onclick="if(confirm('Excluir esta nota?'))
+                                            window.location='${pageContext.request.contextPath}/ServletDeleteNota?id=<%= nota.getIdNotas() %>'">
+                                🗑
+                            </button>
+                        </td>
+                        <% } %>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="<%= (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) ? 10 : 9 %>"
+                            style="text-align:center; padding:20px; color:#888;">
+                            Nenhuma nota encontrada.
+                        </td>
+                    </tr>
                     <% } %>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (listaNotas != null && !listaNotas.isEmpty()) {
-                    for (Notas nota : listaNotas) {
-                        double media = (nota.getNota1() + nota.getNota2()) / 2.0;
-                %>
-                <tr>
-                    <td><%= nota.getIdNotas() %></td>
-                    <td><%= nota.getMatriculaAluno() %></td>
-                    <td><%= nota.getNomeAluno() %></td>
-                    <td><%= nota.getNomeProfessor() %></td>
-                    <td><%= nota.getDisciplina() %></td>
-                    <td><%= nota.getObservacao() %></td>
-                    <td><%= nota.getNota1() %></td>
-                    <td><%= nota.getNota2() %></td>
-                    <td><%= String.format("%.2f", media) %></td>
-                    <td style="color: <%= media >= 7 ? "#2f7d4a" : "#c63b3b" %>; font-weight: bold;">
-                        <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
-                    </td>
-                    <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
-                    <td class="acoes">
-                        <a href="${pageContext.request.contextPath}/ServletReadNota?view=update&id=<%= nota.getIdNotas() %>"
-                           class="btn-editar">✏ Editar</a>
-                        <button class="btn-excluir"
-                                onclick="if(confirm('Excluir esta nota?'))
-                                        window.location='${pageContext.request.contextPath}/ServletDeleteNota?id=<%= nota.getIdNotas() %>'">
-                            🗑
-                        </button>
-                    </td>
-                    <% } %>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="<%= (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) ? 10 : 9 %>"
-                        style="text-align:center; padding:20px; color:#888;">
-                        Nenhuma nota encontrada.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>
