@@ -6,58 +6,69 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Administrador;
 import model.Notas;
-import model.Professor;
 import java.io.IOException;
+
 @WebServlet("/ServletDeleteNota")
-public class ServletDeleteNota extends HttpServlet{
+public class ServletDeleteNota extends HttpServlet {
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Recupera o professor logado na sessão
+        // 1. Valida sessão
         HttpSession session = request.getSession(false);
-        String tipoUsuario = (String) session.getAttribute("tipoUsuario");
-
-        // Pega o usuário logado conforme o tipo
-        Professor profLogado = null;
-        Administrador adminLogado = null;
-
-        if ("professor".equalsIgnoreCase(tipoUsuario)) {
-            profLogado = (Professor) session.getAttribute("usuarioLogado");
-        } else if ("adm".equalsIgnoreCase(tipoUsuario)) {
-            adminLogado = (Administrador) session.getAttribute("adminLogado");
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
 
-        if (profLogado == null && adminLogado == null) {
-            response.sendRedirect("login.jsp");
+        String tipoUsuario = (String) session.getAttribute("tipoUsuario");
+        Integer idUsuario  = (Integer) session.getAttribute("idUsuario");
+
+        if (tipoUsuario == null || idUsuario == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // 2. Só professor e adm podem deletar
+        boolean isProfessor = "professor".equalsIgnoreCase(tipoUsuario);
+        boolean isAdm       = "adm".equalsIgnoreCase(tipoUsuario);
+
+        if (!isProfessor && !isAdm) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
         try {
-            // 2. Pega o ID da nota que deve ser apagada
             int idNotaParaDeletar = Integer.parseInt(request.getParameter("id"));
 
             NotaDAO dao = new NotaDAO();
-
-            // 3. BUSCA A NOTA ANTES DE DELETAR (Segurança)
-            // Precisamos verificar se o idProfessor da nota é o mesmo do profLogado
             Notas notaExistente = dao.read(idNotaParaDeletar);
 
-            if (notaExistente != null && notaExistente.getIdProfessor().equals(profLogado.getIdProfessor())) {
-                // 4. Se for o dono da nota, deleta
-                dao.delete(idNotaParaDeletar);
-                request.getSession().setAttribute("mensagem", "Nota excluída com sucesso!");
-            } else {
-                // Se tentar deletar nota de outro professor
-                request.getSession().setAttribute("erro", "Acesso negado: Você não tem permissão para excluir esta nota.");
+            if (notaExistente == null) {
+                session.setAttribute("erro", "Nota não encontrada.");
+                response.sendRedirect(request.getContextPath() + "/ServletReadNota");
+                return;
             }
 
+            // 3. Admin deleta qualquer nota; professor só deleta as suas
+            boolean podeDeletar = isAdm ||
+                    (isProfessor && notaExistente.getIdProfessor().equals(idUsuario));
+
+            if (podeDeletar) {
+                dao.delete(idNotaParaDeletar);
+                session.setAttribute("mensagem", "Nota excluída com sucesso!");
+            } else {
+                session.setAttribute("erro", "Acesso negado: você não tem permissão para excluir esta nota.");
+            }
+
+        } catch (NumberFormatException e) {
+            session.setAttribute("erro", "ID de nota inválido.");
         } catch (Exception e) {
             e.printStackTrace();
+            session.setAttribute("erro", "Erro ao excluir a nota.");
         }
 
-        // 5. Redireciona de volta para a listagem filtrada
-        response.sendRedirect("ServletReadNota");
+        response.sendRedirect(request.getContextPath() + "/ServletReadNota");
     }
 }

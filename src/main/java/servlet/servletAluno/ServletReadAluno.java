@@ -24,8 +24,8 @@ public class ServletReadAluno extends HttpServlet {
             return;
         }
 
-        String tipo = (String)  session.getAttribute("tipoUsuario");
-        Object idUsuario = session.getAttribute("idUsuario");
+        String tipo = (String) session.getAttribute("tipoUsuario");
+        Integer idUsuario = (Integer) session.getAttribute("idUsuario");
 
         if (tipo == null || idUsuario == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -33,17 +33,32 @@ public class ServletReadAluno extends HttpServlet {
         }
 
         // ================= PARÂMETROS DE FILTRO =================
-        String busca = request.getParameter("busca");
-        String orderBy = request.getParameter("orderBy");
+        String busca     = request.getParameter("busca");
+        String orderBy   = request.getParameter("orderBy");
         String direction = request.getParameter("direction");
 
         if (busca != null && busca.isBlank()) busca = null;
         if (orderBy == null || orderBy.isBlank()) orderBy = "matricula";
         if (direction == null || direction.isBlank()) direction = "ASC";
 
+        // ================= FILTRO POR TURMA (só aluno) =================
+        String turmaFiltro = null;
+
+        if ("aluno".equalsIgnoreCase(tipo)) {
+            AlunoDAO dao = new AlunoDAO();
+            Aluno alunoLogado = dao.buscarPorMatricula(idUsuario);
+
+            if (alunoLogado == null) {
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+                return;
+            }
+
+            turmaFiltro = alunoLogado.getTurma();
+        }
+
         // ================= BUSCA NO BANCO =================
         AlunoDAO dao = new AlunoDAO();
-        List<Aluno> lista = dao.read(busca, orderBy, direction);
+        List<Aluno> lista = dao.read(busca, orderBy, direction, turmaFiltro);
 
         // ================= ENVIA PARA A VIEW =================
         request.setAttribute("listaAluno", lista);
@@ -55,16 +70,13 @@ public class ServletReadAluno extends HttpServlet {
         String view;
 
         switch (tipo.toLowerCase()) {
-
             case "adm":
-                view = "/WEB-INF/AlunoJSP/readAluno.jsp"; // tabela completa + ações
+                view = "/WEB-INF/AlunoJSP/readAluno.jsp";
                 break;
-
             case "professor":
             case "aluno":
-                view = "/WEB-INF/AlunoJSP/readAlunoProfessor.jsp"; // só leitura
+                view = "/WEB-INF/AlunoJSP/readAlunoProfessor.jsp";
                 break;
-
             default:
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
                 return;
