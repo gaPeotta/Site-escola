@@ -4,7 +4,7 @@
 %>
 <html>
 <head>
-  <title>Nova Pré-Matrícula</title>
+  <title>Editar Pré-Matrícula</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
@@ -24,7 +24,7 @@
   <%-- ===== CONTEÚDO ===== --%>
   <div class="conteudo">
 
-    <h2 style="color: #214e3b; margin-bottom: 25px;">Nova Pré-Matrícula</h2>
+    <h2 style="color: #214e3b; margin-bottom: 25px;">Editar Pré-Matrícula</h2>
 
     <div class="div2" style="max-width: 500px;">
 
@@ -33,7 +33,10 @@
       <% } %>
 
       <form method="post"
-            action="${pageContext.request.contextPath}/ServletCreatePreMatricula">
+            action="${pageContext.request.contextPath}/ServletUpdatePreMatricula">
+
+        <%-- CAMPO OCULTO COM O ID (Essencial para o Update funcionar) --%>
+        <input type="hidden" name="id" value="${preMatricula.id_prematricula}">
 
         <div style="margin-bottom: 20px;">
           <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">
@@ -44,12 +47,13 @@
                    name="cpf"
                    placeholder="Somente números (11 dígitos)"
                    maxlength="14"
+                   value="${preMatricula.cpf}"
                    required>
           </div>
         </div>
 
         <div style="display:flex; gap:10px; margin-top:10px;">
-          <button type="submit" class="btn-editar">✔ Cadastrar</button>
+          <button type="submit" class="btn-editar">✔ Salvar Alterações</button>
           <a href="${pageContext.request.contextPath}/ServletReadPreMatricula"
              class="btn-excluir"
              style="padding: 8px 15px; border-radius: 6px; text-decoration:none; display:flex; align-items:center;">
