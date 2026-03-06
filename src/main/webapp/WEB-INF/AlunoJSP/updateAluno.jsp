@@ -15,6 +15,7 @@
 <div class="layout-adm">
 
     <div class="sidebar">
+        <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
         <a href="${pageContext.request.contextPath}/ServletReadNotas">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno" class="active">🎓 Alunos</a>
