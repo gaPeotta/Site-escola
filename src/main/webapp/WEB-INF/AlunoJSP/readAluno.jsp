@@ -18,6 +18,15 @@
     if (busca == null) busca = "";
     if (orderBy == null) orderBy = "matricula";
     if (direction == null) direction = "ASC";
+
+    String tipoUsuarioLogado = (String) session.getAttribute("tipoUsuario");
+    String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
+
+    if (nomeUsuarioLogado == null) nomeUsuarioLogado = "Administrador";
+
+    String tituloCentral = "Central do Aluno";
+    if ("adm".equalsIgnoreCase(tipoUsuarioLogado)) tituloCentral = "Central do Administrador";
+    else if ("professor".equalsIgnoreCase(tipoUsuarioLogado)) tituloCentral = "Central do Professor";
 %>
 <html lang="pt-BR">
 <head>
@@ -26,6 +35,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
 <body>
+
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; background-color: #f4f5f0; border-bottom: 2px solid #e2e1db;">
+    <h1 style="color: #214e3b; margin: 0; font-size: 28px; font-weight: bold;"><%= tituloCentral %></h1>
+    
+    <div style="display: flex; align-items: center; gap: 12px; color: #1a3c2e; font-size: 18px; font-weight: 500;">
+        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        <span><%= nomeUsuarioLogado %></span>
+    </div>
+</header>
 
 <div class="layout-adm">
 
@@ -112,12 +130,12 @@
                         <td><%= aluno.getTurma() %></td>
                         <td style="display: flex; gap: 8px; justify-content: center;">
     
-                            <a href="${pageContext.request.contextPath}/[LINK_EDITAR]?matricula=<%= aluno.getMatricula() %>" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                            <a href="${pageContext.request.contextPath}/ServletUpdateAluno?matricula=<%= aluno.getMatricula() %>" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
                                 <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
                                 Editar
                             </a>
 
-                            <a href="${pageContext.request.contextPath}/[LINK_EXCLUIR]?matricula=<%= aluno.getMatricula() %>" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none;">
+                            <a href="${pageContext.request.contextPath}/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none;">
                                 <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
                             </a>
     
