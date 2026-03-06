@@ -19,7 +19,7 @@
     if (orderBy == null) orderBy = "id_professor";
     if (direction == null) direction = "ASC";
 %>
-<html>
+<html lang="pt-BR">
 <head>
     <title>Professores</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
@@ -71,11 +71,15 @@
                     <option value="DESC" <%= direction.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar">🔍 Filtrar</button>
+                <button type="submit" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" alt="Pesquisar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Filtrar
+                </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadProfessor"
-                   class="btn-editar">🧹 Limpar</a>
-
+                <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Limpar
+                </a>
 
             </form>
 
@@ -100,7 +104,7 @@
                     </tr>
                     <% } } else { %>
                     <tr>
-                        <td colspan="5" style="text-align:center; padding:20px; color:#888;">
+                        <td colspan="4" style="text-align:center; padding:20px; color:#888;">
                             Nenhum professor encontrado.
                         </td>
                     </tr>

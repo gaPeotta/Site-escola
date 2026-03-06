@@ -20,7 +20,7 @@
     if (buscaAluno == null) buscaAluno = "";
     if (tipoLogado == null) tipoLogado = "";
 %>
-<html>
+<html lang="pt-BR">
 <head>
     <title>Notas</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
@@ -37,7 +37,8 @@
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
         <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
         <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
-        <% } %>    </div>
+        <% } %>    
+    </div>
 
     <div class="conteudo">
 
@@ -52,7 +53,6 @@
 
         <div class="div2">
 
-            <!-- FILTROS -->
             <form method="get" action="${pageContext.request.contextPath}/ServletReadNota"
                   style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom: 20px;">
 
@@ -75,19 +75,26 @@
                     <option value="DESC" <%= directionSelecionada.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar">🔍 Filtrar</button>
+                <button type="submit" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" alt="Pesquisar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Filtrar
+                </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadNotas"
-                   class="btn-editar">🧹 Limpar</a>
+                <a href="${pageContext.request.contextPath}/ServletReadNota" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Limpar
+                </a>
 
                 <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
                 <a href="${pageContext.request.contextPath}/ServletReadNota?view=create"
-                   class="btn-editar" style="margin-left: auto;">➕ Nova Nota</a>
+                   class="btn-editar" style="margin-left: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #214e3b; color: white;">
+                    <img src="${pageContext.request.contextPath}/img/iconeAdicionar.png" alt="Nova Nota" style="width: 18px; height: 18px; object-fit: contain;">
+                    Nova Nota
+                </a>
                 <% } %>
 
             </form>
 
-            <!-- TABELA -->
             <div class="tabela-responsiva">
                 <table>
                     <thead>
@@ -103,7 +110,7 @@
                         <th>Média</th>
                         <th>Situação</th>
                         <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
-                        <th>Ações</th>
+                        <th style="text-align: center;">Ações</th>
                         <% } %>
                     </tr>
                     </thead>
@@ -126,20 +133,23 @@
                             <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
                         </td>
                         <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
-                        <td class="acoes">
+                        <td style="display: flex; gap: 8px; justify-content: center;">
                             <a href="${pageContext.request.contextPath}/ServletReadNota?view=update&id=<%= nota.getIdNotas() %>"
-                            class="btn-editar">✏ Editar</a>
-                            <button class="btn-excluir"
+                               class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
+                                Editar
+                            </a>
+                            <button class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none; cursor: pointer;"
                                     onclick="if(confirm('Excluir esta nota?'))
-                                            window.location='${pageContext.request.contextPath}/ServletDeleteNota?id=<%= nota.getIdNotas() %>'">
-                                🗑
+                                             window.location='${pageContext.request.contextPath}/ServletDeleteNota?id=<%= nota.getIdNotas() %>'">
+                                <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
                             </button>
                         </td>
                         <% } %>
                     </tr>
                     <% } } else { %>
                     <tr>
-                        <td colspan="<%= (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) ? 10 : 9 %>"
+                        <td colspan="<%= (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) ? 11 : 10 %>"
                             style="text-align:center; padding:20px; color:#888;">
                             Nenhuma nota encontrada.
                         </td>

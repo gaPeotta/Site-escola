@@ -18,7 +18,7 @@
     if (orderBy   == null) orderBy   = "id_prematricula";
     if (direction == null) direction = "ASC";
 %>
-<html>
+<html lang="pt-BR">
 <head>
     <title>Pré-Matrículas</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
@@ -74,13 +74,20 @@
                     <option value="DESC" <%= direction.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar">🔍 Filtrar</button>
+                <button type="submit" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" alt="Pesquisar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Filtrar
+                </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadPreMatricula"
-                   class="btn-editar">🧹 Limpar</a>
+                <a href="${pageContext.request.contextPath}/ServletReadPreMatricula" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Limpar
+                </a>
 
-                <a href="${pageContext.request.contextPath}/ServletCreatePreMatricula"
-                   class="btn-editar" style="margin-left: auto;">➕ Nova Pré-Matrícula</a>
+                <a href="${pageContext.request.contextPath}/ServletCreatePreMatricula" class="btn-editar" style="margin-left: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #214e3b; color: white;">
+                    <img src="${pageContext.request.contextPath}/img/iconeAdicionar.png" alt="Nova Pré-Matrícula" style="width: 18px; height: 18px; object-fit: contain;">
+                    Nova Pré-Matrícula
+                </a>
 
             </form>
 
@@ -91,7 +98,7 @@
                     <tr>
                         <th>ID</th>
                         <th>CPF</th>
-                        <th>Ações</th>
+                        <th style="text-align: center;">Ações</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -100,14 +107,17 @@
                     <tr>
                         <td><%= pre.getId_prematricula() %></td>
                         <td><%= pre.getCpf() %></td>
-                        <td class="acoes">
+                        <td style="display: flex; gap: 8px; justify-content: center;">
                             <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>"
-                            class="btn-editar">✏ Editar</a>
+                               class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
+                                Editar
+                            </a>
 
-                            <button class="btn-excluir"
+                            <button class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none; cursor: pointer;"
                                     onclick="if(confirm('Remover CPF <%= pre.getCpf() %> da pré-matrícula?'))
-                                            window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
-                                🗑
+                                             window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
+                                <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
                             </button>
                         </td>
                     </tr>
