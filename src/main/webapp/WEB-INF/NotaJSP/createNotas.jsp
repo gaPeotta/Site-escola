@@ -18,7 +18,6 @@
 <div class="layout-adm">
 
     <div class="sidebar">
-        <h3><%= tipoLogado.equalsIgnoreCase("adm") ? "Painel ADM" : "Menu" %></h3>
         <a href="${pageContext.request.contextPath}/ServletReadNota" class="active">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
