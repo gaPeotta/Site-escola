@@ -19,7 +19,7 @@
     if (orderBy == null) orderBy = "id_professor";
     if (direction == null) direction = "ASC";
 %>
-<html>
+<html lang="pt-BR">
 <head>
     <title>Professores</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
@@ -72,13 +72,20 @@
                     <option value="DESC" <%= direction.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar">🔍 Filtrar</button>
+                <button type="submit" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" alt="Pesquisar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Filtrar
+                </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadProfessor"
-                   class="btn-editar">🧹 Limpar</a>
+                <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" style="width: 18px; height: 18px; object-fit: contain;">
+                    Limpar
+                </a>
 
-                <a href="${pageContext.request.contextPath}/ServletCreateProfessor"
-                   class="btn-editar" style="margin-left: auto;">➕ Novo Professor</a>
+                <a href="${pageContext.request.contextPath}/ServletCreateProfessor" class="btn-editar" style="margin-left: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #214e3b; color: white;">
+                    <img src="${pageContext.request.contextPath}/img/iconeAdicionar.png" alt="Novo Professor" style="width: 18px; height: 18px; object-fit: contain;">
+                    Novo Professor
+                </a>
 
             </form>
 
@@ -90,7 +97,7 @@
                         <th>Nome</th>
                         <th>Disciplina</th>
                         <th>Email</th>
-                        <th>Ações</th>
+                        <th style="text-align: center;">Ações</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -101,13 +108,16 @@
                         <td><%= professor.getNome() %></td>
                         <td><%= professor.getDisciplina() %></td>
                         <td><%= professor.getEmail() %></td>
-                        <td class="acoes">
+                        <td style="display: flex; gap: 8px; justify-content: center;">
                             <a href="${pageContext.request.contextPath}/ServletUpdateProfessor?id=<%= professor.getIdProfessor() %>"
-                            class="btn-editar">✏ Editar</a>
-                            <button class="btn-excluir"
+                               class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
+                                Editar
+                            </a>
+                            <button class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none; cursor: pointer;"
                                     onclick="if(confirm('Remover professor <%= professor.getNome() %>?'))
-                                            window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
-                                🗑
+                                             window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
+                                <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
                             </button>
                         </td>
                     </tr>
