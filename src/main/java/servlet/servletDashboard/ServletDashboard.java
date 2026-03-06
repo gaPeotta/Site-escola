@@ -1,6 +1,6 @@
 package servlet;
 
-import Dao.DashboardDAO; 
+import Dao.DashboardDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +25,14 @@ public class ServletDashboard extends HttpServlet {
             return;
         }
 
-        // 2. BUSCA DE DADOS NO BANCO
+        String tipoUsuario = (String) session.getAttribute("tipoUsuario");
+
+        if ("aluno".equals(tipoUsuario)) {
+            response.sendRedirect(request.getContextPath() + "/ServletReadNota");
+            return;
+        }
+
+        // 2. BUSCA DE DADOS REAIS NO BANCO
         DashboardDAO dao = new DashboardDAO();
         Map<String, Object> resumo = dao.getResumoDashboard();
         

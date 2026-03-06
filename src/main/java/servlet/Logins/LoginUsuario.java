@@ -72,7 +72,7 @@ public class LoginUsuario extends HttpServlet {
                         session.setAttribute("nomeUsuario", aluno.getNome()); 
                         session.setMaxInactiveInterval(30 * 60);
 
-                        response.sendRedirect(request.getContextPath() + "/ServletReadNota");
+                        response.sendRedirect(request.getContextPath() + "/ServletDashboard");
                         return;
 
                     } else {
