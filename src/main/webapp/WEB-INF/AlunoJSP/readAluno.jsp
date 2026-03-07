@@ -112,6 +112,7 @@
                 <table>
                     <thead>
                     <tr>
+                        <th>    </th>
                         <th>Matrícula</th>
                         <th>Nome</th>
                         <th>Email</th>
@@ -124,6 +125,9 @@
                     <% if (!listaAluno.isEmpty()) {
                         for (Aluno aluno : listaAluno) { %>
                     <tr>
+                        <td>
+                            <img src="<%= aluno.getFoto() %>" alt="Foto" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                        </td>
                         <td><%= aluno.getMatricula() %></td>
                         <td><%= aluno.getNome() %></td>
                         <td><%= aluno.getEmail() %></td>

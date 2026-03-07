@@ -3,6 +3,7 @@
 <%
     Aluno aluno = (Aluno) request.getAttribute("aluno");
     String erro = (String) request.getAttribute("erro");
+    String fotoAtual = (aluno != null && aluno.getFoto() != null) ? aluno.getFoto() : "";
 %>
 <html>
 <head>
@@ -28,11 +29,11 @@
 
         <div class="div2" style="max-width: 500px;">
 
-                <% if (erro != null) { %>
+            <% if (erro != null) { %>
             <p style="color: #c63b3b; font-weight: bold; margin-bottom: 20px;">⚠ <%= erro %></p>
-                <% } %>
+            <% } %>
 
-                <% if (aluno != null) { %>
+            <% if (aluno != null) { %>
 
             <form action="${pageContext.request.contextPath}/ServletUpdateAluno" method="post">
 
@@ -80,6 +81,15 @@
                     </div>
                 </div>
 
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">
+                        Foto <span style="font-weight:400; color:#888; font-size:13px;">(opcional — cole o link do <a href="https://institutogerminare-my.sharepoint.com/:f:/g/personal/gabriel_vigna_institutojef_org_br/IgDjfKyDgDFeQbfAVDaBVi1oAXxDmMuRB20ET97ibkT7Cgk?e=PFzUxy" target="_blank" style="color:#214e3b;">OneDrive</a>)</span>
+                    </label>
+                    <div class="busca-box" style="width:100%;">
+                        <input type="text" name="foto" placeholder="https://drive.google.com/uc?export=view&id=...">
+                    </div>
+                </div>
+
                 <button type="submit" class="btn-acao editar">Salvar Alterações</button>
 
             </form>
@@ -91,6 +101,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
 </html>

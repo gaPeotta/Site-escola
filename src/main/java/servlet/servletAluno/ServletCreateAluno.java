@@ -60,8 +60,12 @@ public class ServletCreateAluno extends HttpServlet {
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
             String turma = request.getParameter("turma");
+            String foto  = request.getParameter("foto"); // opcional — pode vir vazio ou nulo
 
-            Aluno aluno = new Aluno(nome, cpf, senha, email, turma);
+            if (foto != null && foto.isBlank()) foto = null;
+
+            Aluno aluno = new Aluno(nome, cpf, email, senha, turma);
+            aluno.setFoto(foto);
 
             AlunoDAO dao = new AlunoDAO();
             int matricula = dao.create(aluno);

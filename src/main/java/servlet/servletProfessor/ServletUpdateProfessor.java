@@ -77,11 +77,14 @@ public class ServletUpdateProfessor extends HttpServlet {
         try {
             int    id         = Integer.parseInt(request.getParameter("id"));
             String nome       = request.getParameter("nome");
-            String disciplina = request.getParameter("disciplina"); // estava "discplina" no seu código original — typo corrigido
+            String disciplina = request.getParameter("disciplina");
             String email      = request.getParameter("email");
             String senha      = request.getParameter("senha");
+            String foto       = request.getParameter("foto"); // opcional
 
-            Professor professor = new Professor(id, nome, disciplina, senha, email);
+            if (foto != null && foto.isBlank()) foto = null;
+
+            Professor professor = new Professor(id, nome, disciplina, senha, email, foto);
 
             ProfessorDAO dao = new ProfessorDAO();
             int linhas = dao.update(professor);

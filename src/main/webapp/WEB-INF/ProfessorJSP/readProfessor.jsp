@@ -94,7 +94,6 @@
                     <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" style="width: 18px; height: 18px; object-fit: contain;">
                     Limpar
                 </a>
-
                 <a href="${pageContext.request.contextPath}/ServletCreateProfessor" class="btn-editar" style="margin-left: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #214e3b; color: white;">
                     <img src="${pageContext.request.contextPath}/img/iconeAdicionar.png" alt="Novo Professor" style="width: 18px; height: 18px; object-fit: contain;">
                     Novo Professor
@@ -106,6 +105,7 @@
                 <table>
                     <thead>
                     <tr>
+                        <th>    </th>
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Disciplina</th>
@@ -117,6 +117,9 @@
                     <% if (!listaProfessor.isEmpty()) {
                         for (Professor professor : listaProfessor) { %>
                     <tr>
+                        <td>
+                            <img src="<%= professor.getFoto() %>" alt="Foto" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                        </td>
                         <td><%= professor.getIdProfessor() %></td>
                         <td><%= professor.getNome() %></td>
                         <td><%= professor.getDisciplina() %></td>
