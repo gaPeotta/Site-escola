@@ -24,29 +24,30 @@ public class DashboardDAO {
         try {
             conn = gerenciaConexao.conectar();
 
-            // 1. TOTAL DE ALUNOS
+            // 1. TOTAL DE ALUNOS (Continua na tabela aluno)
             stmt = conn.prepareStatement("SELECT COUNT(matricula) AS total FROM aluno");
             rs = stmt.executeQuery();
             if (rs.next()) dados.put("totalAlunos", rs.getInt("total"));
             rs.close();
             stmt.close();
 
-            // 2. MÉDIA GERAL DA ESCOLA
-            stmt = conn.prepareStatement("SELECT AVG((nota1 + nota2) / 2.0) AS media_geral FROM notas");
+            // 2. MÉDIA GERAL DA ESCOLA (Trocado de 'notas' para 'nota')
+            stmt = conn.prepareStatement("SELECT AVG((nota1 + nota2) / 2.0) AS media_geral FROM nota");
             rs = stmt.executeQuery();
             if (rs.next()) dados.put("mediaEscola", rs.getDouble("media_geral"));
             rs.close();
             stmt.close();
 
-            // 3. ALUNOS COM MEDIA MENOR Q 7
-            stmt = conn.prepareStatement("SELECT COUNT(DISTINCT matricula_aluno) AS risco FROM notas WHERE ((nota1 + nota2) / 2.0) < 7");
+            // 3. ALUNOS EM RISCO (Trocado de 'notas' para 'nota')
+            stmt = conn.prepareStatement("SELECT COUNT(DISTINCT matricula_aluno) AS risco FROM nota WHERE ((nota1 + nota2) / 2.0) < 7");
             rs = stmt.executeQuery();
             if (rs.next()) dados.put("alunosRisco", rs.getInt("risco"));
             rs.close();
             stmt.close();
 
-            // 4. MEDIA POR DISCIPLINA
-            stmt = conn.prepareStatement("SELECT disciplina, AVG((nota1 + nota2) / 2.0) AS media FROM notas GROUP BY disciplina");
+            // 4. DADOS PARA O GRÁFICO DE BARRAS (Trocado de 'notas' para 'nota')
+            // 4. DADOS PARA O GRÁFICO DE BARRAS (Agrupando nomes iguais ignorando maiúsculas/minúsculas)
+            stmt = conn.prepareStatement("SELECT UPPER(disciplina) AS disciplina, AVG((nota1 + nota2) / 2.0) AS media FROM nota GROUP BY UPPER(disciplina)");
             rs = stmt.executeQuery();
             
             List<String> disciplinas = new ArrayList<>();
@@ -61,8 +62,8 @@ public class DashboardDAO {
             rs.close();
             stmt.close();
 
-            // 5. DADOS PARA O GRÁFICO DE ROSCA (Aprovações vs Reprovações)
-            stmt = conn.prepareStatement("SELECT situacao, COUNT(*) AS qtd FROM notas GROUP BY situacao");
+            // 5. DADOS PARA O GRÁFICO DE ROSCA 
+            stmt = conn.prepareStatement("SELECT situacao, COUNT(*) AS qtd FROM nota GROUP BY situacao");
             rs = stmt.executeQuery();
             
             int aprovados = 0;
@@ -83,7 +84,6 @@ public class DashboardDAO {
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
-                
                 gerenciaConexao.desconectar(conn); 
             } catch (Exception e) {
                 e.printStackTrace();
