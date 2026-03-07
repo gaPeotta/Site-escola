@@ -12,6 +12,10 @@
     if ("professor".equalsIgnoreCase(tipoUsuarioLogado)) tituloCentral = "Central do Professor";
     else if ("aluno".equalsIgnoreCase(tipoUsuarioLogado)) tituloCentral = "Central do Aluno";
 
+    // Pega a disciplina selecionada do Servlet para manter o select atualizado
+    String disciplinaFiltro = (String) request.getAttribute("disciplinaSelecionada");
+    if (disciplinaFiltro == null) disciplinaFiltro = "";
+
     // ===== LÓGICA DO DASHBOARD (DADOS DO BANCO) =====
     Map<String, Object> resumo = (Map<String, Object>) request.getAttribute("resumo");
     
@@ -110,13 +114,37 @@
         
         <h2 style="color: #214e3b; margin-bottom: 25px;">Resumo Acadêmico</h2>
 
+        <form method="GET" action="${pageContext.request.contextPath}/ServletDashboard" style="display: flex; gap: 10px; margin-bottom: 25px; align-items: center; flex-wrap: wrap;">
+            
+            <select name="disciplinaFiltro" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b; outline: none; min-width: 250px;">
+                <option value="">Todas as Disciplinas</option>
+                <option value="Matemática" <%= "Matemática".equals(disciplinaFiltro) ? "selected" : "" %>>Matemática</option>
+                <option value="Português" <%= "Português".equals(disciplinaFiltro) ? "selected" : "" %>>Português</option>
+                <option value="História" <%= "História".equals(disciplinaFiltro) ? "selected" : "" %>>História</option>
+                <option value="Ciências" <%= "Ciências".equals(disciplinaFiltro) ? "selected" : "" %>>Ciências</option>
+                <option value="Informática" <%= "Informática".equals(disciplinaFiltro) ? "selected" : "" %>>Informática</option>
+            </select>
+
+            <button type="submit" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" alt="Filtrar" style="width: 18px; height: 18px; object-fit: contain;">
+                Filtrar
+            </button>
+            
+            <% if (!disciplinaFiltro.isEmpty()) { %>
+            <a href="${pageContext.request.contextPath}/ServletDashboard" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #c63b3b; color: white; border: none;">
+                <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" style="width: 18px; height: 18px; object-fit: contain; filter: brightness(0) invert(1);">
+                Limpar
+            </a>
+            <% } %>
+        </form>
+
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px;">
             <div class="card-dash" style="border-left: 5px solid #214e3b;">
                 <p style="color: #888; margin: 0; font-size: 14px;">Total de Alunos</p>
                 <h3 style="margin: 10px 0 0; font-size: 28px; color: #214e3b;"><%= totalAlunos %></h3>
             </div>
             <div class="card-dash" style="border-left: 5px solid #2f7d4a;">
-                <p style="color: #888; margin: 0; font-size: 14px;">Média da Escola</p>
+                <p style="color: #888; margin: 0; font-size: 14px;">Média <%= disciplinaFiltro.isEmpty() ? "da Escola" : "em " + disciplinaFiltro %></p>
                 <h3 style="margin: 10px 0 0; font-size: 28px; color: #2f7d4a;"><%= String.format("%.1f", mediaEscola) %></h3>
             </div>
             <div class="card-dash" style="border-left: 5px solid #c63b3b;">
@@ -158,7 +186,6 @@
         }
     };
 
-    // 1. Gráfico de Barras com os Dados Dinâmicos
     const ctxBar = document.getElementById('graficoMedia').getContext('2d');
     new Chart(ctxBar, {
         type: 'bar',
@@ -181,7 +208,6 @@
         }
     });
 
-    // 2. Gráfico de Rosca com os Dados Dinâmicos
     const ctxPie = document.getElementById('graficoStatus').getContext('2d');
     new Chart(ctxPie, {
         type: 'doughnut',
