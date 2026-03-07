@@ -48,8 +48,15 @@
 
                 <div style="margin-bottom: 20px;">
                     <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Disciplina</label>
-                    <div class="busca-box" style="width:100%;">
-                        <input type="text" name="disciplina" placeholder="Ex: Matemática" required>
+                    <div style="width:100%;">
+                        <select name="disciplina" required style="width:100%; padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b; outline: none;">
+                            <option value="" disabled selected>Selecione uma matéria</option>
+                            <option value="Matemática">Matemática</option>
+                            <option value="Português">Português</option>
+                            <option value="História">História</option>
+                            <option value="Ciências">Ciências</option>
+                            <option value="Informática">Informática</option>
+                        </select>
                     </div>
                 </div>
 
