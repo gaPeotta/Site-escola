@@ -17,7 +17,7 @@
 <div class="layout-adm">
 
     <div class="sidebar">
-        <h3><%= tipoLogado.equalsIgnoreCase("adm") ? "Painel ADM" : "Menu" %></h3>
+        <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
@@ -54,17 +54,24 @@
                         <input type="number" name="matriculaAluno" value="<%= nota.getMatriculaAluno() %>" required>
                     </div>
                 </div>
+                
                 <div style="margin-bottom: 20px;">
                     <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Id do Professor</label>
                     <div class="busca-box" style="width:100%;">
-                        <input type="text" name="id_Professor" value="<%= nota.getDisciplina() %>" required>
+                        <input type="text" name="id_Professor" value="<%= nota.getIdProfessor() %>" required>
                     </div>
                 </div>
 
                 <div style="margin-bottom: 20px;">
                     <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Disciplina</label>
-                    <div class="busca-box" style="width:100%;">
-                        <input type="text" name="disciplina" value="<%= nota.getDisciplina() %>" required>
+                    <div style="width:100%;">
+                        <select name="disciplina" required style="width:100%; padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b; outline: none;">
+                            <option value="Matemática" <%= "Matemática".equals(nota.getDisciplina()) ? "selected" : "" %>>Matemática</option>
+                            <option value="Português" <%= "Português".equals(nota.getDisciplina()) ? "selected" : "" %>>Português</option>
+                            <option value="História" <%= "História".equals(nota.getDisciplina()) ? "selected" : "" %>>História</option>
+                            <option value="Ciências" <%= "Ciências".equals(nota.getDisciplina()) ? "selected" : "" %>>Ciências</option>
+                            <option value="Informática" <%= "Informática".equals(nota.getDisciplina()) ? "selected" : "" %>>Informática</option>
+                        </select>
                     </div>
                 </div>
 
@@ -110,4 +117,4 @@
 </div>
 
 </body>
-</html>
+</html> 

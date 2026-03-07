@@ -46,6 +46,7 @@ public class LoginUsuario extends HttpServlet {
                         session.setAttribute("usuarioLogado", prof);
                         session.setAttribute("tipoUsuario", "professor");
                         session.setAttribute("idUsuario", prof.getIdProfessor());
+                        session.setAttribute("nomeUsuario", prof.getNome()); 
                         session.setMaxInactiveInterval(30 * 60);
 
                         response.sendRedirect(request.getContextPath() + "/ServletReadNota");
@@ -68,9 +69,10 @@ public class LoginUsuario extends HttpServlet {
                         session.setAttribute("usuarioLogado", aluno);
                         session.setAttribute("tipoUsuario", "aluno");
                         session.setAttribute("idUsuario", aluno.getMatricula());
+                        session.setAttribute("nomeUsuario", aluno.getNome()); 
                         session.setMaxInactiveInterval(30 * 60);
 
-                        response.sendRedirect(request.getContextPath() + "/ServletReadNota");
+                        response.sendRedirect(request.getContextPath() + "/ServletDashboard");
                         return;
 
                     } else {

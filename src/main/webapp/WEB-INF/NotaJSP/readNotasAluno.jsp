@@ -13,6 +13,9 @@
     if (orderBySelecionado == null) orderBySelecionado = "id_notas";
     if (directionSelecionada == null) directionSelecionada = "ASC";
     if (buscaAlunoSelecionada == null) buscaAlunoSelecionada = "";
+
+    String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
+    if (nomeUsuarioLogado == null) nomeUsuarioLogado = "Aluno";
 %>
 <html lang="pt-BR">
 <head>
@@ -22,11 +25,19 @@
 </head>
 <body>
 
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; background-color: #f4f5f0; border-bottom: 2px solid #e2e1db;">
+    <h1 style="color: #214e3b; margin: 0; font-size: 28px; font-weight: bold;">Central do Aluno</h1>
+    
+    <div style="display: flex; align-items: center; gap: 12px; color: #1a3c2e; font-size: 18px; font-weight: 500;">
+        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        <span><%= nomeUsuarioLogado %></span>
+    </div>
+</header>
+
 <div class="layout-adm">
 
     <%-- ===== SIDEBAR ===== --%>
     <div class="sidebar">
-        <h3>Menu</h3>
         <a href="${pageContext.request.contextPath}/ServletReadNota" class="active">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>

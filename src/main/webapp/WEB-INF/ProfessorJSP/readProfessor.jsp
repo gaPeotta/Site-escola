@@ -18,6 +18,10 @@
     if (busca == null) busca = "";
     if (orderBy == null) orderBy = "id_professor";
     if (direction == null) direction = "ASC";
+
+    // ===== LÓGICA DO TOPBAR (TÍTULO E NOME DO USUÁRIO) =====
+    String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
+    if (nomeUsuarioLogado == null) nomeUsuarioLogado = "Administrador";
 %>
 <html lang="pt-BR">
 <head>
@@ -27,10 +31,19 @@
 </head>
 <body>
 
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; background-color: #f4f5f0; border-bottom: 2px solid #e2e1db;">
+    <h1 style="color: #214e3b; margin: 0; font-size: 28px; font-weight: bold;">Central do Administrador</h1>
+    
+    <div style="display: flex; align-items: center; gap: 12px; color: #1a3c2e; font-size: 18px; font-weight: 500;">
+        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        <span><%= nomeUsuarioLogado %></span>
+    </div>
+</header>
+
 <div class="layout-adm">
 
     <div class="sidebar">
-        <h3>Painel ADM</h3>
+        <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="active">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
