@@ -40,15 +40,14 @@ public class ProfessorDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Professor professor = new Professor(
+                lista.add(new Professor(
                         rs.getInt("id_professor"),
                         rs.getString("nome"),
                         rs.getString("disciplina"),
                         rs.getString("senha"),
-                        rs.getString("email")
-                );
-
-                lista.add(professor);
+                        rs.getString("email"),
+                        rs.getString("foto")        // ← adicionado
+                ));
             }
 
         } catch (SQLException sqle) {
@@ -62,9 +61,9 @@ public class ProfessorDAO {
     public List<Professor> read(String nome, String orderBy, String direction) {
         Conexao conexao = new Conexao();
         List<Professor> listaProfessor = new LinkedList<>();
+        List<Object> parametros = new LinkedList<>();
 
         StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM professor");
-        List<Object> parametros = new LinkedList<>();
 
         if (nome != null && !nome.trim().isEmpty()) {
             sqlBuilder.append(" WHERE nome ILIKE ?");
@@ -73,39 +72,34 @@ public class ProfessorDAO {
 
         String colunaOrdenacao = "id_professor";
         if (orderBy != null) {
-            String lowerOrderBy = orderBy.trim().toLowerCase();
-            if (lowerOrderBy.equals("nome")) {
-                colunaOrdenacao = "nome";
-            } else if (lowerOrderBy.equals("email")) {
-                colunaOrdenacao = "email";
+            switch (orderBy.trim().toLowerCase()) {
+                case "nome":  colunaOrdenacao = "nome";  break;
+                case "email": colunaOrdenacao = "email"; break;
             }
         }
 
         String dir = "ASC";
-        if ("DESC".equalsIgnoreCase(direction)) {
-            dir = "DESC";
-        }
+        if ("DESC".equalsIgnoreCase(direction)) dir = "DESC";
 
         sqlBuilder.append(" ORDER BY ").append(colunaOrdenacao).append(" ").append(dir);
-        String sql = sqlBuilder.toString();
 
         try (Connection conn = conexao.conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sqlBuilder.toString())) {
 
             for (int i = 0; i < parametros.size(); i++) {
                 pstmt.setObject(i + 1, parametros.get(i));
             }
 
-            try (ResultSet rset = pstmt.executeQuery()) {
-                while (rset.next()) {
-                    Professor prof = new Professor(
-                            rset.getInt("id_professor"),
-                            rset.getString("nome"),
-                            rset.getString("disciplina"),
-                            rset.getString("senha"),
-                            rset.getString("email")
-                    );
-                    listaProfessor.add(prof);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    listaProfessor.add(new Professor(
+                            rs.getInt("id_professor"),
+                            rs.getString("nome"),
+                            rs.getString("disciplina"),
+                            rs.getString("senha"),
+                            rs.getString("email"),
+                            rs.getString("foto")    // ← adicionado
+                    ));
                 }
             }
 
@@ -117,7 +111,7 @@ public class ProfessorDAO {
     }
 
     // ================= LOGIN =================
-    public Professor buscarPorEmailESenha(String email, String senha){
+    public Professor buscarPorEmailESenha(String email, String senha) {
         String sql = "SELECT * FROM professor WHERE email = ? AND senha = ?";
         Conexao conexao = new Conexao();
         Professor prof = null;
@@ -132,30 +126,29 @@ public class ProfessorDAO {
             pstmt.setString(1, email);
             pstmt.setString(2, senha);
 
-            try (ResultSet rset = pstmt.executeQuery()) {
-
-                if (rset.next()) {
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
                     System.out.println("Professor ENCONTRADO no banco!");
-
                     prof = new Professor(
-                            rset.getInt("id_professor"),
-                            rset.getString("nome"),
-                            rset.getString("disciplina"),
-                            rset.getString("senha"),
-                            rset.getString("email")
+                            rs.getInt("id_professor"),
+                            rs.getString("nome"),
+                            rs.getString("disciplina"),
+                            rs.getString("senha"),
+                            rs.getString("email"),
+                            rs.getString("foto")    // ← adicionado
                     );
-
                 } else {
                     System.out.println("Professor NÃO encontrado na query.");
                 }
             }
 
-        } catch (SQLException sqle){
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
 
         return prof;
     }
+
     // ================= BUSCAR POR ID =================
     public Professor buscarPorId(int id) {
         Professor professor = null;
@@ -173,7 +166,8 @@ public class ProfessorDAO {
                         rs.getString("nome"),
                         rs.getString("disciplina"),
                         rs.getString("senha"),
-                        rs.getString("email")
+                        rs.getString("email"),
+                        rs.getString("foto")        // ← adicionado
                 );
             }
 

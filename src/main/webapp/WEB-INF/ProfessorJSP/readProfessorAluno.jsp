@@ -99,6 +99,7 @@
                 <table>
                     <thead>
                     <tr>
+                        <th>    </th>
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Disciplina</th>
@@ -109,6 +110,9 @@
                     <% if (!listaProfessor.isEmpty()) {
                         for (Professor professor : listaProfessor) { %>
                     <tr>
+                        <td>
+                            <img src="<%= professor.getFoto() %>" alt="Foto" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                        </td>
                         <td><%= professor.getIdProfessor() %></td>
                         <td><%= professor.getNome() %></td>
                         <td><%= professor.getDisciplina() %></td>

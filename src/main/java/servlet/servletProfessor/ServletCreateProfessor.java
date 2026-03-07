@@ -59,8 +59,12 @@ public class ServletCreateProfessor extends HttpServlet {
             String disciplina = request.getParameter("disciplina");
             String email      = request.getParameter("email");
             String senha      = request.getParameter("senha");
+            String foto       = request.getParameter("foto"); // opcional
+
+            if (foto != null && foto.isBlank()) foto = null;
 
             Professor professor = new Professor(nome, disciplina, senha, email);
+            professor.setFoto(foto);
 
             ProfessorDAO dao = new ProfessorDAO();
             boolean sucesso = dao.create(professor);
