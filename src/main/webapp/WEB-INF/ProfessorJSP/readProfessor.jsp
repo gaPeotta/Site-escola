@@ -143,7 +143,6 @@
                         <td><%= professor.getNome() %></td>
                         <td><%= professor.getDisciplina() %></td>
                         <td><%= professor.getEmail() %></td>
-                        <td><%= professor.getSenha()%></td>
                         
                         <td style="text-align: center; vertical-align: middle;">
                             <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
