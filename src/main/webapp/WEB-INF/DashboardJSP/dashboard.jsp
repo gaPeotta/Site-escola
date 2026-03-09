@@ -29,6 +29,7 @@
     // Strings que vão virar Arrays no JavaScript
     StringBuilder labelsDisciplinas = new StringBuilder("[]");
     StringBuilder dataMedias = new StringBuilder("[]");
+    String tipoLogado = (String) session.getAttribute("tipoUsuario");
 
     if (resumo != null) {
         // Extraindo os cards
@@ -107,8 +108,9 @@
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
+        <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
         <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
-    </div>
+        <% } %>    </div>
 
     <div class="conteudo">
         
