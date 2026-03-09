@@ -30,6 +30,12 @@
                             <h2><a href="cadastro.jsp" style="text-decoration: none; color: inherit;">Cadastrar</a></h2>
                         </div>
 
+                        <% String erro = (String) request.getAttribute("erro");
+                            if (erro != null) {
+                                String cor = erro.toLowerCase().contains("incorretos") ? "red" : "green"; %>
+                        <p style="color: <%= cor %>"><%= erro %></p>
+                        <% } %>
+
                         <form action="<%=request.getContextPath()%>/loginUsuario" method="post">
                             <div class="input-group">
                                 <label>E-mail</label>
