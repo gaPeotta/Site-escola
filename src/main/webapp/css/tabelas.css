@@ -37,6 +37,11 @@ tbody tr:nth-child(even) td { background-color: #e6e6e6; }
 
 /* --- BOTÕES DE AÇÃO --- */
 td.acoes {
+    text-align: center;
+    vertical-align: middle;
+}
+
+td.acoes div {
     display: flex;
     justify-content: center;
     align-items: center;
