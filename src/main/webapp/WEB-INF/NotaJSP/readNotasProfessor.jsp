@@ -82,6 +82,8 @@
                         <th>Matricula</th>
                         <th>Aluno</th>
                         <th>Disciplina</th>
+                        <th>Nota 1</th>
+                        <th>Nota 2</th>
                         <th>Média</th>
                         <th>Situação</th>
                         <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
@@ -99,6 +101,8 @@
                         <td><%= nota.getMatriculaAluno() %></td>
                         <td><%= nota.getNomeAluno() %></td>
                         <td><%= nota.getDisciplina() %></td>
+                        <td><%= nota.getNota1() %></td>
+                        <td><%= nota.getNota2() %></td>
                         <td><%= String.format("%.2f", media) %></td>
                         <td class="<%= media >= 7 ? "status-aprovado" : "status-reprovado" %>">
                             <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>

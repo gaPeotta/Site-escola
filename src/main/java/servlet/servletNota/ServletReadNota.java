@@ -51,11 +51,11 @@ public class ServletReadNota extends HttpServlet {
         switch (tipo.toLowerCase()) {
 
             case "aluno":
-                matriculaAluno = idUsuario; // 🔒 aluno só vê as próprias
+                matriculaAluno = idUsuario;
                 break;
 
             case "professor":
-                idProfessor = idUsuario; // 🔒 professor só vê as dele
+                idProfessor = idUsuario;
                 break;
 
             case "adm":
