@@ -1,20 +1,27 @@
-/* --- TABELA E REGISTROS --- */
 .div2 {
     background-color: #f7f6f2;
     padding: 25px;
     border-radius: 25px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     border: 1px solid #e0ddd5;
+    margin-bottom: 20px;
+}
+
+/* --- ESTRUTURA DA TABELA --- */
+.tabela-responsiva {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px;
 }
 
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    table-layout: fixed; /* Trava as colunas no lugar */
     border: 1px solid #d9d9d9;
     border-radius: 12px;
     overflow: hidden;
+    background-color: white;
 }
 
 thead th {
@@ -23,6 +30,7 @@ thead th {
     text-align: left;
     color: #444;
     font-size: 14px;
+    font-weight: 600;
 }
 
 tbody td {
@@ -30,12 +38,14 @@ tbody td {
     font-size: 14px;
     border-bottom: 1px solid #eee;
     vertical-align: middle;
+    color: #333;
 }
 
 /* Linhas Zebradas */
-tbody tr:nth-child(even) td { background-color: #e6e6e6; }
+tbody tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
 
-/* --- BOTÕES DE AÇÃO --- */
 td.acoes {
     text-align: center;
     vertical-align: middle;
@@ -45,32 +55,144 @@ td.acoes div {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 8px; /* Espaçamento entre os botões */
 }
 
+/* --- BOTÕES --- */
 .btn-editar {
     background-color: #2f7d4a;
-    color: white;
+    color: white !important;
     border: none;
     padding: 8px 15px;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.btn-editar:hover {
+    background-color: #214e3b;
 }
 
 .btn-excluir {
     background-color: #c63b3b;
-    color: white;
+    color: white !important;
     border: none;
     padding: 8px 12px;
     border-radius: 6px;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: background 0.2s;
 }
 
-/* --- PAGINAÇÃO (ESTILO PÍLULA) --- */
+.btn-excluir:hover {
+    background-color: #a52d2d;
+}
+
+
+.btn-novo-registro {
+    margin-left: auto;
+    background-color: #214e3b !important;
+}
+
+
+.btn-link {
+    text-decoration: none;
+    line-height: 1;
+}
+
+
+.form-alinhado {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.busca-box {
+    display: flex;
+    align-items: center;
+    background-color: #edece6;
+    border-radius: 50px;
+    padding: 8px 20px;
+    border: 1px solid #dcdad4;
+    min-width: 250px;
+}
+
+.busca-box input {
+    background: none;
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.select-custom {
+    padding: 10px 15px;
+    border-radius: 50px;
+    border: 1px solid #dcdad4;
+    background-color: #edece6;
+    font-size: 14px;
+    color: #214e3b;
+    outline: none;
+    cursor: pointer;
+}
+
+/* --- FORMULÁRIOS (CREATE / UPDATE) --- */
+.form-container {
+    max-width: 500px;
+}
+
+.field-group {
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    font-weight: 600;
+    color: #214e3b;
+    margin-bottom: 8px;
+}
+
+.input-full {
+    width: 100% !important;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+/* --- UTILITÁRIOS --- */
+.titulo-sessao {
+    color: #214e3b;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.foto-tabela {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+.msg-sucesso { color: #2f7d4a; font-weight: bold; margin-bottom: 15px; }
+.msg-erro { color: #c63b3b; font-weight: bold; margin-bottom: 15px; }
+
+/* Status de Notas */
+.status-aprovado { color: #2f7d4a !important; font-weight: bold; }
+.status-reprovado { color: #c63b3b !important; font-weight: bold; }
+
+/* --- PAGINAÇÃO --- */
 .final {
     display: flex;
     justify-content: flex-end;
@@ -86,56 +208,4 @@ td.acoes div {
     border-radius: 50px;
     padding: 5px 12px;
     gap: 12px;
-}
-
-.btn-seta {
-    background: none;
-    border: none;
-    color: #214e3b;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.contador-pagina {
-    border: 1.5px solid #214e3b;
-    border-radius: 10px;
-    padding: 3px 12px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #214e3b;
-}
-
-.busca-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-}
-
-.busca-box {
-    display: flex;
-    align-items: center;
-    background-color: #edece6;
-    border-radius: 50px;
-    padding: 10px 20px;
-    width: 350px;
-    border: 1px solid #dcdad4;
-}
-
-.busca-box input {
-    background: none;
-    border: none;
-    outline: none;
-    flex: 1;
-    font-size: 14px;
-}
-.tabela-responsiva {
-    width: 100%;
-    overflow-x: auto; 
-    padding-bottom: 10px; 
-}
-
-.tabela-responsiva table {
-    min-width: 1000px; 
-    table-layout: auto; 
 }
