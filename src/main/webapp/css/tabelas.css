@@ -48,12 +48,10 @@ tbody tr:nth-child(even) td {
 
 td.acoes {
     text-align: center;
-    white-space: nowrap;
-    width: 180px;
+    vertical-align: middle;
 }
 
-
-.acoes-container {
+td.acoes div {
     display: flex;
     justify-content: center;
     align-items: center;

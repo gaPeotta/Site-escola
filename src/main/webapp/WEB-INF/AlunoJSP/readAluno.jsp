@@ -123,19 +123,28 @@
                         <td><%= aluno.getEmail() %></td>
                         <td><%= aluno.getCpf() %></td>
                         <td><%= aluno.getTurma() %></td>
-                        <td class="acoes">
-                            <a href="${pageContext.request.contextPath}/ServletUpdateAluno?matricula=<%= aluno.getMatricula() %>" class="btn-editar btn-link">
-                                <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" width="16">
-                                Editar
-                            </a>
-                            <a href="${pageContext.request.contextPath}/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>" class="btn-excluir btn-link btn-icone">
-                                <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" width="16">
-                            </a>
+                        
+                        <td style="text-align: center; vertical-align: middle;">
+                            <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+                                <a href="${pageContext.request.contextPath}/ServletUpdateAluno?matricula=<%= aluno.getMatricula() %>" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                    <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
+                                    Editar
+                                </a>
+
+                                <a href="${pageContext.request.contextPath}/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>" 
+                                   class="btn-editar" 
+                                   style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none;"
+                                   onclick="return confirm('Deseja realmente remover o aluno <%= aluno.getNome() %>?');">
+                                    <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     <% } } else { %>
                     <tr>
-                        <td colspan="7" class="td-vazio">Nenhum aluno encontrado.</td>
+                        <td colspan="7" style="text-align:center; padding:20px; color:#888;">
+                            Nenhum aluno encontrado.
+                        </td>
                     </tr>
                     <% } %>
                     </tbody>

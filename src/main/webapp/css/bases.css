@@ -159,7 +159,8 @@ body {
 
 .layout-adm {
     display: flex;
-    min-height: 100vh;
+    height: calc(100vh - 80px); 
+    overflow: hidden; 
 }
 
 .conteudo {
