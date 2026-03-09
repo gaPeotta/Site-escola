@@ -108,6 +108,7 @@
                         <th>Matrícula</th>
                         <th>Nome</th>
                         <th>Email</th>
+                        <th>Senha</th>
                         <th>CPF</th>
                         <th>Turma</th>
                         <th class="col-acoes">Ações</th>
@@ -121,6 +122,7 @@
                         <td><%= aluno.getMatricula() %></td>
                         <td><%= aluno.getNome() %></td>
                         <td><%= aluno.getEmail() %></td>
+                        <td><%= aluno.getSenha()%></td>
                         <td><%= aluno.getCpf() %></td>
                         <td><%= aluno.getTurma() %></td>
                         
