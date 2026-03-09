@@ -3,20 +3,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     List<PreMatricula> lista = (List<PreMatricula>) request.getAttribute("listaPreMatricula");
-
     String buscaCpf  = (String) request.getAttribute("buscaCpfSelecionada");
     String orderBy   = (String) request.getAttribute("orderBySelecionado");
     String direction = (String) request.getAttribute("directionSelecionada");
-
     String mensagem  = (String) session.getAttribute("mensagem");
     String erro      = (String) session.getAttribute("erro");
 
     session.removeAttribute("mensagem");
     session.removeAttribute("erro");
-
-    if (buscaCpf  == null) buscaCpf  = "";
-    if (orderBy   == null) orderBy   = "id_prematricula";
-    if (direction == null) direction = "ASC";
 
     String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
     if (nomeUsuarioLogado == null) nomeUsuarioLogado = "Administrador";
@@ -29,11 +23,10 @@
 </head>
 <body>
 
-<header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; background-color: #f4f5f0; border-bottom: 2px solid #e2e1db;">
-    <h1 style="color: #214e3b; margin: 0; font-size: 28px; font-weight: bold;">Central do Administrador</h1>
-    
-    <div style="display: flex; align-items: center; gap: 12px; color: #1a3c2e; font-size: 18px; font-weight: 500;">
-        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+<header class="header">
+    <h1>Central do Administrador</h1>
+    <div class="usuario">
+        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" class="foto-perfil">
         <span><%= nomeUsuarioLogado %></span>
     </div>
 </header>
@@ -81,61 +74,41 @@
                 Pré-Matrículas</a>
         </div>
 
-    <%-- ===== CONTEÚDO ===== --%>
     <div class="conteudo">
+        <h2 class="titulo-sessao">Pré-Matrículas Pendentes</h2>
 
-        <h2 style="color: #214e3b; margin-bottom: 20px;">Pré-Matrículas Pendentes</h2>
-
-        <%-- ===== FEEDBACK ===== --%>
-        <% if (mensagem != null) { %>
-        <p style="color: #2f7d4a; font-weight: bold; margin-bottom: 15px;">✔ <%= mensagem %></p>
-        <% } %>
-        <% if (erro != null) { %>
-        <p style="color: #c63b3b; font-weight: bold; margin-bottom: 15px;">⚠ <%= erro %></p>
-        <% } %>
+        <% if (mensagem != null) { %><p class="msg-sucesso">✔ <%= mensagem %></p><% } %>
+        <% if (erro != null) { %><p class="msg-erro">⚠ <%= erro %></p><% } %>
 
         <div class="div2">
-
-            <%-- ===== FILTROS + BOTÃO NOVO ===== --%>
-            <form method="get"
-                  action="${pageContext.request.contextPath}/ServletReadPreMatricula"
-                  style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom: 20px;">
-
+            <form method="get" action="${pageContext.request.contextPath}/ServletReadPreMatricula" class="form-alinhado">
                 <div class="busca-box">
-                    <input type="text"
-                           name="buscaCpf"
-                           placeholder="Pesquisar por CPF..."
-                           value="<%= buscaCpf %>">
+                    <input type="text" name="buscaCpf" placeholder="Pesquisar por CPF..." value="<%= (buscaCpf != null) ? buscaCpf : "" %>">
                 </div>
 
-                <select name="orderBy" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="id_prematricula" <%= orderBy.equals("id_prematricula") ? "selected" : "" %>>Ordenar por ID</option>
-                    <option value="cpf"             <%= orderBy.equals("cpf") ? "selected" : "" %>>Ordenar por CPF</option>
+                <select name="orderBy" class="select-custom">
+                    <option value="id_prematricula" <%= "id_prematricula".equals(orderBy) ? "selected" : "" %>>ID</option>
+                    <option value="cpf" <%= "cpf".equals(orderBy) ? "selected" : "" %>>CPF</option>
                 </select>
 
-                <select name="direction" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="ASC"  <%= direction.equalsIgnoreCase("ASC") ? "selected" : "" %>>Crescente</option>
-                    <option value="DESC" <%= direction.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
+                <select name="direction" class="select-custom">
+                    <option value="ASC"  <%= "ASC".equalsIgnoreCase(direction) ? "selected" : "" %>>Crescente</option>
+                    <option value="DESC" <%= "DESC".equalsIgnoreCase(direction) ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" alt="Pesquisar" style="width: 18px; height: 18px; object-fit: contain;">
-                    Filtrar
+                <button type="submit" class="btn-editar">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" width="18"> Filtrar
                 </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadPreMatricula" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" style="width: 18px; height: 18px; object-fit: contain;">
-                    Limpar
+                <a href="${pageContext.request.contextPath}/ServletReadPreMatricula" class="btn-editar btn-link">
+                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" width="18"> Limpar
                 </a>
 
-                <a href="${pageContext.request.contextPath}/ServletCreatePreMatricula" class="btn-editar" style="margin-left: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background-color: #214e3b; color: white;">
-                    <img src="${pageContext.request.contextPath}/img/iconeAdicionar.png" alt="Nova Pré-Matrícula" style="width: 18px; height: 18px; object-fit: contain;">
-                    Nova Pré-Matrícula
+                <a href="${pageContext.request.contextPath}/ServletCreatePreMatricula" class="btn-editar btn-link btn-novo-registro">
+                    <img src="${pageContext.request.contextPath}/img/iconeAdicionar.png" width="18"> Nova Pré-Matrícula
                 </a>
-
             </form>
 
-            <%-- ===== TABELA ===== --%>
             <div class="tabela-responsiva">
                 <table>
                     <thead>
@@ -151,31 +124,24 @@
                     <tr>
                         <td><%= pre.getId_prematricula() %></td>
                         <td><%= pre.getCpf() %></td>
-                        <td style="display: flex; gap: 8px; justify-content: center;">
-                            <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>"
-                               class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                                <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
-                                Editar
+                        <td class="acoes">
+                            <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>" class="btn-editar btn-link">
+                                <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" width="16"> Editar
                             </a>
-
-                            <button class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none; cursor: pointer;"
-                                    onclick="if(confirm('Remover CPF <%= pre.getCpf() %> da pré-matrícula?'))
-                                             window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
-                                <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
+                            <button class="btn-excluir"
+                                    onclick="if(confirm('Remover CPF <%= pre.getCpf() %>?')) window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
+                                <img src="${pageContext.request.contextPath}/img/iconeDelete.png" width="16">
                             </button>
                         </td>
                     </tr>
                     <% } } else { %>
                     <tr>
-                        <td colspan="3" style="text-align:center; padding:20px; color:#888;">
-                            Nenhuma pré-matrícula encontrada.
-                        </td>
+                        <td colspan="3" style="text-align:center; padding:20px; color:#888;">Nenhuma pré-matrícula encontrada.</td>
                     </tr>
                     <% } %>
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-package servlet;
+package servlet.servletDashboard;
 
 import Dao.DashboardDAO;
 import jakarta.servlet.ServletException;

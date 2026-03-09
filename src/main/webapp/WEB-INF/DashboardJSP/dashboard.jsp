@@ -29,6 +29,7 @@
     // Strings que vão virar Arrays no JavaScript
     StringBuilder labelsDisciplinas = new StringBuilder("[]");
     StringBuilder dataMedias = new StringBuilder("[]");
+    String tipoLogado = (String) session.getAttribute("tipoUsuario");
 
     if (resumo != null) {
         // Extraindo os cards

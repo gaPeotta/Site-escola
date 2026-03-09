@@ -82,7 +82,7 @@ public class LoginUsuario extends HttpServlet {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                erro = "Erro inesperado ao processar login.";
+                erro = "Usuário ou senha incorretos.";
             }
         }
 
