@@ -14,7 +14,7 @@ public class AlunoDAO {
      */
     public int create(Aluno aluno, boolean semTurma) {
 
-        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma,foto) VALUES (?, ?, ?, ?, ?,?)";
         Conexao conexao = new Conexao();
 
         try (
@@ -45,7 +45,7 @@ public class AlunoDAO {
 
     public int create(Aluno aluno) {
 
-        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma, foto) VALUES (?, ?, ?, ?, ?, ?)";
         Conexao conexao = new Conexao();
 
         try (
@@ -57,6 +57,7 @@ public class AlunoDAO {
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
             pstmt.setString(5, aluno.getTurma());
+            pstmt.setString(6, aluno.getFoto());
 
             pstmt.executeUpdate();
 
