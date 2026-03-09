@@ -43,7 +43,7 @@ public class LoginAdm extends HttpServlet {
                 session.setAttribute("idUsuario",    admin.getId()); //  necessário para controle de acesso
                 session.setAttribute("nomeUsuario",  admin.getNome());
 
-                response.sendRedirect(request.getContextPath() + "/ServletReadProfessor"); //  via servlet
+                response.sendRedirect(request.getContextPath() + "/ServletDashboard"); //  via servlet
             } else {
                 request.setAttribute("erro", "Email ou senha incorretos.");
                 request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);

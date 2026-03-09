@@ -9,15 +9,17 @@ public class Professor {
     private String disciplina;
     private String senha;
     private String email;
+    private String foto;
 
     // ---------------- CONSTRUTORES ----------------
 
-    public Professor(Integer idProfessor, String nome, String disciplina, String senha, String email) {
+    public Professor(Integer idProfessor, String nome, String disciplina, String senha, String email, String foto) {
         this.setIdProfessor(idProfessor);
         this.setNome(nome);
         this.setDisciplina(disciplina);
         this.setSenha(senha);
         this.setEmail(email);
+        this.setFoto(foto);
     }
 
     public Professor(String nome, String disciplina, String senha, String email) {
@@ -25,6 +27,7 @@ public class Professor {
         this.setDisciplina(disciplina);
         this.setSenha(senha);
         this.setEmail(email);
+        this.setFoto(null);
     }
 
     // ---------------- GETTERS E SETTERS ----------------
@@ -102,7 +105,15 @@ public class Professor {
         validateEmail(email);
         this.email = email.trim().toLowerCase();
     }
-
+    public String getFoto() {
+        return foto;
+    }
+    public void setFoto(String foto) {
+        if (foto == null) {
+            foto ="https://institutogerminare-my.sharepoint.com/:i:/g/personal/gabriel_vigna_institutojef_org_br/IQDRaCkMoUtmRrCxATPR58YyAWL6lezDhNN0gvuKZCtPmF0?download=1";
+        }
+        this.foto = foto;
+    }
     // ---------------- TO STRING ----------------
 
     @Override
@@ -123,7 +134,6 @@ public class Professor {
     private static final Pattern PATTERN_DIGITO = Pattern.compile("\\d");
     private static final Pattern PATTERN_ESPECIAL = Pattern.compile("[^\\sA-Za-z0-9]");
 
-    // ✅ regex básica de email (suficiente para sistemas web)
     private static final Pattern PATTERN_EMAIL =
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 

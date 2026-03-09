@@ -4,8 +4,10 @@
     Professor professor = (Professor) request.getAttribute("professor");
     String erro = (String) request.getAttribute("erro");
 %>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
     <title>Editar Professor</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
@@ -15,7 +17,7 @@
 <div class="layout-adm">
 
     <div class="sidebar">
-        <h3>Painel ADM</h3>
+        <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="active">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
@@ -24,12 +26,12 @@
 
     <div class="conteudo">
 
-        <h2 style="color: #214e3b; margin-bottom: 25px;">Editar Professor</h2>
+        <h2 class="titulo-sessao">Editar Professor</h2>
 
-        <div class="div2" style="max-width: 500px;">
+        <div class="div2 form-container">
 
             <% if (erro != null) { %>
-            <p style="color: #c63b3b; font-weight: bold; margin-bottom: 20px;">⚠ <%= erro %></p>
+            <p class="msg-erro">⚠ <%= erro %></p>
             <% } %>
 
             <% if (professor != null) { %>
@@ -38,46 +40,49 @@
 
                 <input type="hidden" name="id" value="<%= professor.getIdProfessor() %>">
 
-                <div style="margin-bottom: 8px;">
-                    <label style="display:block; font-weight:600; color:#888; font-size:13px; margin-bottom:4px;">ID</label>
-                    <p style="font-size:15px; color:#214e3b; font-weight:bold;">#<%= professor.getIdProfessor() %></p>
+                <div class="field-group">
+                    <label class="field-label field-label-hint">ID DO REGISTRO</label>
+                    <p class="field-id">#<%= professor.getIdProfessor() %></p>
                 </div>
 
-                <hr style="border:none; border-top:1px solid #e0ddd5; margin: 15px 0;">
-
-                <div style="margin-bottom: 20px;">
-                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Nome</label>
-                    <div class="busca-box" style="width:100%;">
+                <div class="field-group">
+                    <label class="field-label">Nome</label>
+                    <div class="busca-box input-full">
                         <input type="text" name="nome" value="<%= professor.getNome() %>" required>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 20px;">
-                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Disciplina</label>
-                    <div class="busca-box" style="width:100%;">
+                <div class="field-group">
+                    <label class="field-label">Disciplina</label>
+                    <div class="busca-box input-full">
                         <input type="text" name="disciplina" value="<%= professor.getDisciplina() %>" required>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 20px;">
-                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Email</label>
-                    <div class="busca-box" style="width:100%;">
+                <div class="field-group">
+                    <label class="field-label">Email</label>
+                    <div class="busca-box input-full">
                         <input type="email" name="email" value="<%= professor.getEmail() %>" required>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 20px;">
-                    <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">Senha</label>
-                    <div class="busca-box" style="width:100%;">
-                        <input type="text" name="senha" value="<%= professor.getSenha() %>" required>
+                <div class="field-group">
+                    <label class="field-label">Senha</label>
+                    <div class="busca-box input-full">
+                        <input type="password" name="senha" value="<%= professor.getSenha() %>" required>
                     </div>
                 </div>
 
-                <div style="display:flex; gap:10px; margin-top:10px;">
-                    <button type="submit" class="btn-editar">✔ Salvar</button>
-                    <a href="${pageContext.request.contextPath}/ServletReadProfessor"
-                       class="btn-excluir"
-                       style="padding: 8px 15px; border-radius: 6px; text-decoration:none; display:flex; align-items:center;">
+                <div class="field-group">
+                    <label class="field-label">Link da Foto</label>
+                    <div class="busca-box input-full">
+                        <input type="text" name="foto" value="<%= (professor.getFoto() != null) ? professor.getFoto() : "" %>" placeholder="URL da imagem">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn-editar">✔ Salvar Alterações</button>
+                    <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="btn-excluir btn-link">
                         ✖ Cancelar
                     </a>
                 </div>
@@ -85,8 +90,10 @@
             </form>
 
             <% } else { %>
-            <p style="color: #c63b3b;">Professor não encontrado.</p>
-            <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="btn-editar">← Voltar</a>
+            <div class="not-found">
+                <p class="msg-erro">Professor não encontrado ou ID inválido.</p>
+                <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="btn-editar btn-link">← Voltar para a lista</a>
+            </div>
             <% } %>
 
         </div>

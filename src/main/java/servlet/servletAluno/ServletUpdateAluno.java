@@ -81,8 +81,11 @@ public class ServletUpdateAluno extends HttpServlet {
             String email     = request.getParameter("email");
             String senha     = request.getParameter("senha");
             String turma     = request.getParameter("turma");
+            String foto      = request.getParameter("foto"); // opcional — pode vir vazio ou nulo
 
-            Aluno aluno = new Aluno(matricula, nome, cpf, email, senha, turma);
+            if (foto != null && foto.isBlank()) foto = null;
+
+            Aluno aluno = new Aluno(matricula, nome, cpf, email, senha, turma, foto);
 
             AlunoDAO dao = new AlunoDAO();
             int status = dao.update(aluno);

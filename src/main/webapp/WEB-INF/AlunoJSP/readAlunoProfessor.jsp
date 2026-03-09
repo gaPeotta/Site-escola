@@ -21,19 +21,35 @@
 
     String tipoUsuario = (String) session.getAttribute("tipoUsuario");
     boolean isProfessor = "professor".equalsIgnoreCase(tipoUsuario);
+
+    String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
+    if (nomeUsuarioLogado == null) nomeUsuarioLogado = "Usuário";
+
+    String tituloCentral = "Central do Aluno";
+    if ("adm".equalsIgnoreCase(tipoUsuario)) tituloCentral = "Central do Administrador";
+    else if (isProfessor) tituloCentral = "Central do Professor";
 %>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
     <title>Alunos</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
 <body>
 
+<header class="header">
+    <h1><%= tituloCentral %></h1>
+    <div class="usuario">
+        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" class="foto-perfil">
+        <span><%= nomeUsuarioLogado %></span>
+    </div>
+</header>
+
 <div class="layout-adm">
 
     <div class="sidebar">
-        <h3>Menu</h3>
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno" class="active">🎓 Alunos</a>
@@ -41,78 +57,76 @@
 
     <div class="conteudo">
 
-        <% if (isProfessor) { %>
-        <h2 style="color: #214e3b; margin-bottom: 20px;">Alunos</h2>
-        <% } else { %>
-        <h2 style="color: #214e3b; margin-bottom: 20px;">Minha Sala</h2>
-        <% } %>
+        <h2 class="titulo-sessao"><%= isProfessor ? "Alunos" : "Minha Sala" %></h2>
 
-        <% if (mensagem != null) { %>
-        <p style="color: #2f7d4a; font-weight: bold; margin-bottom: 15px;">✔ <%= mensagem %></p>
-        <% } %>
-        <% if (erro != null) { %>
-        <p style="color: #c63b3b; font-weight: bold; margin-bottom: 15px;">⚠ <%= erro %></p>
-        <% } %>
+        <% if (mensagem != null) { %><p class="msg-sucesso">✔ <%= mensagem %></p><% } %>
+        <% if (erro != null) { %><p class="msg-erro">⚠ <%= erro %></p><% } %>
 
         <div class="div2">
 
-            <form method="get"
-                  action="${pageContext.request.contextPath}/ServletReadAluno"
-                  style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom: 20px;">
+            <form method="get" action="${pageContext.request.contextPath}/ServletReadAluno" class="form-alinhado">
 
                 <div class="busca-box">
-                    <input type="text"
-                           name="busca"
-                           placeholder="Pesquisar por nome..."
-                           value="<%= busca %>">
+                    <input type="text" name="busca" placeholder="Pesquisar por nome..." value="<%= busca %>">
                 </div>
 
-                <select name="orderBy" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
+                <select name="orderBy" class="select-custom">
                     <option value="matricula" <%= orderBy.equals("matricula") ? "selected" : "" %>>Ordenar por Matrícula</option>
-                    <option value="nome"      <%= orderBy.equals("nome") ? "selected" : "" %>>Ordenar por Nome</option>
-                    <option value="turma"     <%= orderBy.equals("turma") ? "selected" : "" %>>Ordenar por Turma</option>
-                    <option value="email"     <%= orderBy.equals("email") ? "selected" : "" %>>Ordenar por Email</option>
+                    <option value="nome" <%= orderBy.equals("nome") ? "selected" : "" %>>Ordenar por Nome</option>
+                    <option value="turma" <%= orderBy.equals("turma") ? "selected" : "" %>>Ordenar por Turma</option>
+                    <option value="email" <%= orderBy.equals("email") ? "selected" : "" %>>Ordenar por Email</option>
                 </select>
 
-                <select name="direction" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="ASC"  <%= direction.equalsIgnoreCase("ASC") ? "selected" : "" %>>Crescente</option>
+                <select name="direction" class="select-custom">
+                    <option value="ASC"  <%= direction.equalsIgnoreCase("ASC")  ? "selected" : "" %>>Crescente</option>
                     <option value="DESC" <%= direction.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar">🔍 Filtrar</button>
+                <button type="submit" class="btn-editar">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" alt="Pesquisar" width="18">
+                    Filtrar
+                </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadAluno"
-                   class="btn-editar">🧹 Limpar</a>
+                <a href="${pageContext.request.contextPath}/ServletReadAluno" class="btn-editar btn-link">
+                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" alt="Limpar" width="18">
+                    Limpar
+                </a>
 
             </form>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Matrícula</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Turma</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (!listaAluno.isEmpty()) {
-                    for (Aluno aluno : listaAluno) { %>
-                <tr>
-                    <td><%= aluno.getMatricula() %></td>
-                    <td><%= aluno.getNome() %></td>
-                    <td><%= aluno.getEmail() %></td>
-                    <td><%= aluno.getTurma() %></td>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="4" style="text-align:center; padding:20px; color:#888;">
-                        Nenhum aluno encontrado.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="col-foto"></th>
+                        <th>Matrícula</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Turma</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (!listaAluno.isEmpty()) {
+                        for (Aluno aluno : listaAluno) { %>
+                    <tr>
+                        <td><img src="<%= aluno.getFoto() %>" alt="Foto" class="foto-tabela"></td>
+                        <td><%= aluno.getMatricula() %></td>
+                        <td><%= aluno.getNome() %></td>
+                        <td><%= aluno.getEmail() %></td>
+                        <td><%= aluno.getTurma() %></td>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="5" class="td-vazio">Nenhum aluno encontrado.</td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </div>
+</div>
+
+</body>
+</html>

@@ -3,110 +3,106 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     List<Professor> listaProfessor = (List<Professor>) request.getAttribute("listaProfessor");
-
-    String busca= (String) request.getAttribute("buscaSelecionada");
+    String busca = (String) request.getAttribute("buscaSelecionada");
     String orderBy = (String) request.getAttribute("orderBySelecionado");
     String direction = (String) request.getAttribute("directionSelecionada");
-
-    String mensagem  = (String) session.getAttribute("mensagem");
+    String mensagem = (String) session.getAttribute("mensagem");
     String erro = (String) session.getAttribute("erro");
 
     session.removeAttribute("mensagem");
     session.removeAttribute("erro");
 
     if (listaProfessor == null) listaProfessor = new java.util.LinkedList<>();
-    if (busca == null) busca = "";
-    if (orderBy == null) orderBy = "id_professor";
-    if (direction == null) direction = "ASC";
+    String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
+    if (nomeUsuarioLogado == null) nomeUsuarioLogado = "Aluno";
 %>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
     <title>Professores</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tabelas.css">
 </head>
 <body>
 
+<header class="header">
+    <h1>Central do Aluno</h1>
+    <div class="usuario">
+        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" class="foto-perfil">
+        <span><%= nomeUsuarioLogado %></span>
+    </div>
+</header>
+
 <div class="layout-adm">
 
     <div class="sidebar">
-        <h3>MENU</h3>
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="active">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
     </div>
 
     <div class="conteudo">
+        <h2 class="titulo-sessao">Professores</h2>
 
-        <h2 style="color: #214e3b; margin-bottom: 20px;">Professores</h2>
-
-        <% if (mensagem != null) { %>
-        <p style="color: #2f7d4a; font-weight: bold; margin-bottom: 15px;">✔ <%= mensagem %></p>
-        <% } %>
-        <% if (erro != null) { %>
-        <p style="color: #c63b3b; font-weight: bold; margin-bottom: 15px;">⚠ <%= erro %></p>
-        <% } %>
+        <% if (mensagem != null) { %><p class="msg-sucesso">✔ <%= mensagem %></p><% } %>
+        <% if (erro != null) { %><p class="msg-erro">⚠ <%= erro %></p><% } %>
 
         <div class="div2">
 
-            <form method="get"
-                  action="${pageContext.request.contextPath}/ServletReadProfessor"
-                  style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom: 20px;">
-
+            <form method="get" action="${pageContext.request.contextPath}/ServletReadProfessor" class="form-alinhado">
                 <div class="busca-box">
-                    <input type="text"
-                           name="busca"
-                           placeholder="Pesquisar por nome..."
-                           value="<%= busca %>">
+                    <input type="text" name="busca" placeholder="Pesquisar por nome..." value="<%= (busca != null) ? busca : "" %>">
                 </div>
 
-                <select name="orderBy" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="id_professor" <%= orderBy.equals("id_professor") ? "selected" : "" %>>Ordenar por ID</option>
-                    <option value="nome" <%= orderBy.equals("nome") ? "selected" : "" %>>Ordenar por Nome</option>
-                    <option value="email" <%= orderBy.equals("email") ? "selected" : "" %>>Ordenar por Email</option>
+                <select name="orderBy" class="select-custom">
+                    <option value="id_professor" <%= "id_professor".equals(orderBy) ? "selected" : "" %>>ID</option>
+                    <option value="nome" <%= "nome".equals(orderBy) ? "selected" : "" %>>Nome</option>
                 </select>
 
-                <select name="direction" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="ASC"  <%= direction.equalsIgnoreCase("ASC")  ? "selected" : "" %>>Crescente</option>
-                    <option value="DESC" <%= direction.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
+                <select name="direction" class="select-custom">
+                    <option value="ASC"  <%= "ASC".equalsIgnoreCase(direction)  ? "selected" : "" %>>Crescente</option>
+                    <option value="DESC" <%= "DESC".equalsIgnoreCase(direction) ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar">🔍 Filtrar</button>
+                <button type="submit" class="btn-editar">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" width="18"> Filtrar
+                </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadProfessor"
-                   class="btn-editar">🧹 Limpar</a>
-
-
+                <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="btn-editar btn-link">
+                    <img src="${pageContext.request.contextPath}/img/iconeLimpar.png" width="18"> Limpar
+                </a>
             </form>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Disciplina</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (!listaProfessor.isEmpty()) {
-                    for (Professor professor : listaProfessor) { %>
-                <tr>
-                    <td><%= professor.getIdProfessor() %></td>
-                    <td><%= professor.getNome() %></td>
-                    <td><%= professor.getDisciplina() %></td>
-                    <td><%= professor.getEmail() %></td>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="5" style="text-align:center; padding:20px; color:#888;">
-                        Nenhum professor encontrado.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
-
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="col-foto">Foto</th>
+                        <th class="col-id">ID</th>
+                        <th>Nome</th>
+                        <th>Disciplina</th>
+                        <th>Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (!listaProfessor.isEmpty()) {
+                        for (Professor professor : listaProfessor) { %>
+                    <tr>
+                        <td><img src="<%= professor.getFoto() %>" class="foto-tabela"></td>
+                        <td><%= professor.getIdProfessor() %></td>
+                        <td><%= professor.getNome() %></td>
+                        <td><%= professor.getDisciplina() %></td>
+                        <td><%= professor.getEmail() %></td>
+                    </tr>
+                    <% } } else { %>
+                    <tr>
+                        <td colspan="5" class="td-vazio">Nenhum professor encontrado.</td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

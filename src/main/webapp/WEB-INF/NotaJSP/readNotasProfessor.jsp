@@ -3,24 +3,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     List<Notas> listaNotas = (List<Notas>) request.getAttribute("listaNotas");
-
-    String orderBySelecionado = (String) request.getAttribute("orderBySelecionado");
-    String directionSelecionada = (String) request.getAttribute("directionSelecionada");
+    String orderBy = (String) request.getAttribute("orderBySelecionado");
+    String direction = (String) request.getAttribute("directionSelecionada");
     String buscaAluno = request.getParameter("buscaAluno");
-
-    String mensagem = (String) session.getAttribute("mensagem");
-    String erro = (String) session.getAttribute("erro");
     String tipoLogado = (String) session.getAttribute("tipoUsuario");
 
-    session.removeAttribute("mensagem");
-    session.removeAttribute("erro");
-
-    if (orderBySelecionado == null) orderBySelecionado = "id_notas";
-    if (directionSelecionada == null) directionSelecionada = "ASC";
+    if (orderBy == null) orderBy = "id_notas";
+    if (direction == null) direction = "ASC";
     if (buscaAluno == null) buscaAluno = "";
-    if (tipoLogado == null) tipoLogado = "";
+
+    String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
+    String tituloCentral = "Central do Aluno";
+    if ("adm".equalsIgnoreCase(tipoLogado)) tituloCentral = "Central do Administrador";
+    else if ("professor".equalsIgnoreCase(tipoLogado)) tituloCentral = "Central do Professor";
 %>
-<html>
+<html lang="pt-BR">
 <head>
     <title>Notas</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bases.css">
@@ -28,128 +25,97 @@
 </head>
 <body>
 
-<div class="layout-adm">
+<header class="header">
+    <h1><%= tituloCentral %></h1>
+    <div class="usuario">
+        <img src="${pageContext.request.contextPath}/img/iconePerfil.png" alt="Perfil" class="foto-perfil">
+        <span><%= (nomeUsuarioLogado != null) ? nomeUsuarioLogado : "Usuário" %></span>
+    </div>
+</header>
 
+<div class="layout-adm">
     <div class="sidebar">
-        <h3>Painel ADM</h3>
+        <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
         <a href="${pageContext.request.contextPath}/ServletReadNota" class="active">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
-        <% if (tipoLogado.equalsIgnoreCase("adm")) { %>
+        <% if ("adm".equalsIgnoreCase(tipoLogado)) { %>
         <a href="${pageContext.request.contextPath}/ServletReadPreMatricula">📋 Pré-Matrículas</a>
-        <% } %>    </div>
+        <% } %>
+    </div>
 
     <div class="conteudo">
-
-        <h2 style="color: #214e3b; margin-bottom: 20px;">Notas</h2>
-
-        <% if (mensagem != null) { %>
-        <p style="color: #2f7d4a; font-weight: bold; margin-bottom: 15px;">✔ <%= mensagem %></p>
-        <% } %>
-        <% if (erro != null) { %>
-        <p style="color: #c63b3b; font-weight: bold; margin-bottom: 15px;">⚠ <%= erro %></p>
-        <% } %>
+        <h2 class="titulo-sessao">Notas</h2>
 
         <div class="div2">
-
-            <!-- FILTROS -->
-            <form method="get" action="${pageContext.request.contextPath}/ServletReadNota"
-                  style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom: 20px;">
-
+            <form method="get" action="${pageContext.request.contextPath}/ServletReadNota" class="form-alinhado">
                 <div class="busca-box">
-                    <input type="text"
-                           name="buscaAluno"
-                           placeholder="Pesquisar aluno ou disciplina..."
-                           value="<%= buscaAluno %>">
+                    <input type="text" name="buscaAluno" placeholder="Aluno ou disciplina..." value="<%= buscaAluno %>">
                 </div>
 
-                <select name="orderBy" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="id_notas"   <%= orderBySelecionado.equals("id_notas")   ? "selected" : "" %>>Ordenar por ID</option>
-                    <option value="disciplina" <%= orderBySelecionado.equals("disciplina") ? "selected" : "" %>>Ordenar por Disciplina</option>
-                    <option value="nota1"      <%= orderBySelecionado.equals("nota1")      ? "selected" : "" %>>Ordenar por Nota 1</option>
-                    <option value="nota2"      <%= orderBySelecionado.equals("nota2")      ? "selected" : "" %>>Ordenar por Nota 2</option>
+                <select name="orderBy" class="select-custom">
+                    <option value="id_notas" <%= "id_notas".equals(orderBy) ? "selected" : "" %>>ID</option>
+                    <option value="disciplina" <%= "disciplina".equals(orderBy) ? "selected" : "" %>>Disciplina</option>
                 </select>
 
-                <select name="direction" style="padding: 10px 15px; border-radius: 50px; border: 1px solid #dcdad4; background-color: #edece6; font-size: 14px; color: #214e3b;">
-                    <option value="ASC"  <%= directionSelecionada.equalsIgnoreCase("ASC")  ? "selected" : "" %>>Crescente</option>
-                    <option value="DESC" <%= directionSelecionada.equalsIgnoreCase("DESC") ? "selected" : "" %>>Decrescente</option>
+                <select name="direction" class="select-custom">
+                    <option value="ASC"  <%= "ASC".equalsIgnoreCase(direction)  ? "selected" : "" %>>Crescente</option>
+                    <option value="DESC" <%= "DESC".equalsIgnoreCase(direction) ? "selected" : "" %>>Decrescente</option>
                 </select>
 
-                <button type="submit" class="btn-editar">🔍 Filtrar</button>
+                <button type="submit" class="btn-editar">
+                    <img src="${pageContext.request.contextPath}/img/iconePesquisa.png" width="18"> Filtrar
+                </button>
 
-                <a href="${pageContext.request.contextPath}/ServletReadNotas"
-                   class="btn-editar">🧹 Limpar</a>
-
-                <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
-                <a href="${pageContext.request.contextPath}/ServletReadNota?view=create"
-                   class="btn-editar" style="margin-left: auto;">➕ Nova Nota</a>
+                <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
+                <a href="${pageContext.request.contextPath}/ServletReadNota?view=create" class="btn-editar btn-link btn-novo-registro">
+                    <img src="${pageContext.request.contextPath}/img/iconeAdicionar.png" width="18"> Nova Nota
+                </a>
                 <% } %>
-
             </form>
 
-            <!-- TABELA -->
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Matricula</th>
-                    <th>Aluno</th>
-                    <th>Professor</th>
-                    <th>Disciplina</th>
-                    <th>Observação</th>
-                    <th>Nota 1</th>
-                    <th>Nota 2</th>
-                    <th>Média</th>
-                    <th>Situação</th>
-                    <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
-                    <th>Ações</th>
-                    <% } %>
-                </tr>
-                </thead>
-                <tbody>
-                <% if (listaNotas != null && !listaNotas.isEmpty()) {
-                    for (Notas nota : listaNotas) {
-                        double media = (nota.getNota1() + nota.getNota2()) / 2.0;
-                %>
-                <tr>
-                    <td><%= nota.getIdNotas() %></td>
-                    <td><%= nota.getMatriculaAluno() %></td>
-                    <td><%= nota.getNomeAluno() %></td>
-                    <td><%= nota.getNomeProfessor() %></td>
-                    <td><%= nota.getDisciplina() %></td>
-                    <td><%= nota.getObservacao() %></td>
-                    <td><%= nota.getNota1() %></td>
-                    <td><%= nota.getNota2() %></td>
-                    <td><%= String.format("%.2f", media) %></td>
-                    <td style="color: <%= media >= 7 ? "#2f7d4a" : "#c63b3b" %>; font-weight: bold;">
-                        <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
-                    </td>
-                    <% if (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) { %>
-                    <td class="acoes">
-                        <a href="${pageContext.request.contextPath}/ServletReadNota?view=update&id=<%= nota.getIdNotas() %>"
-                           class="btn-editar">✏ Editar</a>
-                        <button class="btn-excluir"
-                                onclick="if(confirm('Excluir esta nota?'))
-                                        window.location='${pageContext.request.contextPath}/ServletDeleteNota?id=<%= nota.getIdNotas() %>'">
-                            🗑
-                        </button>
-                    </td>
-                    <% } %>
-                </tr>
-                <% } } else { %>
-                <tr>
-                    <td colspan="<%= (tipoLogado.equalsIgnoreCase("adm") || tipoLogado.equalsIgnoreCase("professor")) ? 10 : 9 %>"
-                        style="text-align:center; padding:20px; color:#888;">
-                        Nenhuma nota encontrada.
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
-
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Matricula</th>
+                        <th>Aluno</th>
+                        <th>Disciplina</th>
+                        <th>Média</th>
+                        <th>Situação</th>
+                        <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
+                        <th style="text-align: center;">Ações</th>
+                        <% } %>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (listaNotas != null) {
+                        for (Notas nota : listaNotas) {
+                            double media = (nota.getNota1() + nota.getNota2()) / 2.0;
+                    %>
+                    <tr>
+                        <td><%= nota.getIdNotas() %></td>
+                        <td><%= nota.getMatriculaAluno() %></td>
+                        <td><%= nota.getNomeAluno() %></td>
+                        <td><%= nota.getDisciplina() %></td>
+                        <td><%= String.format("%.2f", media) %></td>
+                        <td class="<%= media >= 7 ? "status-aprovado" : "status-reprovado" %>">
+                            <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
+                        </td>
+                        <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
+                        <td class="acoes">
+                            <a href="ServletReadNota?view=update&id=<%= nota.getIdNotas() %>" class="btn-editar btn-link">✏</a>
+                            <button class="btn-excluir" onclick="if(confirm('Excluir nota?')) window.location='ServletDeleteNota?id=<%= nota.getIdNotas() %>'">🗑</button>
+                        </td>
+                        <% } %>
+                    </tr>
+                    <% } } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>
