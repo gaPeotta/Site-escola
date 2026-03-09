@@ -12,7 +12,6 @@
 
 <div class="layout-adm">
 
-  <%-- ===== SIDEBAR ===== --%>
   <div class="sidebar">
     <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
     <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
@@ -21,38 +20,27 @@
     <a href="${pageContext.request.contextPath}/ServletReadPreMatricula" class="active">📋 Pré-Matrículas</a>
   </div>
 
-  <%-- ===== CONTEÚDO ===== --%>
   <div class="conteudo">
+    <h2 class="titulo-sessao">Nova Pré-Matrícula</h2>
 
-    <h2 style="color: #214e3b; margin-bottom: 25px;">Nova Pré-Matrícula</h2>
-
-    <div class="div2" style="max-width: 500px;">
+    <div class="div2 form-container">
 
       <% if (erro != null) { %>
-      <p style="color: #c63b3b; font-weight: bold; margin-bottom: 20px;">⚠ <%= erro %></p>
+      <p class="msg-erro">⚠ <%= erro %></p>
       <% } %>
 
-      <form method="post"
-            action="${pageContext.request.contextPath}/ServletCreatePreMatricula">
+      <form method="post" action="${pageContext.request.contextPath}/ServletCreatePreMatricula">
 
-        <div style="margin-bottom: 20px;">
-          <label style="display:block; font-weight:600; color:#214e3b; margin-bottom:8px;">
-            CPF do Aluno
-          </label>
-          <div class="busca-box" style="width:100%;">
-            <input type="text"
-                   name="cpf"
-                   placeholder="Somente números (11 dígitos)"
-                   maxlength="14"
-                   required>
+        <div class="field-group">
+          <label class="field-label">CPF do Aluno</label>
+          <div class="busca-box input-full">
+            <input type="text" name="cpf" placeholder="Somente números (11 dígitos)" maxlength="14" required>
           </div>
         </div>
 
-        <div style="display:flex; gap:10px; margin-top:10px;">
+        <div class="btn-group">
           <button type="submit" class="btn-editar">✔ Cadastrar</button>
-          <a href="${pageContext.request.contextPath}/ServletReadPreMatricula"
-             class="btn-excluir"
-             style="padding: 8px 15px; border-radius: 6px; text-decoration:none; display:flex; align-items:center;">
+          <a href="${pageContext.request.contextPath}/ServletReadPreMatricula" class="btn-excluir btn-link">
             ✖ Cancelar
           </a>
         </div>
