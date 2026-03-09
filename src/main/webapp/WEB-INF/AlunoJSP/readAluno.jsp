@@ -126,16 +126,17 @@
                         
                         <td style="text-align: center; vertical-align: middle;">
                             <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                <a href="${pageContext.request.contextPath}/ServletUpdateAluno?matricula=<%= aluno.getMatricula() %>" class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                <a href="${pageContext.request.contextPath}/ServletUpdateAluno?matricula=<%= aluno.getMatricula() %>" class="btn-editar"
+                                    style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
                                     <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
                                     Editar
                                 </a>
 
-                                <a href="${pageContext.request.contextPath}/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>" 
-                                   class="btn-editar" 
-                                   style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none;"
+                                <a href="${pageContext.request.contextPath}/ServletDeleteAluno?matricula=<%= aluno.getMatricula() %>" class="btn-excluir" 
+                                   style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;"
                                    onclick="return confirm('Deseja realmente remover o aluno <%= aluno.getNome() %>?');">
                                     <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
+                                    Remover
                                 </a>
                             </div>
                         </td>

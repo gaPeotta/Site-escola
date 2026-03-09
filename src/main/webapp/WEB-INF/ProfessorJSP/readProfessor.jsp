@@ -99,7 +99,6 @@
                         <th>Nome</th>
                         <th>Disciplina</th>
                         <th>Email</th>
-                        <th>Senha</th>
                         <th class="col-acoes">Ações</th>
                     </tr>
                     </thead>
@@ -115,15 +114,17 @@
                         
                         <td style="text-align: center; vertical-align: middle;">
                             <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                <a href="${pageContext.request.contextPath}/ServletUpdateProfessor?id=<%= professor.getIdProfessor() %>"
-                                   class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                <a href="${pageContext.request.contextPath}/ServletUpdateProfessor?id=<%= professor.getIdProfessor() %>" class="btn-editar"
+                                style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
                                     <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
                                     Editar
                                 </a>
-                                <button class="btn-editar" style="display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; background-color: #c63b3b; color: white; border: none; cursor: pointer;"
-                                        onclick="if(confirm('Remover professor <%= professor.getNome() %>?'))
-                                                 window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
+
+                                <button class="btn-excluir" 
+                                        style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;"
+                                        onclick="if(confirm('Remover professor <%= professor.getNome() %>?')) window.location='${pageContext.request.contextPath}/ServletDeleteProfessor?id=<%= professor.getIdProfessor() %>'">
                                     <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
+                                    Remover
                                 </button>
                             </div>
                         </td>

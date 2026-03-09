@@ -104,9 +104,21 @@
                             <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
                         </td>
                         <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
-                        <td class="acoes">
-                            <a href="ServletReadNota?view=update&id=<%= nota.getIdNotas() %>" class="btn-editar btn-link">✏</a>
-                            <button class="btn-excluir" onclick="if(confirm('Excluir nota?')) window.location='ServletDeleteNota?id=<%= nota.getIdNotas() %>'">🗑</button>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+                                 <a href="ServletReadNota?view=update&id=<%= nota.getIdNotas() %>" class="btn-editar"
+                                style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                    <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
+                                    Editar
+                                </a>
+
+                                <button class="btn-excluir" 
+                                        style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;"
+                                        onclick="if(confirm('Excluir nota?')) window.location='ServletDeleteNota?id=<%= nota.getIdNotas() %>'">
+                                    <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
+                                    Remover
+                                </button>
+                            </div>
                         </td>
                         <% } %>
                     </tr>
