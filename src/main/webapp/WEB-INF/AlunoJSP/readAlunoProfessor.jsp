@@ -50,6 +50,9 @@
 <div class="layout-adm">
 
     <div class="sidebar">
+        <% if (tipoUsuario.equalsIgnoreCase("professor")) { %>
+        <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
+        <% } %>
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno" class="active">🎓 Alunos</a>

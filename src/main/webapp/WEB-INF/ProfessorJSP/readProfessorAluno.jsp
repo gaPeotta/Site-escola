@@ -13,6 +13,7 @@
     session.removeAttribute("erro");
 
     if (listaProfessor == null) listaProfessor = new java.util.LinkedList<>();
+    String tipoLogado = (String) session.getAttribute("tipoUsuario");
     String nomeUsuarioLogado = (String) session.getAttribute("nomeUsuario");
     if (nomeUsuarioLogado == null) nomeUsuarioLogado = "Aluno";
 %>
@@ -37,6 +38,9 @@
 <div class="layout-adm">
 
     <div class="sidebar">
+        <% if (tipoLogado.equalsIgnoreCase("professor")) { %>
+        <a href="${pageContext.request.contextPath}/ServletDashboard">📊 Dashboard</a>
+        <% } %>
         <a href="${pageContext.request.contextPath}/ServletReadNota">📝 Notas</a>
         <a href="${pageContext.request.contextPath}/ServletReadProfessor" class="active">🧑‍🏫 Professores</a>
         <a href="${pageContext.request.contextPath}/ServletReadAluno">🎓 Alunos</a>
