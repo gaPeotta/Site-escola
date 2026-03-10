@@ -124,14 +124,21 @@
                     <tr>
                         <td><%= pre.getId_prematricula() %></td>
                         <td><%= pre.getCpf() %></td>
-                        <td class="acoes">
-                            <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>" class="btn-editar btn-link">
-                                <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" width="16"> Editar
-                            </a>
-                            <button class="btn-excluir"
-                                    onclick="if(confirm('Remover CPF <%= pre.getCpf() %>?')) window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
-                                <img src="${pageContext.request.contextPath}/img/iconeDelete.png" width="16">
-                            </button>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+                                <a href="${pageContext.request.contextPath}/ServletUpdatePreMatricula?id=<%= pre.getId_prematricula() %>" class="btn-editar"
+                                style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                    <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
+                                    Editar
+                                </a>
+
+                                <button class="btn-excluir" 
+                                        style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;"
+                                        onclick="if(confirm('Remover CPF <%= pre.getCpf() %>?')) window.location='${pageContext.request.contextPath}/ServletDeletePreMatricula?cpf=<%= pre.getCpf() %>'">
+                                    <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">
+                                    Remover
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     <% } } else { %>
