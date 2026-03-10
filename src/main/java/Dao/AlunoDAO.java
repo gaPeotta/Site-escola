@@ -13,27 +13,28 @@ public class AlunoDAO {
      * Cria um aluno e retorna a matrícula.
      */
     public int create(Aluno aluno, boolean semTurma) {
-
-        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma,foto) VALUES (?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma, foto) " +
+                "VALUES (?, ?, ?, ?, ?, ?) RETURNING matricula";
         Conexao conexao = new Conexao();
 
         try (
                 Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+                PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
             pstmt.setString(1, aluno.getNome());
             pstmt.setString(2, aluno.getSenha());
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
-            pstmt.setString(5, "-");
+            pstmt.setString(5, semTurma ? "-" : aluno.getTurma());
+            pstmt.setString(6, aluno.getFoto());
 
-            pstmt.executeUpdate();
-
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("matricula"); // pega direto a matrícula gerada
+                }
             }
-            return -1;
+
+            return 0;
 
         } catch (SQLException e) {
             System.err.println("Erro SQL: " + e.getMessage());
@@ -42,6 +43,7 @@ public class AlunoDAO {
             return 0;
         }
     }
+
 
     public int create(Aluno aluno) {
 

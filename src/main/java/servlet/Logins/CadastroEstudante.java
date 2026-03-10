@@ -26,7 +26,6 @@ public class CadastroEstudante extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/precadastro");
                 return;
             }
-
             String nome  = request.getParameter("nome");
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
