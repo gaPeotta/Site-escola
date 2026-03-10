@@ -118,7 +118,7 @@
                         Foto <span style="font-weight:400; color:#888; font-size:13px;">(opcional — cole o link do <a href="https://institutogerminare-my.sharepoint.com/:f:/g/personal/gabriel_vigna_institutojef_org_br/IgDjfKyDgDFeQbfAVDaBVi1oAXxDmMuRB20ET97ibkT7Cgk?e=PFzUxy" target="_blank" style="color:#214e3b;">OneDrive</a>)</span>
                     </label>
                     <div class="busca-box" style="width:100%;">
-                        <input type="text" name="foto" placeholder="https://drive.google.com/uc?export=view&id=...">
+                        <input type="text" name="foto" value="<%= aluno.getFoto()%>">
                     </div>
                 </div>
 

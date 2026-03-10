@@ -91,22 +91,20 @@ public class NotaDAO {
     /*
      * Busca notas com filtros dinâmicos.
      */
-    public List<Notas> read(Integer matriculaAluno,
-                            Integer idProfessor,
-                            String disciplina,
-                            String buscaProfessor,
-                            String buscaAluno,
-                            String orderBy,
-                            String direction) {
+
+    /*
+     * Busca nota pelo ID.
+     */
+    public List<Notas> read(Integer matriculaAluno, Integer idProfessor, String disciplina,
+                            String buscaProfessor, String buscaAluno,
+                            String orderBy, String direction) {
 
         Conexao conexao = new Conexao();
         List<Notas> lista = new LinkedList<>();
         List<Object> parametros = new LinkedList<>();
 
         StringBuilder sql = new StringBuilder(
-                "SELECT n.*, " +
-                        "a.nome AS nome_aluno, " +
-                        "p.nome AS nome_professor " +
+                "SELECT n.*, a.nome AS nome_aluno, p.nome AS nome_professor " +
                         "FROM nota n " +
                         "JOIN aluno a ON a.matricula = n.matricula_aluno " +
                         "JOIN professor p ON p.id_professor = n.id_professor " +
@@ -129,32 +127,27 @@ public class NotaDAO {
         }
 
         if (buscaAluno != null && !buscaAluno.trim().isEmpty()) {
-            sql.append(" AND (p.nome ILIKE ? OR n.disciplina ILIKE ?)");
+            sql.append(" AND (a.nome ILIKE ? OR n.disciplina ILIKE ?)");
             parametros.add("%" + buscaAluno.trim() + "%");
             parametros.add("%" + buscaAluno.trim() + "%");
         }
 
         if (buscaProfessor != null && !buscaProfessor.trim().isEmpty()) {
-            sql.append(" AND a.nome ILIKE ?");
+            sql.append(" AND p.nome ILIKE ?");
             parametros.add("%" + buscaProfessor.trim() + "%");
         }
 
         String coluna = "n.id_notas";
-
         if (orderBy != null) {
             switch (orderBy.toLowerCase()) {
-                case "disciplina": coluna = "n.disciplina"; break;
-                case "nota1":      coluna = "n.nota1";      break;
-                case "nota2":      coluna = "n.nota2";      break;
+                case "disciplina": coluna = "n.disciplina";      break;
+                case "nota1":      coluna = "n.nota1";           break;
+                case "nota2":      coluna = "n.nota2";           break;
                 case "matricula":  coluna = "n.matricula_aluno"; break;
-                case "id_notas":   coluna = "n.id_notas";   break;
             }
         }
 
-        String dir = "ASC";
-        if ("DESC".equalsIgnoreCase(direction)) {
-            dir = "DESC";
-        }
+        String dir = "DESC".equalsIgnoreCase(direction) ? "DESC" : "ASC";
 
         sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
 
@@ -170,7 +163,6 @@ public class NotaDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
 
                 while (rs.next()) {
-
                     Notas notas = new Notas(
                             rs.getInt("id_notas"),
                             rs.getInt("matricula_aluno"),
@@ -181,10 +173,8 @@ public class NotaDAO {
                             rs.getDouble("nota2"),
                             rs.getBoolean("situacao")
                     );
-
                     notas.setNomeAluno(rs.getString("nome_aluno"));
                     notas.setNomeProfessor(rs.getString("nome_professor"));
-
                     lista.add(notas);
                 }
             }
@@ -194,44 +184,6 @@ public class NotaDAO {
         }
 
         return lista;
-    }
-
-    /*
-     * Busca nota pelo ID.
-     */
-    public Notas read(int idNotas) {
-
-        String sql = "SELECT * FROM nota WHERE id_notas = ?";
-        Conexao conexao = new Conexao();
-
-        try (
-                Connection conn = conexao.conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)
-        ) {
-
-            pstmt.setInt(1, idNotas);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-
-                if (rs.next()) {
-                    return new Notas(
-                            rs.getInt("id_notas"),
-                            rs.getInt("matricula_aluno"),
-                            rs.getInt("id_professor"),
-                            rs.getString("disciplina"),
-                            rs.getString("observacao"),
-                            rs.getDouble("nota1"),
-                            rs.getDouble("nota2"),
-                            rs.getBoolean("situacao")
-                    );
-                }
-            }
-
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-
-        return null;
     }
 
     /*
@@ -272,6 +224,50 @@ public class NotaDAO {
         }
 
         return notas;
+    }
+    /*
+     * Busca nota pelo ID com JOIN para trazer nomes.
+     */
+    public Notas read(int idNotas) {
+
+        String sql = "SELECT n.*, a.nome AS nome_aluno, p.nome AS nome_professor " +
+                "FROM nota n " +
+                "JOIN aluno a ON a.matricula = n.matricula_aluno " +
+                "JOIN professor p ON p.id_professor = n.id_professor " +
+                "WHERE n.id_notas = ?";
+        Conexao conexao = new Conexao();
+
+        try (
+                Connection conn = conexao.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+
+            pstmt.setInt(1, idNotas);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                if (rs.next()) {
+                    Notas nota = new Notas(
+                            rs.getInt("id_notas"),
+                            rs.getInt("matricula_aluno"),
+                            rs.getInt("id_professor"),
+                            rs.getString("disciplina"),
+                            rs.getString("observacao"),
+                            rs.getDouble("nota1"),
+                            rs.getDouble("nota2"),
+                            rs.getBoolean("situacao")
+                    );
+                    nota.setNomeAluno(rs.getString("nome_aluno"));
+                    nota.setNomeProfessor(rs.getString("nome_professor"));
+                    return nota;
+                }
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+        return null;
     }
 
     /*

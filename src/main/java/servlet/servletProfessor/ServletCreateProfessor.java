@@ -55,11 +55,11 @@ public class ServletCreateProfessor extends HttpServlet {
 
         // ================= CREATE =================
         try {
-            String nome       = request.getParameter("nome");
+            String nome = request.getParameter("nome");
             String disciplina = request.getParameter("disciplina");
-            String email      = request.getParameter("email");
-            String senha      = request.getParameter("senha");
-            String foto       = request.getParameter("foto"); // opcional
+            String email = request.getParameter("email");
+            String senha = request.getParameter("senha");
+            String foto = request.getParameter("foto"); // opcional
 
             if (foto != null && foto.isBlank()) foto = null;
 

@@ -53,7 +53,7 @@ public class ServletCreateNota extends HttpServlet {
             Integer idProfessor = null;
 
             if (adminLogado != null) {
-                idProfessor = 14;
+                idProfessor = 6;
             } else if (profLogado != null) {
                 idProfessor = profLogado.getIdProfessor();
             }

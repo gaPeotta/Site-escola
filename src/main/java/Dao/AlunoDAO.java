@@ -14,7 +14,7 @@ public class AlunoDAO {
      */
     public int create(Aluno aluno, boolean semTurma) {
 
-        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma,foto) VALUES (?, ?, ?, ?, ?,?)";
         Conexao conexao = new Conexao();
 
         try (
@@ -45,7 +45,7 @@ public class AlunoDAO {
 
     public int create(Aluno aluno) {
 
-        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO aluno (nome, senha, email, cpf, turma, foto) VALUES (?, ?, ?, ?, ?, ?)";
         Conexao conexao = new Conexao();
 
         try (
@@ -57,6 +57,7 @@ public class AlunoDAO {
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
             pstmt.setString(5, aluno.getTurma());
+            pstmt.setString(6, aluno.getFoto());
 
             pstmt.executeUpdate();
 
@@ -181,7 +182,7 @@ public class AlunoDAO {
                         rs.getString("email"),
                         rs.getString("senha"),
                         rs.getString("turma"),
-                        rs.getString("foto")       // ← adicionado
+                        rs.getString("foto")
                 );
             }
         } catch (SQLException e) {
@@ -274,7 +275,7 @@ public class AlunoDAO {
                             rs.getString("email"),
                             rs.getString("senha"),
                             rs.getString("turma"),
-                            rs.getString("foto")   // ← adicionado
+                            rs.getString("foto")
                     );
                 }
             }
@@ -290,7 +291,7 @@ public class AlunoDAO {
      */
     public int update(Aluno aluno) {
 
-        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ? WHERE matricula = ?";
+        String sql = "UPDATE aluno SET nome = ?, senha = ?, email = ?, cpf = ?, turma = ?, foto = ? WHERE matricula = ?";
         Conexao conexao = new Conexao();
 
         try (
@@ -302,7 +303,8 @@ public class AlunoDAO {
             pstmt.setString(3, aluno.getEmail());
             pstmt.setString(4, aluno.getCpf());
             pstmt.setString(5, aluno.getTurma());
-            pstmt.setInt(6, aluno.getMatricula());
+            pstmt.setString(6, aluno.getFoto());
+            pstmt.setInt(7, aluno.getMatricula());
 
             return pstmt.executeUpdate();
         } catch (SQLException sqle) {
