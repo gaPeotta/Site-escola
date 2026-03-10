@@ -48,7 +48,6 @@
 </header>
 
 <div class="layout-adm">
-
     <div class="sidebar">
         <% if (tipoUsuario != null && !tipoUsuario.equalsIgnoreCase("aluno")) { %>
         <a href="${pageContext.request.contextPath}/ServletDashboard">

@@ -29,10 +29,7 @@ public class ServletDeleteAluno extends HttpServlet {
                 mensagem = "A exclusão de " + aluno + " foi realizada com sucesso.";
                 break;
             case 0:
-                mensagem = "A exclusão falhou:" + aluno + " está associada a outra tabela. Apague os campos relacionados primeiro.";
-                break;
-            case -1:
-                mensagem = "A exclusão de " + aluno + " falhou: erro interno.";
+                mensagem = "A exclusão de  aluno  falhou: erro interno.";
                 break;
             default:
                 mensagem = "A exclusão de " + aluno + " falhou: erro desconhecido.";
