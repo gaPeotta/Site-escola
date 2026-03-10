@@ -110,10 +110,10 @@
                 <table>
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Matricula</th>
                         <th>Aluno</th>
                         <th>Disciplina</th>
+                        <th>Observação</th>
                         <th>Nota 1</th>
                         <th>Nota 2</th>
                         <th>Média</th>
@@ -129,10 +129,10 @@
                             double media = (nota.getNota1() + nota.getNota2()) / 2.0;
                     %>
                     <tr>
-                        <td><%= nota.getIdNotas() %></td>
                         <td><%= nota.getMatriculaAluno() %></td>
                         <td><%= nota.getNomeAluno() %></td>
                         <td><%= nota.getDisciplina() %></td>
+                        <td><%= nota.getObservacao() %></td>
                         <td><%= nota.getNota1() %></td>
                         <td><%= nota.getNota2() %></td>
                         <td><%= String.format("%.2f", media) %></td>
