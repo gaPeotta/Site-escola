@@ -42,7 +42,7 @@ public class ServletDeleteProfessor extends HttpServlet {
                     session.setAttribute("mensagem", "Professor " + nomeProfessor + " removido com sucesso!");
                     break;
                 case 0:
-                    session.setAttribute("erro", nomeProfessor + " está associado a outra tabela. Remova os registros relacionados primeiro.");
+                    session.setAttribute("erro", nomeProfessor + "Erro ao remover professor.");
                     break;
                 default:
                     session.setAttribute("erro", "Erro ao remover professor.");
