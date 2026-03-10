@@ -180,7 +180,7 @@ public class ProfessorDAO {
 
     // ================= UPDATE =================
     public int update(Professor professor) {
-        String sql = "UPDATE professor SET nome = ?, disciplina = ?, senha = ?, email = ? WHERE id_professor = ?";
+        String sql = "UPDATE professor SET nome = ?, disciplina = ?, senha = ?, email = ?, foto = ? WHERE id_professor = ?";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -189,7 +189,8 @@ public class ProfessorDAO {
             pstmt.setString(2, professor.getDisciplina());
             pstmt.setString(3, professor.getSenha());
             pstmt.setString(4, professor.getEmail());
-            pstmt.setInt(5, professor.getIdProfessor());
+            pstmt.setString(5, professor.getFoto());
+            pstmt.setInt(6, professor.getIdProfessor());
 
             return pstmt.executeUpdate();
 
