@@ -79,7 +79,6 @@ public class ServletReadNota extends HttpServlet {
                 orderBy,
                 direction
         );
-
         // ================= ENVIA PARA A VIEW =================
         request.setAttribute("listaNotas", listaNotas);
 

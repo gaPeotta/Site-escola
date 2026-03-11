@@ -126,18 +126,25 @@
                     </thead>
                     <tbody>
                     <% if (listaNotas != null) {
+                        String mostraN2= null;
                         for (Notas nota : listaNotas) {
                             double media = (nota.getNota1() + nota.getNota2()) / 2.0;
+                            if (nota.getNota2() >0) {
+                                mostraN2 = String.valueOf(nota.getNota2());
+                            }
+                            else {
+                                mostraN2=null;
+                            }
                     %>
                     <tr>
                         <td><%= nota.getIdNotas() %></td>
                         <td><%= nota.getNomeProfessor() %></td>
                         <td><%= nota.getDisciplina() %></td>
                         <td><%= nota.getNota1() %></td>
-                        <td><%= nota.getNota2() %></td>
-                        <td><%= String.format("%.2f", media) %></td>
-                        <td class="<%= media >= 7 ? "status-aprovado" : "status-reprovado" %>">
-                            <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
+                        <td><%= mostraN2 %></td>
+                        <td><%= mostraN2 != null ? String.format("%.2f", media) : "Indisponível" %></td>
+                        <td class="<%= mostraN2 != null ? (media >= 7 ? "status-aprovado" : "status-reprovado") : "status-indisponivel" %>">
+                            <%= mostraN2 != null ? (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado") : "Indisponível" %>
                         </td>
                     </tr>
                     <% } } %>
