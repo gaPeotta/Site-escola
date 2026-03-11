@@ -137,29 +137,30 @@
                     <tbody>
                     <% if (listaNotas != null) {
                         for (Notas nota : listaNotas) {
-                            double media = (nota.getNota1() + nota.getNota2()) / 2.0;
+                            boolean n2Nula = nota.getNota2() == null;
+                            String n2Exibir = n2Nula ? "-" : String.format("%.2f", nota.getNota2());
+                            String mediaExibir = n2Nula ? "-" : String.format("%.2f", (nota.getNota1() + nota.getNota2()) / 2.0);
+                            String situacaoClasse = n2Nula ? "status-processo" : (nota.getSituacao() ? "status-aprovado" : "status-reprovado");
+                            String situacaoTexto = n2Nula ? "⏳ Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
                     %>
                     <tr>
                         <td><%= nota.getMatriculaAluno() %></td>
                         <td><%= nota.getNomeAluno() %></td>
                         <td><%= nota.getDisciplina() %></td>
                         <td><%= nota.getObservacao() %></td>
-                        <td><%= nota.getNota1() %></td>
-                        <td><%= nota.getNota2() %></td>
-                        <td><%= String.format("%.2f", media) %></td>
-                        <td class="<%= media >= 7 ? "status-aprovado" : "status-reprovado" %>">
-                            <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
-                        </td>
+                        <td><%= String.format("%.2f", nota.getNota1()) %></td>
+                        <td><%= n2Exibir %></td>
+                        <td><%= mediaExibir %></td>
+                        <td class="<%= situacaoClasse %>"><%= situacaoTexto %></td>
                         <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
                         <td style="text-align: center; vertical-align: middle;">
                             <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                 <a href="ServletReadNota?view=update&id=<%= nota.getIdNotas() %>" class="btn-editar"
-                                style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
+                                <a href="ServletReadNota?view=update&id=<%= nota.getIdNotas() %>" class="btn-editar"
+                                   style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
                                     <img src="${pageContext.request.contextPath}/img/iconeUpdate.png" alt="Editar" style="width: 16px; height: 16px; object-fit: contain;">
                                     Editar
                                 </a>
-
-                                <button class="btn-excluir" 
+                                <button class="btn-excluir"
                                         style="display: inline-flex; align-items: center; justify-content: center; gap: 5px;"
                                         onclick="if(confirm('Excluir nota?')) window.location='ServletDeleteNota?id=<%= nota.getIdNotas() %>'">
                                     <img src="${pageContext.request.contextPath}/img/iconeDelete.png" alt="Excluir" style="width: 16px; height: 16px; object-fit: contain;">

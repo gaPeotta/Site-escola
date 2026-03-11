@@ -127,18 +127,20 @@
                     <tbody>
                     <% if (listaNotas != null) {
                         for (Notas nota : listaNotas) {
-                            double media = (nota.getNota1() + nota.getNota2()) / 2.0;
+                            boolean n2Nula = nota.getNota2() == null;
+                            String n2Exibir = n2Nula ? "-" : String.format("%.2f", nota.getNota2());
+                            String mediaExibir = n2Nula ? "-" : String.format("%.2f", (nota.getNota1() + nota.getNota2()) / 2.0);
+                            String situacaoClasse = n2Nula ? "status-processo" : (nota.getSituacao() ? "status-aprovado" : "status-reprovado");
+                            String situacaoTexto = n2Nula ? "⏳ Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
                     %>
                     <tr>
                         <td><%= nota.getIdNotas() %></td>
                         <td><%= nota.getNomeProfessor() %></td>
                         <td><%= nota.getDisciplina() %></td>
-                        <td><%= nota.getNota1() %></td>
-                        <td><%= nota.getNota2() %></td>
-                        <td><%= String.format("%.2f", media) %></td>
-                        <td class="<%= media >= 7 ? "status-aprovado" : "status-reprovado" %>">
-                            <%= nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado" %>
-                        </td>
+                        <td><%= String.format("%.2f", nota.getNota1()) %></td>
+                        <td><%= n2Exibir %></td>
+                        <td><%= mediaExibir %></td>
+                        <td class="<%= situacaoClasse %>"><%= situacaoTexto %></td>
                     </tr>
                     <% } } %>
                     </tbody>

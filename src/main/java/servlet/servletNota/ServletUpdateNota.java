@@ -59,10 +59,11 @@ public class ServletUpdateNota extends HttpServlet {
                 String n2Param = request.getParameter("nota2");
 
                 double n1 = (n1Param != null && !n1Param.trim().isEmpty()) ? Double.parseDouble(n1Param) : 0;
-                double n2 = (n2Param != null && !n2Param.trim().isEmpty()) ? Double.parseDouble(n2Param) : 0;
+                Double n2 = n2Param.equals("-") || n2Param.trim().isEmpty() ? null : Double.parseDouble(n2Param);
 
-                double media = (n1 + n2) / 2.0;
-                boolean situacao = media >= 7;
+                Double media = (n2 == null) ? null : (n1 + n2) / 2.0;
+
+                Boolean situacao = (n2 == null) ? null : (media >= 7);
 
                 Notas notaAtualizada = new Notas(
                         idNota,
