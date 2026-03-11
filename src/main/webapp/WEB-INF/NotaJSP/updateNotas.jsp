@@ -121,7 +121,7 @@
                 <div class="field-group">
                     <label class="field-label">Nota 2</label>
                     <div class="busca-box input-full">
-                        <input type="number" step="0.01" min="0" max="10" name="nota2" value="<%= nota.getNota2() %>" required>
+                        <input type="number" step="0.01" min="0" max="10" name="nota2" value="<%= nota.getNota2() %>" >
                     </div>
                 </div>
 
