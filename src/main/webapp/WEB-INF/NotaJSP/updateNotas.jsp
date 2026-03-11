@@ -121,9 +121,13 @@
                 <div class="field-group">
                     <label class="field-label">Nota 2</label>
                     <div class="busca-box input-full">
+<<<<<<< HEAD
                         <input type="text" name="nota2"
                                value="<%= nota.getNota2() != null ? nota.getNota2() : "" %>"
                                placeholder="Digite a nota ou deixe em branco">
+=======
+                        <input type="number" step="0.01" min="0" max="10" name="nota2" value="<%= nota.getNota2() %>" >
+>>>>>>> ddd4940bfe481edd423c2117ff0249ba82cbfd53
                     </div>
                 </div>
 

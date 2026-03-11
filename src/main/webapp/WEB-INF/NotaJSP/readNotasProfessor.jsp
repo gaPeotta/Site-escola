@@ -136,7 +136,9 @@
                     </thead>
                     <tbody>
                     <% if (listaNotas != null) {
+                        String mostraN2= null;
                         for (Notas nota : listaNotas) {
+<<<<<<< HEAD
                             boolean n2Nula = nota.getNota2() == null;
                             String n2Exibir = n2Nula ? "-" : String.format("%.2f", nota.getNota2());
                             String mediaExibir = n2Nula ? "-" : String.format("%.2f", (nota.getNota1() + nota.getNota2()) / 2.0);
@@ -148,10 +150,19 @@
                         <td><%= nota.getNomeAluno() %></td>
                         <td><%= nota.getDisciplina() %></td>
                         <td><%= nota.getObservacao() %></td>
+<<<<<<< HEAD
                         <td><%= String.format("%.2f", nota.getNota1()) %></td>
                         <td><%= n2Exibir %></td>
                         <td><%= mediaExibir %></td>
                         <td class="<%= situacaoClasse %>"><%= situacaoTexto %></td>
+=======
+                        <td><%= nota.getNota1() %></td>
+                        <td><%= mostraN2 %></td>
+                        <td><%= mostraN2 != null ? String.format("%.2f", media) : "Indisponível" %></td>
+                        <td class="<%= mostraN2 != null ? (media >= 7 ? "status-aprovado" : "status-reprovado") : "status-indisponivel" %>">
+                            <%= mostraN2 != null ? (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado") : "Indisponível" %>
+                        </td>
+>>>>>>> ddd4940bfe481edd423c2117ff0249ba82cbfd53
                         <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
                         <td style="text-align: center; vertical-align: middle;">
                             <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">

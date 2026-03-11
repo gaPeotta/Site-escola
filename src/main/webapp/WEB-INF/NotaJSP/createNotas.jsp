@@ -102,6 +102,7 @@
                     <label class="field-label">Nota 2</label>
                     <div class="busca-box input-full">
                         <input type="text" name="nota2" placeholder="Digite a nota ou deixe em branco ou -">
+
                     </div>
                 </div>
                 <div class="btn-group">

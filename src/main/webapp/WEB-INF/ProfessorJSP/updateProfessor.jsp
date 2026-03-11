@@ -113,6 +113,17 @@
                     </div>
                 </div>
 
+                <div class="field-group">
+                    <label class="field-label">
+                        Foto <span class="field-label-hint">(opcional — cole o link do
+                            <a class="link-label" href="https://institutogerminare-my.sharepoint.com/:f:/g/personal/gabriel_vigna_institutojef_org_br/IgDjfKyDgDFeQbfAVDaBVi1oAXxDmMuRB20ET97ibkT7Cgk?e=PFzUxy" target="_blank">OneDrive</a>)
+                        </span>
+                    </label>
+                    <div class="busca-box input-full">
+                        <input type="text" name="foto" placeholder="https://...">
+                    </div>
+                </div>
+
                 <div style="display:flex; gap:10px; margin-top:10px;">
                     <button type="submit" class="btn-editar">✔ Salvar</button>
                     <a href="${pageContext.request.contextPath}/ServletReadProfessor"
@@ -121,6 +132,8 @@
                         ✖ Cancelar
                     </a>
                 </div>
+
+
 
             </form>
 

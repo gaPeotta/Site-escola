@@ -202,7 +202,7 @@ public class ProfessorDAO {
 
     // ================= DELETE =================
     public int delete(int idProfessor) {
-        String sql = "DELETE FROM professor WHERE id_professor = ? ON CASCADE";
+        String sql = "DELETE FROM professor WHERE id_professor = ? ";
 
         try (Connection conn = new Conexao().conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
