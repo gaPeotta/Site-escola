@@ -141,7 +141,7 @@
                             String n2Exibir = n2Nula ? "-" : String.format("%.2f", nota.getNota2());
                             String mediaExibir = n2Nula ? "-" : String.format("%.2f", (nota.getNota1() + nota.getNota2()) / 2.0);
                             String situacaoClasse = n2Nula ? "status-processo" : (nota.getSituacao() ? "status-aprovado" : "status-reprovado");
-                            String situacaoTexto = n2Nula ? "⏳ Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
+                            String situacaoTexto = n2Nula ? " Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
                     %>
                     <tr>
                         <td><%= nota.getMatriculaAluno() %></td>
