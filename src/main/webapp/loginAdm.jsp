@@ -147,6 +147,8 @@
             }
         }
     </style>
+
+    <%String erro = (String) session.getAttribute("erro");%>
 </head>
 <body>
 
@@ -158,8 +160,8 @@
         <div class="form-wrapper">
 
             <div class="login-card">
+                <% if (erro != null) { %><p class="msg-erro">⚠ <%= erro %></p><% } %>
                 <form action="<%=request.getContextPath()%>/Login-Adm" method="post">
-
                     <div class="input-group">
                         <label>E-mail</label>
                         <input type="email" placeholder="Seunome@email.com" id="usuario" name="usuario" required>

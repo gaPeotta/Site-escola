@@ -55,6 +55,4 @@ public class LoginAdm extends HttpServlet {
             request.getRequestDispatcher("/loginAdm.jsp").forward(request, response);
         }
     }
-
-
 }
