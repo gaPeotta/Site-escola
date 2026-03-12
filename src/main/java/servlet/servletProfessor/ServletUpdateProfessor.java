@@ -75,12 +75,12 @@ public class ServletUpdateProfessor extends HttpServlet {
 
         // ================= UPDATE =================
         try {
-            int    id         = Integer.parseInt(request.getParameter("id"));
-            String nome       = request.getParameter("nome");
+            int id = Integer.parseInt(request.getParameter("id"));
+            String nome = request.getParameter("nome");
             String disciplina = request.getParameter("disciplina");
-            String email      = request.getParameter("email");
-            String senha      = request.getParameter("senha");
-            String foto       = request.getParameter("foto"); // opcional
+            String email = request.getParameter("email");
+            String senha = request.getParameter("senha");
+            String foto = request.getParameter("foto");
 
             if (foto != null && foto.isBlank()) foto = null;
 

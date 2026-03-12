@@ -9,9 +9,6 @@ import java.util.List;
 
 public class NotaDAO {
 
-    /*
-     * Cria uma nota e retorna o ID.
-     */
     public int create(Notas notas){
 
         String sql = "INSERT INTO nota (matricula_aluno, id_professor, disciplina, observacao, nota1, nota2, situacao) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -27,8 +24,8 @@ public class NotaDAO {
             pstmt.setString(3, notas.getDisciplina());
             pstmt.setString(4, notas.getObservacao());
             pstmt.setDouble(5, notas.getNota1());
-            pstmt.setDouble(6, notas.getNota2());
-            pstmt.setBoolean(7, notas.getSituacao());
+            pstmt.setObject(6, notas.getNota2());
+            pstmt.setObject(7, notas.getSituacao());
 
             int linhas = pstmt.executeUpdate();
 
@@ -50,9 +47,6 @@ public class NotaDAO {
         }
     }
 
-    /*
-     * Busca todas as notas.
-     */
     public List<Notas> read(){
 
         String sql = "SELECT * FROM nota ORDER BY id_notas";
@@ -66,6 +60,8 @@ public class NotaDAO {
         ) {
 
             while (rs.next()) {
+                Double nota2 = rs.getObject("nota2") != null ? rs.getDouble("nota2") : null;
+                Boolean situacao = rs.getObject("situacao") != null ? rs.getBoolean("situacao") : null;
 
                 Notas notas = new Notas(
                         rs.getInt("id_notas"),
@@ -74,10 +70,9 @@ public class NotaDAO {
                         rs.getString("disciplina"),
                         rs.getString("observacao"),
                         rs.getDouble("nota1"),
-                        rs.getDouble("nota2"),
-                        rs.getBoolean("situacao")
+                        nota2,
+                        situacao
                 );
-
                 lista.add(notas);
             }
 
@@ -88,13 +83,6 @@ public class NotaDAO {
         return lista;
     }
 
-    /*
-     * Busca notas com filtros dinâmicos.
-     */
-
-    /*
-     * Busca nota pelo ID.
-     */
     public List<Notas> read(Integer matriculaAluno, Integer idProfessor, String disciplina,
                             String buscaProfessor, String buscaAluno,
                             String orderBy, String direction) {
@@ -148,7 +136,6 @@ public class NotaDAO {
         }
 
         String dir = "DESC".equalsIgnoreCase(direction) ? "DESC" : "ASC";
-
         sql.append(" ORDER BY ").append(coluna).append(" ").append(dir);
 
         try (
@@ -161,8 +148,10 @@ public class NotaDAO {
             }
 
             try (ResultSet rs = pstmt.executeQuery()) {
-
                 while (rs.next()) {
+                    Double nota2 = rs.getObject("nota2") != null ? rs.getDouble("nota2") : null;
+                    Boolean situacao = rs.getObject("situacao") != null ? rs.getBoolean("situacao") : null;
+
                     Notas notas = new Notas(
                             rs.getInt("id_notas"),
                             rs.getInt("matricula_aluno"),
@@ -170,8 +159,8 @@ public class NotaDAO {
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2"),
-                            rs.getBoolean("situacao")
+                            nota2,
+                            situacao
                     );
                     notas.setNomeAluno(rs.getString("nome_aluno"));
                     notas.setNomeProfessor(rs.getString("nome_professor"));
@@ -186,9 +175,6 @@ public class NotaDAO {
         return lista;
     }
 
-    /*
-     * Busca notas por professor.
-     */
     public List<Notas> buscarPorProfessor(int idProfessor) {
 
         String sql = "SELECT * FROM nota WHERE id_professor = ? ORDER BY id_notas";
@@ -203,8 +189,10 @@ public class NotaDAO {
             pstmt.setInt(1, idProfessor);
 
             try (ResultSet rs = pstmt.executeQuery()) {
-
                 while (rs.next()) {
+                    Double nota2 = rs.getObject("nota2") != null ? rs.getDouble("nota2") : null;
+                    Boolean situacao = rs.getObject("situacao") != null ? rs.getBoolean("situacao") : null;
+
                     Notas nota = new Notas(
                             rs.getInt("id_notas"),
                             rs.getInt("matricula_aluno"),
@@ -212,8 +200,8 @@ public class NotaDAO {
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2"),
-                            rs.getBoolean("situacao")
+                            nota2,
+                            situacao
                     );
                     notas.add(nota);
                 }
@@ -225,9 +213,7 @@ public class NotaDAO {
 
         return notas;
     }
-    /*
-     * Busca nota pelo ID com JOIN para trazer nomes.
-     */
+
     public Notas read(int idNotas) {
 
         String sql = "SELECT n.*, a.nome AS nome_aluno, p.nome AS nome_professor " +
@@ -245,8 +231,10 @@ public class NotaDAO {
             pstmt.setInt(1, idNotas);
 
             try (ResultSet rs = pstmt.executeQuery()) {
-
                 if (rs.next()) {
+                    Double nota2 = rs.getObject("nota2") != null ? rs.getDouble("nota2") : null;
+                    Boolean situacao = rs.getObject("situacao") != null ? rs.getBoolean("situacao") : null;
+
                     Notas nota = new Notas(
                             rs.getInt("id_notas"),
                             rs.getInt("matricula_aluno"),
@@ -254,8 +242,8 @@ public class NotaDAO {
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2"),
-                            rs.getBoolean("situacao")
+                            nota2,
+                            situacao
                     );
                     nota.setNomeAluno(rs.getString("nome_aluno"));
                     nota.setNomeProfessor(rs.getString("nome_professor"));
@@ -270,9 +258,6 @@ public class NotaDAO {
         return null;
     }
 
-    /*
-     * Busca nota pelo ID.
-     */
     public List<Notas> buscarPorId(int idNota) {
 
         String sql = "SELECT * FROM nota WHERE id_notas = ? ORDER BY id_notas";
@@ -287,8 +272,10 @@ public class NotaDAO {
             pstmt.setInt(1, idNota);
 
             try (ResultSet rs = pstmt.executeQuery()) {
-
                 while (rs.next()) {
+                    Double nota2 = rs.getObject("nota2") != null ? rs.getDouble("nota2") : null;
+                    Boolean situacao = rs.getObject("situacao") != null ? rs.getBoolean("situacao") : null;
+
                     Notas nota = new Notas(
                             rs.getInt("id_notas"),
                             rs.getInt("matricula_aluno"),
@@ -296,8 +283,8 @@ public class NotaDAO {
                             rs.getString("disciplina"),
                             rs.getString("observacao"),
                             rs.getDouble("nota1"),
-                            rs.getDouble("nota2"),
-                            rs.getBoolean("situacao")
+                            nota2,
+                            situacao
                     );
                     notas.add(nota);
                 }
@@ -310,9 +297,6 @@ public class NotaDAO {
         return notas;
     }
 
-    /*
-     * Atualiza nota.
-     */
     public int update(Notas notas){
 
         String sql = "UPDATE nota SET matricula_aluno = ?, id_professor = ?, disciplina = ?, observacao = ?, nota1 = ?, nota2 = ?, situacao = ? WHERE id_notas = ?";
@@ -328,8 +312,8 @@ public class NotaDAO {
             pstmt.setString(3, notas.getDisciplina());
             pstmt.setString(4, notas.getObservacao());
             pstmt.setDouble(5, notas.getNota1());
-            pstmt.setDouble(6, notas.getNota2());
-            pstmt.setBoolean(7, notas.getSituacao());
+            pstmt.setObject(6, notas.getNota2());
+            pstmt.setObject(7, notas.getSituacao());
             pstmt.setInt(8, notas.getIdNotas());
 
             return pstmt.executeUpdate();
@@ -340,11 +324,8 @@ public class NotaDAO {
         }
     }
 
-    /*
-     * Atualiza nota via parâmetros diretos.
-     */
     public int update(int idNotas, Integer matriculaAluno, Integer idProfessor, String disciplina,
-                      String observacao, double nota1, double nota2, boolean situacao){
+                      String observacao, double nota1, Double nota2, Boolean situacao){
 
         String sql = "UPDATE nota SET matricula_aluno = ?, id_professor = ?, disciplina = ?, observacao = ?, nota1 = ?, nota2 = ?, situacao = ? WHERE id_notas = ?";
         Conexao conexao = new Conexao();
@@ -359,8 +340,8 @@ public class NotaDAO {
             pstmt.setString(3, disciplina);
             pstmt.setString(4, observacao);
             pstmt.setDouble(5, nota1);
-            pstmt.setDouble(6, nota2);
-            pstmt.setBoolean(7, situacao);
+            pstmt.setObject(6, nota2);
+            pstmt.setObject(7, situacao);
             pstmt.setInt(8, idNotas);
 
             return pstmt.executeUpdate();
@@ -371,9 +352,6 @@ public class NotaDAO {
         }
     }
 
-    /*
-     * Remove nota pelo ID.
-     */
     public int delete(int idNotas){
 
         String sql = "DELETE FROM nota WHERE id_notas = ?";
@@ -393,9 +371,6 @@ public class NotaDAO {
         }
     }
 
-    /*
-     * Remove notas pela matrícula do aluno.
-     */
     public int deleteByMatricula(int matriculaAluno){
 
         String sql = "DELETE FROM nota WHERE matricula_aluno = ?";

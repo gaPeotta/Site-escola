@@ -44,11 +44,11 @@ public class ServletCreateNota extends HttpServlet {
             String n2Param = request.getParameter("nota2");
 
             double n1 = (n1Param != null && !n1Param.trim().isEmpty()) ? Double.parseDouble(n1Param) : 0;
-            double n2 = (n2Param != null && !n2Param.trim().isEmpty()) ? Double.parseDouble(n2Param) : 0;
-
-            double media = (n1 + n2) / 2.0;
-            boolean situacao = media >= 7;
-
+            Double n2 = (n2Param == null || n2Param.trim().isEmpty() || n2Param.equals("-"))
+                    ? null
+                    : Double.parseDouble(n2Param);
+            Double media = (n2 == null) ? null : (n1 + n2) / 2;
+            Boolean situacao = (n2 == null) ? null : (media >= 7);
             // Determina o idProfessor conforme quem está logado
             Integer idProfessor = null;
 
@@ -70,12 +70,13 @@ public class ServletCreateNota extends HttpServlet {
             NotaDAO dao = new NotaDAO();
             dao.create(novaNota);
 
+
             response.sendRedirect("ServletReadNota");
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("erro", "Falha ao cadastrar nota. Verifique os valores inseridos.");
-            request.getRequestDispatcher("/WEB-INF/NotaJSP/criarNota.jsp") // ajuste pro nome real do JSP
+            request.getRequestDispatcher("/WEB-INF/NotaJSP/readNotasAluno.jsp") // ajuste pro nome real do JSP
                     .forward(request, response);
         }
     }
