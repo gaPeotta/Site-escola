@@ -10,29 +10,29 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background-image: url(/src/main/webapp/img/fundo.png);
+    background-image: url("../img/fundo.png");
+    background-size: cover;
+    background-position: center;
 }
+
+/* caixas principais */
 
 .mandarEmail,
 .codigoEmail,
-.novaSenha,
-.principal{
-    width:500px;
-    padding:50px;
+.novaSenha{
+    width:420px;
+    padding:40px;
     border-radius:20px;
-    background:rgba(255,255,255,0.65);
+    background:rgba(255,255,255,0.7);
     backdrop-filter: blur(8px);
     text-align:center;
 }
 
+/* textos */
+
 h1{
     color:#214e3b;
     margin-bottom:10px;
-}
-
-h2{
-    color:#214e3b;
-    margin-top:10px;
 }
 
 p{
@@ -40,8 +40,10 @@ p{
     margin-bottom:25px;
 }
 
+/* inputs */
+
 input{
-    width:90%;
+    width:100%;
     padding:12px;
     border-radius:20px;
     border:1px solid #cfd8d3;
@@ -49,6 +51,8 @@ input{
     outline:none;
     background:#f2f5f4;
 }
+
+/* botão principal */
 
 button{
     margin-top:15px;
@@ -66,21 +70,20 @@ button:hover{
     background:#17392a;
 }
 
-.codigo{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    margin-top:10px;
-}
-
-.codigo input{
-    width:45px;
-    height:45px;
-    text-align:center;
-    font-size:18px;
-    border-radius:8px;
-}
+/* botão voltar login */
 
 .botaoVolta{
-    margin-top:25px;
+    display:inline-block;
+    margin-top:20px;
+    padding:10px 25px;
+    border-radius:20px;
+    background:#214e3b;
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+    transition:0.2s;
+}
+
+.botaoVolta:hover{
+    background:#17392a;
 }
