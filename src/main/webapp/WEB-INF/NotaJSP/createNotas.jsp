@@ -81,6 +81,7 @@
                         <option value="História">História</option>
                         <option value="Ciências">Ciências</option>
                         <option value="Informática">Informática</option>
+                        <option value="Banco de dados">Banco de dados</option>
                     </select>
                 </div>
 
@@ -97,14 +98,12 @@
                         <input type="number" step="0.01" min="0" max="10" name="nota1" required>
                     </div>
                 </div>
-
                 <div class="field-group">
                     <label class="field-label">Nota 2</label>
                     <div class="busca-box input-full">
-                        <input type="number" step="0.01" min="0" max="10" name="nota2" >
+                        <input type="text" name="nota2" placeholder="Digite a nota ou deixe em branco">
                     </div>
                 </div>
-
                 <div class="btn-group">
                     <button type="submit" class="btn-editar">✔ Cadastrar</button>
                     <a href="${pageContext.request.contextPath}/ServletReadNota" class="btn-excluir btn-link">✖ Cancelar</a>
