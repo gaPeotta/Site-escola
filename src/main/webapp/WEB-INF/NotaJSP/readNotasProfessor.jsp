@@ -136,6 +136,7 @@
                     </thead>
                     <tbody>
                     <% if (listaNotas != null) {
+                        String mostraN2;
                         for (Notas nota : listaNotas) {
                             boolean n2Nula = nota.getNota2() == null;
                             String n2Exibir = n2Nula ? "-" : String.format("%.2f", nota.getNota2());
