@@ -136,7 +136,7 @@
                     </thead>
                     <tbody>
                     <% if (listaNotas != null) {
-                        String mostraN2= null;
+                        String mostraN2;
                         for (Notas nota : listaNotas) {
                             double media = (nota.getNota1() + nota.getNota2()) / 2.0;
                             if (nota.getNota2() >0) {
