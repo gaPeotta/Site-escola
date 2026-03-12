@@ -126,13 +126,12 @@
                     </thead>
                     <tbody>
                     <% if (listaNotas != null) {
-                        String mostraN2= null;
                         for (Notas nota : listaNotas) {
                             boolean n2Nula = nota.getNota2() == null;
                             String n2Exibir = n2Nula ? "-" : String.format("%.2f", nota.getNota2());
                             String mediaExibir = n2Nula ? "-" : String.format("%.2f", (nota.getNota1() + nota.getNota2()) / 2.0);
                             String situacaoClasse = n2Nula ? "status-processo" : (nota.getSituacao() ? "status-aprovado" : "status-reprovado");
-                            String situacaoTexto = n2Nula ? " Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
+                            String situacaoTexto = n2Nula ? "Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
                     %>
                     <tr>
                         <td><%= nota.getIdNotas() %></td>

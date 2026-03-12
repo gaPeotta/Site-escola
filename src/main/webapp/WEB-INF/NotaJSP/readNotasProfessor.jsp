@@ -35,8 +35,8 @@
 
 <div class="layout-adm">
     <div class="sidebar">
-        <% 
-            String tipoSidebarProf = (String) session.getAttribute("tipoUsuario"); 
+        <%
+            String tipoSidebarProf = (String) session.getAttribute("tipoUsuario");
         %>
 
         <% if (tipoSidebarProf != null && !tipoSidebarProf.equalsIgnoreCase("aluno")) { %>
@@ -57,7 +57,7 @@
                 <path d="M12.5 3.5V7.1C12.5 7.94008 12.5 8.36012 12.6635 8.68099C12.8073 8.96323 13.0368 9.1927 13.319 9.33651C13.6399 9.5 14.0599 9.5 14.9 9.5H18.5" stroke="white"/>
             </svg>
             Notas</a>
-            
+
         <a href="${pageContext.request.contextPath}/ServletReadProfessor">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="8" r="2.5" stroke="#214e3b" stroke-linecap="round"/>
@@ -68,7 +68,7 @@
                 <path d="M10.9129 12.5859L10.9949 13.0791L11.9026 12.9283L11.2821 12.2488L10.9129 12.5859ZM4.70343 15.4162L5.18845 15.5377L4.70343 15.4162ZM6.81868 16.5V17H7.19453L7.29898 16.639L6.81868 16.5ZM8.49999 12C9.38931 12 10.0433 12.375 10.5436 12.923L11.2821 12.2488C10.6264 11.5306 9.71723 11 8.49999 11V12ZM5.18845 15.5377C5.36554 14.8306 5.68228 13.9253 6.22167 13.2069C6.75048 12.5027 7.47226 12 8.49999 12V11C7.0798 11 6.08743 11.7203 5.42199 12.6065C4.76713 13.4787 4.40955 14.5315 4.21841 15.2948L5.18845 15.5377ZM5.60498 16C5.29247 16 5.13465 15.7526 5.18845 15.5377L4.21841 15.2948C3.98477 16.2277 4.73424 17 5.60498 17V16ZM6.81868 16H5.60498V17H6.81868V16ZM7.29898 16.639C7.72104 15.1801 8.69435 13.4614 10.9949 13.0791L10.8309 12.0927C7.98101 12.5663 6.8095 14.7326 6.33838 16.361L7.29898 16.639Z" fill="#214e3b"/>
             </svg>
             Professores</a>
-            
+
         <a href="${pageContext.request.contextPath}/ServletReadAluno">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3.84299 8.12534L11.1877 4.86101C11.7049 4.63118 12.2951 4.63118 12.8123 4.86101L20.157 8.12534C20.4817 8.26962 20.4817 8.73038 20.157 8.87466L12.8123 12.139C12.2951 12.3688 11.7049 12.3688 11.1877 12.139L3.84299 8.87466C3.51835 8.73038 3.51835 8.26962 3.84299 8.12534Z" stroke="#214e3b" stroke-linecap="round" stroke-linejoin="round"/>
@@ -136,33 +136,22 @@
                     </thead>
                     <tbody>
                     <% if (listaNotas != null) {
-                        String mostraN2= null;
                         for (Notas nota : listaNotas) {
-<<<<<<< HEAD
                             boolean n2Nula = nota.getNota2() == null;
                             String n2Exibir = n2Nula ? "-" : String.format("%.2f", nota.getNota2());
                             String mediaExibir = n2Nula ? "-" : String.format("%.2f", (nota.getNota1() + nota.getNota2()) / 2.0);
                             String situacaoClasse = n2Nula ? "status-processo" : (nota.getSituacao() ? "status-aprovado" : "status-reprovado");
-                            String situacaoTexto = n2Nula ? " Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
+                            String situacaoTexto = n2Nula ? "Em Processo" : (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado");
                     %>
                     <tr>
                         <td><%= nota.getMatriculaAluno() %></td>
                         <td><%= nota.getNomeAluno() %></td>
                         <td><%= nota.getDisciplina() %></td>
                         <td><%= nota.getObservacao() %></td>
-<<<<<<< HEAD
                         <td><%= String.format("%.2f", nota.getNota1()) %></td>
                         <td><%= n2Exibir %></td>
                         <td><%= mediaExibir %></td>
                         <td class="<%= situacaoClasse %>"><%= situacaoTexto %></td>
-=======
-                        <td><%= nota.getNota1() %></td>
-                        <td><%= mostraN2 %></td>
-                        <td><%= mostraN2 != null ? String.format("%.2f", media) : "Indisponível" %></td>
-                        <td class="<%= mostraN2 != null ? (media >= 7 ? "status-aprovado" : "status-reprovado") : "status-indisponivel" %>">
-                            <%= mostraN2 != null ? (nota.getSituacao() ? "✔ Aprovado" : "✖ Reprovado") : "Indisponível" %>
-                        </td>
->>>>>>> ddd4940bfe481edd423c2117ff0249ba82cbfd53
                         <% if ("adm".equalsIgnoreCase(tipoLogado) || "professor".equalsIgnoreCase(tipoLogado)) { %>
                         <td style="text-align: center; vertical-align: middle;">
                             <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">

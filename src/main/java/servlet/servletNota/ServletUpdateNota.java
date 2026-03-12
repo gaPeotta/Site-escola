@@ -68,7 +68,7 @@ public class ServletUpdateNota extends HttpServlet {
                 Notas notaAtualizada = new Notas(
                         idNota,
                         matricula,
-                        notaExistente.getIdProfessor(), // preserva o professor original
+                        notaExistente.getIdProfessor(),
                         disciplina,
                         observacao,
                         n1,
